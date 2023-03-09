@@ -182,19 +182,19 @@
             children: [
               {
                 icon: 'mdi-folder-file',
-                title: 'ກວດສອບສິນຄ້າ',
-                to: {name: 'product'}
+                title: 'ເລືອກສິນຄ້າ',
+                to: {name: 'sell'}
               },
-              {
-                icon: 'mdi-folder-file',
-                title: 'ບັນທືກການຂາຍ',
-                to: {name: 'order'}
-              },
-              {
-                icon: 'mdi-folder-file',
-                title: 'ພິມບິນໃບ',
-                to: {name: 'order'}
-              },
+              // {
+              //   icon: 'mdi-folder-file',
+              //   title: 'ບັນທືກການຂາຍ',
+              //   to: {name: 'order'}
+              // },
+              // {
+              //   icon: 'mdi-folder-file',
+              //   title: 'ພິມບິນໃບ',
+              //   to: {name: 'order'}
+              // },
             ]
           },
            //  ສັ່ງຊື່

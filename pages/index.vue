@@ -1,6 +1,6 @@
 <template>
     <div style="background: #333">
-      <v-card color="#fafafa" elevation="0">
+      <v-card color="#fafafa" elevation="0" >
         <div class="d-flex justify-center mb-2 px-1 mt-5 x">
           <v-card
             v-ripple="{ class: `green--text` }"
@@ -193,7 +193,7 @@
           </v-row>
   
           <v-row>
-            <v-col cols="12" class="justify-center">
+            <v-col cols="12" class="justify-center" md="4" >
               <v-row no-gutters class="justify-center">
                 <v-col cols="12" md="4" class="align-center mx-5">
                   <v-hover v-slot="{hover}" open-delay="200">
@@ -210,7 +210,7 @@
                   </v-hover>
                 </v-col>
   
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="4" >
                   <v-hover v-slot="{hover}" open-delay="200">
                    <v-card :elevation="hover ? 20 : 2" :class="{'on-hover': hover}" width="100%" height="400">
                     <v-card-title>
