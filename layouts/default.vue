@@ -21,3 +21,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* * {
+  font-family: "Noto Serif Lao", serif;
+} */
+</style>
