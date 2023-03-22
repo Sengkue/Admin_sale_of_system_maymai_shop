@@ -1,5 +1,5 @@
 <template>
     <div>
-        shop
+        shop1
     </div>
 </template>
