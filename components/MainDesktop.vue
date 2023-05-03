@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app light clipped-left dense flat color="#e0e0e0">
       <v-app-bar-nav-icon @click.stop="mini = !mini"></v-app-bar-nav-icon>
-      <v-avatar size="45" class="mr-1 ml-2" color="red">
+      <v-avatar size="35" class="mr-1 ml-2" home color="red">
         <v-img class="ma-1" :src="require('@/static/images/logo.png')" />
       </v-avatar>
       <h2>Sale System Of Maymai Shop</h2>
@@ -139,27 +139,27 @@ export default {
           title: 'ຈັດການຂໍ້ມູນພື້ນຖານ',
           children: [
             {
-              icon: 'mdi-folder-file',
+              icon: 'mdi-tshirt-crew',
               title: 'ສິນຄ້າ',
               to: { name: 'product' },
             },
             {
-              icon: 'mdi-folder-file',
+              icon: 'mdi-shape',
               title: 'ຂໍ້ມູນປະເພດ',
               to: { name: 'category' },
             },
             {
-              icon: 'mdi-folder-file',
+              icon: 'mdi-account-tie',
               title: 'ຂໍ້ມູນພະນັກງານ',
-              to: { name: 'personnel' },
+              to: { name: 'employee' },
             },
             {
-              icon: 'mdi-folder-file',
+              icon: 'mdi-account-cowboy-hat',
               title: 'ຂໍ້ມູນຜູ້ສະໜອງ',
               to: { name: 'supplier' },
             },
             {
-              icon: 'mdi-folder-file',
+              icon: 'mdi-account',
               title: 'ຂໍ້ມູນລູກຄ້າ',
               to: { name: 'customer' },
             },
@@ -170,66 +170,20 @@ export default {
             },
           ],
         },
-        //  ຂາຍສິນຄ້າ
         {
-          icon: 'mdi-cart-percent',
-          title: 'ຂາຍສິນຄ້າ',
-          children: [
-            {
-              icon: 'mdi-point-of-sale',
-              title: 'ເລືອກສິນຄ້າ',
-              to: { name: 'sell' },
-            },
-            // {
-            //   icon: 'mdi-folder-file',
-            //   title: 'ບັນທືກການຂາຍ',
-            //   to: {name: 'order'}
-            // },
-            // {
-            //   icon: 'mdi-folder-file',
-            //   title: 'ພິມບິນໃບ',
-            //   to: {name: 'order'}
-            // },
-          ],
-        },
-        //  ສັ່ງຊື່
-        {
-          icon: 'mdi-purse',
+          icon: 'mdi-message-arrow-right',
           title: 'ສັ່ງຊື້ສິນຄ້າ',
-          children: [
-            {
-              icon: 'mdi-folder-file',
-              title: 'ກວດສອບສັ່ງຊື້',
-              to: { name: 'product' },
-            },
-            {
-              icon: 'mdi-folder-file',
-              title: 'ບັນທຶກສັ່ງຊື້',
-              to: { name: 'order' },
-            },
-            {
-              icon: 'mdi-folder-file',
-              title: 'ພີມໃບສັ່ງຊື້',
-              to: { name: 'order' },
-            },
-          ],
+          to: 'order',
         },
-        //  ນຳເຂົ້າສິນຄ້າ
         {
-          icon: 'mdi-cart-arrow-right',
-          title: 'ນຳເຂົ້າສິນຄ້າ',
-          children: [
-            {
-              icon: 'mdi-folder-file',
-              title: 'ກວດສອບສັ່ງຊື້',
-              to: { name: 'product' },
-            },
-            {
-              icon: 'mdi-folder-file',
-              title: 'ນຳເຂົ້າສິນຄ້າ',
-              to: { name: 'order' },
-            },
-          ],
+          icon: 'mdi-table-arrow-left',
+          title: 'ນໍາເຂົ້າສິນຄ້າ',
+          to: 'import',
+        },
+        {
+          icon: 'mdi-widgets',
+          title: 'ຂາຍສິນຄ້າ',
+          to: 'sale',
         },
         //  ລາຍງານ
         {
@@ -237,35 +191,35 @@ export default {
           title: 'ລາຍງານ',
           children: [
             {
-              icon: 'mdi-folder-file',
+              icon: 'mdi-tshirt-crew',
               title: 'ຂໍ້ມູນສິນຄ້າ',
-              to: { name: 'product' },
+              to: '/report/admin.product',
             },
             {
-              icon: 'mdi-folder-file',
-              title: 'ການຂາຍ',
-              to: { name: 'order' },
+              icon: 'mdi-chart-bell-curve',
+              title: 'ຂໍ້ມູນການຂາຍ',
+              to: '/report/admin.sale' ,
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນລູກຄ້າ',
-              to: { name: 'product' },
+              to:'/report/admin.customer' ,
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນພະນັກງານ',
-              to: { name: 'order' },
+              to:'/report/admin.employee',
             },
             {
-              icon: 'mdi-folder-file',
+              icon: 'mdi-baby-carriage',
               title: 'ຂໍ້ມູນການສັງຊື້',
-              to: { name: 'product' },
+              to: '/report/admin.order' ,
             },
-            {
-              icon: 'mdi-folder-file',
-              title: 'ລາຍຮັບ',
-              to: { name: 'order' },
-            },
+            // {
+            //   icon: 'mdi-folder-file',
+            //   title: 'ລາຍຮັບ',
+            //   to: { name: 'order' },
+            // },
           ],
         },
       ],

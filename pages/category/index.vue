@@ -14,12 +14,12 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="500px">
                 <template #activator="{ on, attrs }">
-                  <v-btn color="primary" dark v-bind="attrs" v-on="on" class="mt-n5">
+                  <v-btn class="mt-n5" color="primary" dark v-bind="attrs" v-on="on">
                     <v-icon left>mdi-plus</v-icon> ເພີ່ມ
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-text-field append-icon="mdi-magnify" placeholder="ຄົ້ນຫາ" outlined dense v-model="search"
-                    class="mt-4"></v-text-field>
+                  <v-text-field  v-model="search" outlined append-icon="mdi-magnify" class="mt-4" placeholder="ຄົ້ນຫາ" dense
+                    ></v-text-field>
                 </template>
 
                 <v-card>
@@ -32,12 +32,10 @@
                     <v-form v-model="valid">
                       <v-row justify="center" class="mt-3">
                         <v-col cols="12" class="mb-n5">
-                          <v-text-field dense outlined label="ຊື່ປະເພດສິນຄ້າ"
-                           v-model="editItem.category_name" 
-                           required
+                          <v-text-field  v-model="editItem.category_name"  label="ຊື່ປະເພດສິນຄ້າ"  dense outlined  required
                             :rules="[
                               (val) => !!val || 'ກະລຸນາປ້ອນຊື່ປະເພດສິນຄ້າ.',
-                            ]"></v-text-field>
+                            ]"/>
                         </v-col>
                       </v-row>
                     </v-form>
@@ -62,7 +60,7 @@
           </template>
           <template #[`item.actions`]="{ item }">
             <v-row no-gutters justify="end">
-              <v-btn color="#dc3455" dark small  class="mr-2" @click="deleteAction(item)">
+              <v-btn color="#dc3455" dark small class="mr-2" @click="deleteAction(item)">
                 <v-icon left>mdi-delete</v-icon>
                 ລືບ</v-btn>
               <v-btn color="#28a745" dark small @click="editAction(item)">
@@ -109,6 +107,16 @@ export default {
           id: '1',
           category_name: 'ເສື້ອຍາວ',
           size: 'S'
+        },
+        {
+          id: '2',
+          category_name: 'ເສື້ອກັດໜາວ',
+          size: 'L'
+        },
+        {
+          id: '3',
+          category_name: 'ສົນຂາຍາວ',
+          size: 'L'
         }
       ]
 
@@ -130,11 +138,11 @@ export default {
         this.editIndex = -1;
       })
     },
-    editAction(list){
-        this.editedIndex = this.item.indexOf(list);
-        this.editItem = Object.assign({}, list);
-        this.dialog = true;
-      }
+    editAction(list) {
+      this.editedIndex = this.item.indexOf(list);
+      this.editItem = Object.assign({}, list);
+      this.dialog = true;
+    }
   }
 }
 </script>
