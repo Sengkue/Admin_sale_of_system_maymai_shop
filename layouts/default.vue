@@ -130,6 +130,11 @@ export default {
           ],
         },
         {
+          icon: 'mdi-widgets',
+          title: 'ຂາຍສິນຄ້າ',
+          to: 'sale',
+        },
+        {
           icon: 'mdi-message-arrow-right',
           title: 'ສັ່ງຊື້ສິນຄ້າ',
           to: 'order',
@@ -138,11 +143,6 @@ export default {
           icon: 'mdi-table-arrow-left',
           title: 'ນໍາເຂົ້າສິນຄ້າ',
           to: 'import',
-        },
-        {
-          icon: 'mdi-widgets',
-          title: 'ຂາຍສິນຄ້າ',
-          to: 'sale',
         },
         //  ລາຍງານ
         {
