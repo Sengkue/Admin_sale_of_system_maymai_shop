@@ -54,7 +54,7 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [ { src: '~/plugins/chart.js', mode: 'client' },],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -91,7 +91,7 @@ export default {
       body: '"Noto Serif Lao", sans-serif',
     },
   },
-
+  target: 'static',
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }

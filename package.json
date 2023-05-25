@@ -14,9 +14,12 @@
     "lintfix": "prettier --write --list-different . && yarn lint:js --fix && yarn lint:style --fix"
   },
   "dependencies": {
+    "@types/chart.js": "^2.9.37",
+    "chart.js": "^3.9.1",
     "core-js": "^3.25.3",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",
+    "vue-chartjs": "^4.1.2",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
     "vuetify": "^2.6.10"
