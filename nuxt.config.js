@@ -8,53 +8,56 @@ export default {
     htmlAttrs: {
       lang: 'en',
     },
-    meta: [{
-        charset: 'utf-8'
+    meta: [
+      {
+        charset: 'utf-8',
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
+        content: 'width=device-width, initial-scale=1',
       },
       {
         hid: 'description',
         name: 'description',
-        content: ''
+        content: '',
       },
       {
         name: 'format-detection',
-        content: 'telephone=no'
+        content: 'telephone=no',
       },
     ],
-    link: [{
+    link: [
+      {
         rel: 'icon',
         type: 'image/x-icon',
-        href: '/favicon.ico'
+        href: '/favicon.ico',
       },
       {
         rel: 'preconnect',
-        href: 'https://fonts.googleapis.com'
+        href: 'https://fonts.googleapis.com',
       },
       {
         rel: 'preconnect',
         href: 'https://fonts.gstatic.com',
-        crossorigin: true
+        crossorigin: true,
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Noto+Serif+Lao:wght@300&display=swap'
-      }
-
+        href: 'https://fonts.googleapis.com/css2?family=Noto+Serif+Lao:wght@300&display=swap',
+      },
     ],
-
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    './assets/css/styles.css'
-  ],
+  css: ['./assets/css/styles.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [ { src: '~/plugins/chart.js', mode: 'client' },],
+  plugins: [
+    { src: '~/plugins/chart.js', mode: 'client' },
+    {
+      src: '~/plugins/axios.js',
+    },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -70,7 +73,10 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: ['@nuxtjs/axios', 'cookie-universal-nuxt'],
+  publicRuntimeConfig: {
+    api: 'http://127.0.0.1:8080',
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -91,6 +97,8 @@ export default {
       body: '"Noto Serif Lao", sans-serif',
     },
   },
+  ssr: true,
+  target: 'server',
   target: 'static',
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

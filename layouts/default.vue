@@ -66,16 +66,59 @@
       <v-spacer></v-spacer>
       <h2 style="color: #004d40">ລະບົບຂາຍ ຮ້ານຂາຍເຄື່ອງແມ່ໄໝ</h2>
       <v-spacer />
-      <v-btn text color="primary" small><v-icon>mdi-login</v-icon></v-btn>
+      <div v-ripple class="text-center px-3 cursor-pointer">
+        <v-btn text rounded>
+          <v-badge color="success" dot
+            ><span class="btn"
+              >ຜູ້ເຂົ້າໃໍຊ້ລະບົບ : {{ $cookies.get('name') }}</span
+            ></v-badge
+          >
+        </v-btn>
+      </div>
+      <div v-ripple class="text-center px-3 cursor-pointer">
+        <v-btn text rounded @click="dialog = true">
+          <v-icon color="primary"> mdi-logout</v-icon>
+          ອອກຈາກລະບົບ
+        </v-btn>
+      </div>
     </v-app-bar>
     <v-main>
       <Nuxt />
     </v-main>
-
+    <v-row>
+      <v-dialog
+        v-model="dialog"
+        width="600"
+        transition="dialog-bottom-transition"
+        persistent
+      >
+        <v-card>
+          <v-toolbar dark color="#9155FD">
+            <div class="text-center">ອອກຈາກລະບົບ!!!</div>
+            <v-spacer></v-spacer>
+            <v-btn icon dark @click="dialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar>
+          <div class="text-center">
+            <v-card-title class="text-center">
+              ທ່ານຕ້ອງການອອກຈາກລະບົບບໍ ?
+            </v-card-title>
+          </div>
+          <v-card-actions class="d-flex justify-end">
+            <v-btn color="error" @click="logout">
+              <v-icon color="white">mdi-power</v-icon>
+              <span style="color: white"> ອອກຈາກລະບົບ</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-app>
 </template>
 <script>
 export default {
+  middleware: 'auth',
   data() {
     return {
       notifications: [],
@@ -183,6 +226,14 @@ export default {
         },
       ],
     }
+    
+  },
+  methods: {
+    logout() {
+      this.$cookies.remove("token");
+      this.$cookies.remove("name");
+       this.$router.push("/login");
+    },
   },
 }
 </script>
