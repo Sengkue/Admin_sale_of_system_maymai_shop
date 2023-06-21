@@ -18,21 +18,22 @@
                         <v-row align="center" justify="center">
                           <v-col cols="12" sm="8">
                             <v-text-field
-                              v-model="username"
-                              label="Email"
-                              outlined
-                              dense
-                              color="blue"
-                              autocomplete="false"
-                              class="mt-16"
-                              :rules="[
-                                (v) => !!v || 'Name is required',
-                                (v) =>
-                                  (v && v.length <= 25) ||
-                                  'Name must be less than 10 characters',
-                              ]"
-                            >
-                            </v-text-field>
+  v-model="phone"
+  label="Phone"
+  outlined
+  dense
+  color="blue"
+  autocomplete="off" 
+  class="mt-16"
+  :rules="[
+    (v) => !!v || 'Phone is required',
+    (v) =>
+      (v && v.length <= 25) ||
+      'Phone must be less than 10 characters',
+  ]"
+>
+</v-text-field>
+
                             <v-text-field
                               v-model="password"
                               label="Password"
@@ -186,8 +187,8 @@
                             />
 
                             <v-text-field
-                              v-model="R_username"
-                              label="Username"
+                              v-model="R_phone"
+                              label="phone"
                               outlined
                               dense
                               color="blue"
@@ -275,11 +276,11 @@ export default {
       file: null,
       url: null,
       step: 1,
-      username: '',
+      phone: '',
       password: '',
       valid: true,
       R_name: '',
-      R_username: '',
+      R_phone: '',
       R_password: '',
     }
   },
@@ -295,20 +296,20 @@ export default {
     login() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('user/login', {
-          username: this.username,
+          phone: this.phone,
           password: this.password,
         })
       }
     },
     addLog() {
-      this.username = 'eve.holt@reqres.in'
+      this.phone = 'eve.holt@reqres.in'
       this.password = 'cityslicka'
     },
     signup() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('user/register', {
           name: this.R_name,
-          username: this.R_username,
+          phone: this.R_phone,
           password: this.R_password,
           profile: this.file,
         })

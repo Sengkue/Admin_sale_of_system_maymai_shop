@@ -57,6 +57,8 @@ export default {
     {
       src: '~/plugins/axios.js',
     },
+    "~/plugins/global.js",
+    { src: '~/plugins/dayjs.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

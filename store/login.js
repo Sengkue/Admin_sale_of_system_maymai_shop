@@ -10,10 +10,11 @@ export const state = () => ({
   
   export const actions = {
     realLogin({ commit }, form) {
-      this.$axios.post('localhost:8080/user/login', form).then((data) => {
-        this.$cookies.set('token', data.data.token)
+      this.$axios.post('/user/login', form).then((data) => {
+        // this.$cookies.set('token', data.data.token)
         this.$cookies.set('user', data.data)
-        this.$router.push('/')
+        console.log('return:',data.data)
+        // this.$router.push('/')
       })
     },
   }

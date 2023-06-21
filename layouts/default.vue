@@ -224,6 +224,17 @@ export default {
             // },
           ],
         },
+        {
+          icon: 'mdi-cog',
+          title: 'ຕັ້ງຄ້າ',
+          children: [
+            {
+              icon: 'mdi-account-group',
+              title: 'ຈັດການສິດຜູ້ໃໍຊ້ລະບົບ',
+              to: '/user',
+            }
+          ],
+        },
       ],
     }
     
@@ -231,7 +242,7 @@ export default {
   methods: {
     logout() {
       this.$cookies.remove("token");
-      this.$cookies.remove("name");
+      this.$cookies.remove("status");
        this.$router.push("/login");
     },
   },
