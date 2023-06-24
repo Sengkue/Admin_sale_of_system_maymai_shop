@@ -35,14 +35,19 @@
         </v-list-item>
       </v-select>
     </v-col>
-              <v-col cols="6" class="my-0 py-0">                <v-text-field
-                filled
-                  dense
-                  v-model="phone"
-                  label="User Number*"
-                  prepend-inner-icon="mdi-account-group"
-                  required
-                ></v-text-field></v-col>
+    <v-col cols="6" class="my-0 py-0">
+    <v-select
+      v-model="employee_id"
+      :items="getEmployeet"
+      item-value="id"
+      item-text="firstName"
+      label="Employee*"
+      outlined
+      dense
+      prepend-inner-icon="mdi-account-group"
+      required
+    ></v-select>
+  </v-col>
               <v-col cols="6" class="my-0 py-0">                <v-text-field
                 filled
                   dense
@@ -72,6 +77,7 @@
       ></v-select>
     </v-col>
             </v-row>
+        <v-row>{{ getEmployee }}fasdfasdfasdfasd</v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -100,8 +106,15 @@ export default {
       ],
       searchText: ''
   }),
+  conputed:{
+    getEmployee(){
+      return this.$store.state.employee.AllEmployee
+    }
+  },
   mounted() {
     this.dialog = this.$store.state.user.insert;
+     this.$store.dispatch('employee/selectEmployee')
+
   },
   methods: {
     back() {

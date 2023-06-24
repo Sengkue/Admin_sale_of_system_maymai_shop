@@ -34,7 +34,7 @@ export const actions = {
     this.$axios.post('/user/login', form).then((data) => {
       this.$cookies.set('token', data.data.token)
       this.$cookies.set('status', data.data.status)
-      console.log('return:', data.data.result)
+      this.$cookies.set('name', data.data.employeeFirstName?data.data.employeeFirstName:data.data.ownerFirstName)
       this.$router.push('/')
     })
   },

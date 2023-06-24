@@ -10,8 +10,8 @@ export const state = () => ({
   
   export const actions = {
     selectEmployee({commit}){
-        this.$axios.get('/customer').then((res)=>{
-            commit('setEmployee', res.data)
+        this.$axios.get('/employee').then((res)=>{
+            commit('setEmployee', res.data.result)
             console.log('vuex:', res.data)
         })
     }

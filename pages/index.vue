@@ -4,8 +4,8 @@
       <v-col cols="12"></v-col>
       <v-col cols="12" sm="3" lg="3">
         <v-card
-          elevation="2"
-          v-ripple="{ class: `green--text` }"
+        v-ripple="{ class: `green--text` }"
+        elevation="2"
           class="white--text pa-2"
           style="background: linear-gradient(to right, #5e1b1b, #e60000); cursor: pointer;"
         >
@@ -29,10 +29,10 @@
       </v-col>
       <v-col cols="12" sm="3" lg="3" md="3">
         <v-card
-          elevation="2"
-          v-ripple="{ class: `green--text` }"
+        v-ripple="{ class: `green--text` }"
+        elevation="2"
           class="white--text pa-2"
-          style="background: linear-gradient(120deg, #701212, #ff0b0b)"
+          style="background: linear-gradient(120deg, #6b7012, #ebff0b)"
         >
           <div class="d-flex justify-space-between align-center">
             <div
@@ -59,7 +59,7 @@
           v-ripple="{ class: `green--text` }"
           elevation="2"
           class="white--text pa-2"
-          style="background: linear-gradient(120deg, #7e1a1a, #ff0909)"
+          style="background: linear-gradient(120deg, #1a7e27, #09ff19)"
         >
           <div class="d-flex justify-space-between align-center">
             <div
@@ -84,7 +84,7 @@
           v-ripple="{ class: `green--text` }"
           elevation="2"
           class="white--text pa-2"
-          style="background: linear-gradient(to right, #631414, #ff1010)"
+          style="background: linear-gradient(to right, #63145e, #ff10d7)"
         >
           <div class="d-flex justify-space-between align-center">
             <div
@@ -106,11 +106,14 @@
       </v-col>
     </v-row>
     <v-row class="mb-5 mt-0">
-      <v-col cols="12" sm="3" lg="3" v-ripple="{ class: `green--text` }">
+      <v-col 
+      v-ripple="{ class: `green--text` }" 
+      cols="12" sm="3" lg="3"
+       >
         <v-card
           elevation="2"
           class="white--text pa-2"
-          style="background: linear-gradient(to right, #5e1b1b, #e60000)"
+          style="background: linear-gradient(to right, #5e1b5d, #ff0cdb)"
         >
           <div class="d-flex justify-space-between align-center">
             <div
@@ -132,10 +135,10 @@
       </v-col>
       <v-col cols="12" sm="3" lg="3" md="3">
         <v-card
+        v-ripple="{ class: `green--text` }"
           elevation="2"
-          v-ripple="{ class: `green--text` }"
           class="white--text pa-2"
-          style="background: linear-gradient(to right, #5e1b1b, #e60000)"
+          style="background: linear-gradient(to right, #1b5e2c, #0eff12)"
         >
           <div class="d-flex justify-space-between align-center">
             <div
@@ -160,7 +163,7 @@
           v-ripple="{ class: `green--text` }"
           elevation="2"
           class="white--text pa-2"
-          style="background: linear-gradient(to right, #5e1b1b, #e60000)"
+          style="background: linear-gradient(to right, #5c5e1b, #fff70e)"
         >
           <div class="d-flex justify-space-between align-center">
             <div

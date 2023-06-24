@@ -57,7 +57,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar :clipped-left="clipped" fixed app >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-avatar size="45" class="mr-1 ml-2" color="red">
         <v-img class="ma-1" :src="require('@/static/images/logo.png')" />
@@ -93,7 +93,7 @@
         persistent
       >
         <v-card>
-          <v-toolbar dark color="#9155FD">
+          <v-toolbar dark class="teal white--text">
             <div class="text-center">ອອກຈາກລະບົບ!!!</div>
             <v-spacer></v-spacer>
             <v-btn icon dark @click="dialog = false">
