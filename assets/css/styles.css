@@ -1,3 +1,50 @@
+
 *{
-  font-family: "Noto Serif Lao", serif;
+  font-family: 'Noto Sans Lao Looped', sans-serif;
+   font-family: 'Noto Serif Lao', serif;
 }
+.colorLike{
+  background-color: #DBE9FD;
+}
+.bg {
+  background-image: url('/6.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.bg1 {
+  background-image: url('/shining.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.bg_spider {
+  background-image: url('/0.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.bg_bar {
+  background: linear-gradient(to right, #5e1b1b, #e60000)
+}
+
+/* Add this to your CSS file or style block */
+.my-toast {
+animation: slide-in 0.5s ease;
+}
+
+.my-toast-container {
+position: fixed;
+top: 20px;
+right: 20px;
+}
+
+@keyframes slide-in {
+0% {
+  transform: translateX(100%);
+}
+100% {
+  transform: translateX(0);
+}
+}
+

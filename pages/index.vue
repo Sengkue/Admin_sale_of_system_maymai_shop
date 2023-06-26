@@ -4,33 +4,40 @@
       <v-col cols="12"></v-col>
       <v-col cols="12" sm="3" lg="3">
         <v-card
-        v-ripple="{ class: `green--text` }"
-        elevation="2"
+          v-ripple="{ class: `green--text` }"
+          elevation="2"
           class="white--text pa-2"
-          style="background: linear-gradient(to right, #5e1b1b, #e60000); cursor: pointer;"
+          style="
+            background: linear-gradient(to right, #5e1b1b, #e60000);
+            cursor: pointer;
+          "
         >
           <div class="d-flex justify-space-between align-center">
             <div
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ລາຍຮັບທັງໝົດ</h3>
-              <span>{{ cardImcome?'350,000,000 ກິບ':'50,000,000 ກິບ' }}</span>
+              <span>{{
+                cardImcome ? '350,000,000 ກິບ' : '50,000,000 ກິບ'
+              }}</span>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-wallet-giftcard</v-icon>
             </div>
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
-          <div  class="d-flex">
-            <v-icon v-ripple color="white"  @click="Income()">{{`mdi-arrow-${cardImcome? 'down':'up'}-circle-outline`}}</v-icon>
-            <div>{{cardImcome? 'ພາຍໃນປີ':'ພາຍໃນເດືອນ'}}</div>
+          <div class="d-flex">
+            <v-icon v-ripple color="white" @click="Income()">{{
+              `mdi-arrow-${cardImcome ? 'down' : 'up'}-circle-outline`
+            }}</v-icon>
+            <div>{{ cardImcome ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div>
           </div>
         </v-card>
       </v-col>
       <v-col cols="12" sm="3" lg="3" md="3">
         <v-card
-        v-ripple="{ class: `green--text` }"
-        elevation="2"
+          v-ripple="{ class: `green--text` }"
+          elevation="2"
           class="white--text pa-2"
           style="background: linear-gradient(120deg, #6b7012, #ebff0b)"
         >
@@ -39,7 +46,9 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ລາຍຈ່າຍທັງໝົດ</h3>
-              <span>{{cardExpenses?'120,000,000 ກິບ':'50,000,000 ກິບ'}}</span>
+              <span>{{
+                cardExpenses ? '120,000,000 ກິບ' : '50,000,000 ກິບ'
+              }}</span>
             </div>
             <div>
               <v-icon color="white" size="50"
@@ -49,8 +58,10 @@
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
           <div class="d-flex">
-            <v-icon v-ripple color="white" @click="Expenses()">{{`mdi-arrow-${cardExpenses?'down':'up'}-circle-outline`}}</v-icon>
-            <div>{{cardExpenses?'ພາຍໃນປີ':'ພາຍໃນເດືອນ'}}</div>
+            <v-icon v-ripple color="white" @click="Expenses()">{{
+              `mdi-arrow-${cardExpenses ? 'down' : 'up'}-circle-outline`
+            }}</v-icon>
+            <div>{{ cardExpenses ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div>
           </div>
         </v-card>
       </v-col>
@@ -66,7 +77,9 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ກຳໄລທັງໝົດ</h3>
-              <span>{{cardProfit?'120,000,000 ກິບ':'50,000,000 ກິບ'}}</span>
+              <span>{{
+                cardProfit ? '120,000,000 ກິບ' : '50,000,000 ກິບ'
+              }}</span>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-chart-bar</v-icon>
@@ -74,8 +87,10 @@
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
           <div class="d-flex">
-            <v-icon v-ripple color="white" @click="Profit()">{{`mdi-arrow-${cardProfit?'down':'up'}-circle-outline`}}</v-icon>
-            <div>{{cardProfit?'ພາຍໃນປີ':'ພາຍໃນເດືອນ'}}</div>
+            <v-icon v-ripple color="white" @click="Profit()">{{
+              `mdi-arrow-${cardProfit ? 'down' : 'up'}-circle-outline`
+            }}</v-icon>
+            <div>{{ cardProfit ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div>
           </div>
         </v-card>
       </v-col>
@@ -106,10 +121,7 @@
       </v-col>
     </v-row>
     <v-row class="mb-5 mt-0">
-      <v-col 
-      v-ripple="{ class: `green--text` }" 
-      cols="12" sm="3" lg="3"
-       >
+      <v-col v-ripple="{ class: `green--text` }" cols="12" sm="3" lg="3">
         <v-card
           elevation="2"
           class="white--text pa-2"
@@ -135,7 +147,7 @@
       </v-col>
       <v-col cols="12" sm="3" lg="3" md="3">
         <v-card
-        v-ripple="{ class: `green--text` }"
+          v-ripple="{ class: `green--text` }"
           elevation="2"
           class="white--text pa-2"
           style="background: linear-gradient(to right, #1b5e2c, #0eff12)"
@@ -170,7 +182,7 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ໃບບິນສັ່ງຊື້ໃໝ່</h3>
-              <h2 class="flashing-ligh" :class="animateClass ">{{ newOrder?newOrder:0 }}</h2>
+              <h2 class="flashing-ligh" :class="animateClass">{{ 0 }}</h2>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-cash-multiple</v-icon>
@@ -210,9 +222,8 @@
       </v-col>
     </v-row>
 
-        
-  <v-row no-gutters justify="center">
-    <!-- <v-row no-gutters>
+    <v-row no-gutters justify="center">
+      <!-- <v-row no-gutters>
       <v-col cols="12" md="4" class="px-2 py-1">
         <v-card elevation="1">
           <bar :chart-options="chartOptions" :chart-data="chartData" :chart-id="chartId" :dataset-id-key="datasetIdKey"
@@ -244,48 +255,44 @@
       <!-- <v-col cols="12" >
         <Map></Map>
       </v-col> -->
-  </v-row>
-
-</div>
+    </v-row>
+  </div>
 </template>
 
 <script>
-
 export default {
   name: 'PieChart',
-  components: {
-
-  },
+  components: {},
   props: {
     chartId: {
       type: String,
-      default: 'pie-chart'
+      default: 'pie-chart',
     },
     datasetIdKey: {
       type: String,
-      default: 'label'
+      default: 'label',
     },
     width: {
       type: Number,
-      default: 400
+      default: 400,
     },
     height: {
       type: Number,
-      default: 400
+      default: 400,
     },
     cssClasses: {
       default: '',
-      type: String
+      type: String,
     },
 
     styles: {
       type: Object,
-      default: () => { }
+      default: () => {},
     },
     plugins: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -307,9 +314,7 @@ export default {
       // currentPlace: null
     }
   },
-  computed: {
-   
-  },
+  computed: {},
   // watch: {
   //   markers(val) {
   //     this.center = {
@@ -326,21 +331,19 @@ export default {
   // },
 
   methods: {
-       // +++++++++++++++++++++++++++++ card
-       Income(){
+    // +++++++++++++++++++++++++++++ card
+    Income() {
       this.cardImcome = !this.cardImcome
     },
-    Expenses(){
+    Expenses() {
       this.cardExpenses = !this.cardExpenses
     },
-    Profit(){
+    Profit() {
       this.cardProfit = !this.cardProfit
     },
-    Stock(){
+    Stock() {
       this.cardStock = !this.cardStock
-    }
-
-  }
-
+    },
+  },
 }
 </script>
