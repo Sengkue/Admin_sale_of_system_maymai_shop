@@ -4,6 +4,7 @@ export const state = () => ({
   edit: false,
   view: false,
   insert: false,
+  findOne:''
 })
 
 export const mutations={
@@ -22,25 +23,33 @@ export const mutations={
   setInsert(state, data) {
     state.insert = data;
   },
+  setFindOne(state, data) {
+    state.findOne = data;
+  },
 }
 
 export const actions = {
-  selectUser({commit}){
-    this.$axios.get('/user').then((data)=>{
-      commit('setAllUser', data.data)
-    })
+  async update({ commit }, data) {
+    const id = data.updateId;
+    const items = data.data;
+    await this.$axios.put(`/user/${id}`, items);
   },
-  login({ commit }, form) {
-    this.$axios.post('/user/login', form).then((data) => {
-      this.$cookies.set('token', data.data.token)
-      this.$cookies.set('status', data.data.status)
-      this.$cookies.set('name', data.data.employeeFirstName?data.data.employeeFirstName:data.data.ownerFirstName)
-      this.$router.push('/')
-    })
+  async selectOne({ commit }, id) {
+    const response = await this.$axios.get(`/user/${id}`);
+    commit('setFindOne', response.data.result);
   },
-  selectProfile({commit}){
-    this.$axios.get('/profile').then((data)=>{
-      commit('setProfile', data.data)
-    })
-  }
-}
+  async insert({ commit }, data) {
+    await this.$axios.post('/user', data);
+  },
+  async selectUser({ commit }) {
+    const response = await this.$axios.get('/user');
+    commit('setAllUser', response.data);
+  },
+  async login({ commit }, form) {
+    const response = await this.$axios.post('/user/login', form);
+    this.$cookies.set('token', response.data.token);
+    this.$cookies.set('status', response.data.status);
+    this.$cookies.set('name', response.data.employeeFirstName ? response.data.employeeFirstName : response.data.ownerFirstName);
+    this.$router.push('/');
+  },
+};

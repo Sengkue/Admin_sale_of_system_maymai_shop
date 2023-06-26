@@ -4,7 +4,7 @@
       <v-card>
         <v-card class="pa-3 mb-10 teal white--text rounded-0">
           <div class="d-flex justify-center">
-            <div class="text-h5">Create Users</div>
+            <div class="text-h5">Update Users</div>
           </div>
         </v-card>
         <v-card-text>
@@ -24,19 +24,16 @@
 
 
               <v-col cols="6" class="my-0 py-0"> <v-text-field filled dense v-model="phone" label="User Number*"
-                  prepend-inner-icon="mdi-cellphone" clearable clear-icon="mdi-close-circle-outline"
-                  required></v-text-field></v-col>
+                  prepend-inner-icon="mdi-cellphone" clearable clear-icon="mdi-close-circle-outline" required></v-text-field></v-col>
               <v-col cols="6" class="my-0 py-0">
                 <v-text-field filled dense v-model="password" label="User Number*" prepend-inner-icon="mdi-key"
                   :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="showPassword ? 'text' : 'password'"
-                  @click:append="showPassword = !showPassword" clearable clear-icon="mdi-close-circle-outline"
-                  required></v-text-field>
+                  @click:append="showPassword = !showPassword" clearable clear-icon="mdi-close-circle-outline" required></v-text-field>
               </v-col>
 
               <v-col cols="12" class="my-0 py-0">
                 <v-select filled dense v-model="status" :items="['admin', 'user']" label="User Status*"
-                  prepend-inner-icon="mdi-family-tree" clearable clear-icon="mdi-close-circle-outline"
-                  required></v-select>
+                  prepend-inner-icon="mdi-family-tree" clearable clear-icon="mdi-close-circle-outline" required></v-select>
               </v-col>
             </v-row>
           </v-container>
@@ -44,7 +41,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="back()"> Close </v-btn>
-          <v-btn :loading="loading" color="blue darken-1" class="mr-2" text @click="insert()"> Save </v-btn>
+          <v-btn :loading="loading" color="blue darken-1" class="mr-2" text @click="update()"> Save </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -53,17 +50,22 @@
 <script>
 export default {
   data: () => ({
-    loading: false,
+    loading:false,
     showPassword: false,
-    dialog: '',
-    employee_id: "",
-    owner_id: "",
-    password: "",
-    status: "",
-    phone: "",
+    dialog: true,
+    id: '',
+    employee_id: '',
+    owner_id: '',
+    password: '',
+    status: '',
+    phone: '',
     searchText: ''
+
   }),
   computed: {
+    getUser() {
+      return this.$store.state.user.findOne;
+    },
     getEmployee() {
       return this.$store.state.employee.AllEmployee;
     },
@@ -72,15 +74,26 @@ export default {
     }
 
   },
-  mounted() {
-    this.dialog = this.$store.state.user.insert;
+  watch: {
+    getUser: {
+      immediate: true,
+      handler(value) {
+        this.id = value.id || '';
+        this.employee_id = value.employee_id || '';
+        this.owner_id = value.owner_id || '';
+        this.phone = value.phone || '';
+        // this.password = value.password || '';
+        this.status = value.status || '';
+      }
+    }
   },
   methods: {
     back() {
-      this.$store.commit("user/setInsert", false);
+      this.$store.commit("user/setEdit", false);
     },
-    async insert() {
+    async update() {
       this.loading = true;
+      const updateId = this.id;
       const data = {
         employee_id: this.employee_id,
         owner_id: this.owner_id,
@@ -88,18 +101,14 @@ export default {
         password: this.password,
         status: this.status
       };
-      await this.$store.dispatch("user/insert", data);
+      await this.$store.dispatch("user/update", { updateId, data });
       setTimeout(() => {
         this.loading = false;
-        this.$store.dispatch('user/selectUser')
-        this.$store.commit("user/setInsert", false);
+        this.$store.dispatch('user/selectUser');
+        this.$store.commit("user/setEdit", false);
       }, 1000);
-      this.employee_id = "";
-      this.owner_id = "";
-      this.password = "";
-      this.status = "";
-      this.phone = ""
     },
+
   },
 };
 </script>

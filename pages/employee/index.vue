@@ -72,11 +72,11 @@ export default {
         },
         {
           text: 'ຊື່',
-          value: 'fname',
+          value: 'firstName',
         },
         {
           text: 'ນາມສະກຸນ',
-          value: 'lname',
+          value: 'lastName',
         },
         {
           text: 'ເພດ',
@@ -107,14 +107,11 @@ export default {
     }
   },
   computed: {
-    formTitle() {
-      return this.editIndex === -1 ? 'ເພີ່ມຂໍ້ມູນ' : 'ແກ້ໄຂຂໍ້ມູນ'
-    },
     getEmployee() {
-      const allEmployee = this.$store.state.employee.AllEmployee
+      const allEmployee = this.$store.state.employee.AllEmployee;
 
-      if (allEmployee && allEmployee.result) {
-        return allEmployee.result.map((item, index) => {
+      if (allEmployee) {
+        return allEmployee.map((item, index) => {
           return {
             index: index + 1,
             ...item,

@@ -1489,6 +1489,11 @@
   "resolved" "https://registry.npmjs.org/@polka/url/-/url-1.0.0-next.21.tgz"
   "version" "1.0.0-next.21"
 
+"@sweetalert2/theme-bootstrap-4@^5.0.15":
+  "integrity" "sha512-WsGXk67Yz3Txe3lJA4FNqQCKbQQ6yJLpVUknyGcoESVvwHm+UBBlIMHAcKuLvF+WXK9Rbq8gXhpDIU8ISoiPlQ=="
+  "resolved" "https://registry.npmjs.org/@sweetalert2/theme-bootstrap-4/-/theme-bootstrap-4-5.0.15.tgz"
+  "version" "5.0.15"
+
 "@types/chart.js@^2.9.37":
   "integrity" "sha512-9bosRfHhkXxKYfrw94EmyDQcdjMaQPkU1fH2tDxu8DWXxf1mjzWQAV4laJF51ZbC2ycYwNDvIm1rGez8Bug0vg=="
   "resolved" "https://registry.npmjs.org/@types/chart.js/-/chart.js-2.9.37.tgz"
@@ -8838,6 +8843,11 @@
     "stable" "^0.1.8"
     "unquote" "~1.1.1"
     "util.promisify" "~1.0.0"
+
+"sweetalert2@^11.7.12":
+  "integrity" "sha512-TQJy8mQymJLzqWPQOMQErd81Zd/rSYr0UL4pEc7bqEihtjS+zt7LWJXLhfPp93e+Hf3Z2FHMB6QGNskAMCsdTg=="
+  "resolved" "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.7.12.tgz"
+  "version" "11.7.12"
 
 "table@^6.8.1":
   "integrity" "sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA=="

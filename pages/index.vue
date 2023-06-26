@@ -195,7 +195,7 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ຮ້ານຄ້າແຍກທັງໝົດ</h3>
-              <span>{{ allShop?allShop:0 }}</span>
+              <span>{{ 0 }}</span>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-store-outline</v-icon>

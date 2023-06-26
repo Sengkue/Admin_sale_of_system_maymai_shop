@@ -17,30 +17,17 @@
           <v-col cols="12" sm="12" class="mt-2">
             <v-row>
               <v-col cols="12" sm="6">
-                <v-text-field
-  v-model="search"
-  label="ຄົ້ນຫາ"
-  small
-  outlined
-  hide-details
-  clearable
-  prepend-inner-icon="mdi-magnify"
-  dense
->
-</v-text-field>
+                <v-text-field v-model="search" label="ຄົ້ນຫາ" small outlined hide-details clearable
+                  prepend-inner-icon="mdi-magnify" dense>
+                </v-text-field>
               </v-col>
 
               <v-col cols="12" sm="6">
                 <div class="d-flex justify-end">
-                  <v-btn
-  class="mt-1"
-  color="teal"
-  dark
-  @click="Insert()"
->
-  <v-icon>mdi-plus-box</v-icon>
-  ເພີ່ມໃໝ່
-</v-btn>
+                  <v-btn class="mt-1" color="teal" dark @click="Insert()">
+                    <v-icon>mdi-plus-box</v-icon>
+                    ເພີ່ມໃໝ່
+                  </v-btn>
 
                 </div>
               </v-col>
@@ -49,26 +36,24 @@
           </v-col>
           <v-col cols="12" sm="12">
             <v-card>
-              <v-data-table
-  :headers="headers"
-  :items="getRow"
-  :search="search"
-  :items-per-page="10"
-  :loading="loading"
-  class="elevation-1"
->
-<template #[`item.profile`]="{ item }">
-  <div>
-    <img v-if="item.owner && item.owner.profile" :src="item.owner.profile" alt="Profile Image" width="80" height="80" />
-    <img v-if="item.employee && item.employee.profile" :src="item.employee.profile" alt="Profile Image" width="80" height="80" />
-  </div>
-</template>
-<template #[`item.name`]="{ item }">
-  <div>
-    <div v-if="item.owner && item.owner.firstName">{{ item.owner.firstName }}</div>
-    <div v-if="item.employee && item.employee.firstName">{{ item.employee.firstName }}</div>
-  </div>
-</template>
+              <v-data-table :headers="headers" :items="getRow" :search="search" :items-per-page="10" :loading="loading"
+                class="elevation-1">
+                <template #[`item.profile`]="{ item }">
+                  <div>
+                    <img v-if="item.owner && item.owner.profile" :src="item.owner.profile" alt="Profile Image" width="80"
+                      height="80" />
+                    <div v-if="item.owner ===  null && item.employee ===  null"><v-icon large color="error">mdi-account-remove</v-icon></div>
+                    <img v-if="item.employee && item.employee.profile" :src="item.employee.profile" alt="Profile Image"
+                      width="80" height="80" />
+                  </div>
+                </template>
+                <template #[`item.name`]="{ item }">
+                  <div>
+                    <div v-if="item.owner && item.owner.firstName">{{ item.owner.firstName }}</div>
+                    <div v-if="item.employee && item.employee.firstName">{{ item.employee.firstName }}</div>
+
+                  </div>
+                </template>
 
                 <template #[`item.createdAt`]="{ value }">
                   {{ formatDate(value) }}
@@ -85,7 +70,7 @@
 
                   <v-tooltip top color="green">
                     <template #activator="{ on }">
-                      <v-btn class="ma-n1" icon text color="green" @click="edit(item)" v-on="on">
+                      <v-btn class="ma-n1" icon text color="green" @click="edit(item.id)" v-on="on">
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
                     </template>
@@ -96,11 +81,10 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row>{{ getRow }}</v-row>
       </v-card>
     </div>
     <div v-if="getEdit">
-      <userEdit />
+      <userEditUsers />
     </div>
     <div v-if="getView">
       <userView />
@@ -112,6 +96,7 @@
 </template>
   
 <script>
+
 export default {
   data() {
     return {
@@ -166,48 +151,42 @@ export default {
   },
 
   methods: {
-    //   async deleteItem(item) {
-    //     await this.$swal
-    //       .fire({
-    //         title: "ທ່ານແນ່ໃຈບໍ?",
-    //         text: `ທີ່ຈະຍົກເລີກຂໍ້ມູນລາຍການນີ້!`,
-    //         icon: "warning",
-    //         showCancelButton: true,
-    //         confirmButtonColor: "#3085d6",
-    //         cancelButtonColor: "#d33",
-    //         confirmButtonText: "ຢືນຢັນລືບ!",
-    //         cancelButtonText: "ຍົກເລີກ",
-    //       })
-    //       .then(async (result) => {
-    //         if (result.isConfirmed) {
-    //           this.loading = true;
-    //           const U_id = item;
-    //           const dataItems = {
-    //             deleted: true
-    //           };
-    //           await this.$store.dispatch("user/update", {
-    //             U_id,
-    //             dataItems,
-    //           });
-    //           console.log('data:', dataItems)
-    //           this.loading = false;
-    //           this.$swal.fire({
-    //             title: "ຍົກເລີກສຳເລັດ!",
-    //             text: "ຂໍ້ມູນໄດ້ຖືກຍົກເລີກແລ້ວ.",
-    //             icon: "success",
-    //             confirmButtonText: "OKAY",
-    //             customClass: {
-    //               container: "my-swal-container",
-    //             },
-    //           });
-    //         }
-    //       });
-    //   },
+    async deleteItem(item) {
+      await this.$swal
+        .fire({
+          title: "ທ່ານແນ່ໃຈບໍ?",
+          text: `ທີ່ຈະຍົກເລີກຂໍ້ມູນລາຍການນີ້!`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "ຢືນຢັນລືບ!",
+          cancelButtonText: "ຍົກເລີກ",
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.loading = true;
+            await this.$axios.delete(`/user/${item}`);
+            await this.$store.dispatch('user/selectUser')
+            this.loading = false;
+            this.$swal.fire({
+              title: "ລືບສຳເລັດ!",
+              text: "ຂໍ້ມູນໄດ້ຖືກລືບສຳເລັດ.",
+              icon: "success",
+              confirmButtonText: "OKAY",
+              customClass: {
+                container: "my-swal-container",
+              },
+            });
+          }
+        });
+    },
 
-    async edit(item) {
+    async edit(id) {
       this.isLoading = true;
-      const id = item.id;
-      await this.$store.dispatch("user/selectOne", { id });
+      await this.$store.dispatch("user/selectOne",id);
+      await this.$store.dispatch('employee/selectEmployee')
+      await this.$store.dispatch('owner/selectOwner')
       this.$store.commit("user/setEdit", true);
       this.isLoading = false;
     },
@@ -215,6 +194,7 @@ export default {
       this.isLoading = false;
       await this.$store.commit("user/setInsert", true);
       await this.$store.dispatch('employee/selectEmployee')
+      await this.$store.dispatch('owner/selectOwner')
       this.isLoading = false;
     },
   },
