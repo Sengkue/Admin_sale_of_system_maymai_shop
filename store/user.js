@@ -45,11 +45,20 @@ export const actions = {
     const response = await this.$axios.get('/user');
     commit('setAllUser', response.data);
   },
+
   async login({ commit }, form) {
-    const response = await this.$axios.post('/user/login', form);
-    this.$cookies.set('token', response.data.token);
-    this.$cookies.set('status', response.data.status);
-    this.$cookies.set('name', response.data.employeeFirstName ? response.data.employeeFirstName : response.data.ownerFirstName);
-    this.$router.push('/');
+    try {
+      const res = await this.$axios.post('/user/login', form);
+      this.$cookies.set('token', res.data.token);
+      this.$cookies.set('status', res.data.status);
+      this.$cookies.set('name', res.data.employeeFirstName ? res.data.employeeFirstName : res.data.ownerFirstName);
+      this.$router.push('/');
+      this.$toast.success('welcome to maymai shop pos')
+    } catch (error) {
+      // Handle the error here
+      this.$toast.error('Login fail, please check your number and password! ',error);
+      // You can perform additional actions like displaying an error toast or updating the state
+    }
   },
+  
 };

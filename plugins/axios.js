@@ -4,10 +4,10 @@ export default function (context) {
     config.headers.common.Authorization = `SENG ${context.$cookies.get('token')}`
   })
 
-  context.$axios.onError((error) => {
+  // context.$axios.onError((error) => {
     // Sending the toast messages.
-    if (error.response.status !== 401) context.$toast.error(error)
+    // if (error.response.status !== 401) context.$toast.error(error)
     //  return Promise.resolve(false)
-    return false
-  })
+    // return false
+  // })
 }

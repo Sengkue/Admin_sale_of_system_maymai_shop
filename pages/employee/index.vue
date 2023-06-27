@@ -35,7 +35,7 @@
                 dark
                 small
                 class="mr-2"
-                @click="deleteAction(item)"
+                @click="deleteAction(item.id)"
               >
                 <v-icon left>mdi-delete</v-icon>
                 ລືບ</v-btn
@@ -108,8 +108,7 @@ export default {
   },
   computed: {
     getEmployee() {
-      const allEmployee = this.$store.state.employee.AllEmployee;
-
+      const allEmployee = this.$store.state.employee.AllEmployee
       if (allEmployee) {
         return allEmployee.map((item, index) => {
           return {
@@ -118,7 +117,6 @@ export default {
           }
         })
       }
-
       return []
     },
   },
@@ -126,6 +124,38 @@ export default {
     this.$store.dispatch('employee/selectEmployee')
   },
   methods: {
+    async deleteAction(id) {
+      await this.$swal
+        .fire({
+          title: 'ທ່ານແນ່ໃຈບໍ?',
+          text: `ທີ່ຈະຍົກເລີກຂໍ້ມູນລາຍການນີ້!`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'ຢືນຢັນລືບ!',
+          cancelButtonText: 'ຍົກເລີກ',
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.loading = true
+            await this.$axios.delete(`employee/${id}`)
+            await this.$store.dispatch('employee/selectEmployee')
+
+            this.loading = false
+            this.$swal.fire({
+              title: 'ລືບສຳເລັດ!',
+              text: 'ຂໍ້ມູນໄດ້ຖືກລືບສຳເລັດ.',
+              icon: 'success',
+              confirmButtonText: 'OKAY',
+              customClass: {
+                container: 'my-swal-container',
+              },
+            })
+          }
+        })
+    },
+
     openDialog() {
       this.dialog = true
     },
@@ -136,10 +166,9 @@ export default {
         this.editIndex = -1
       })
     },
-    editAction(list) {
-      this.editedIndex = this.item.indexOf(list)
-      this.editItem = Object.assign({}, list)
-      this.dialog = true
+    editAction(item) {
+      this.$store.dispatch(`employee/setUpdate`, item)
+      this.$router.push(`employee/${item.id}`)
     },
   },
 }

@@ -76,9 +76,17 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios', 'cookie-universal-nuxt'],
+  modules: ['@nuxtjs/axios', 'cookie-universal-nuxt','@nuxtjs/toast',],
+  toast: {
+    position: 'top-right',
+    duration: 3000,
+    className: ['my-toast'],
+    containerClass: ['my-toast-container'],
+  },
+  
+  
   publicRuntimeConfig: {
-    api: 'http://127.0.0.1:8080',
+    api: 'http://127.0.0.1:8080/',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -97,7 +105,6 @@ export default {
           success: colors.green.accent3,
         },
       },
-      body: '"Noto Serif Lao", sans-serif',
     },
   },
   ssr: true,

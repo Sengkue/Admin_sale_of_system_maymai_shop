@@ -17,9 +17,9 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ລາຍຮັບທັງໝົດ</h3>
-              <span>{{
+              <!-- <span>{{
                 cardImcome ? '350,000,000 ກິບ' : '50,000,000 ກິບ'
-              }}</span>
+              }}</span> -->
             </div>
             <div>
               <v-icon color="white" size="50">mdi-wallet-giftcard</v-icon>
@@ -27,10 +27,10 @@
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
           <div class="d-flex">
-            <v-icon v-ripple color="white" @click="Income()">{{
+            <!-- <v-icon v-ripple color="white" @click="Income()">{{
               `mdi-arrow-${cardImcome ? 'down' : 'up'}-circle-outline`
             }}</v-icon>
-            <div>{{ cardImcome ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div>
+            <div>{{ cardImcome ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div> -->
           </div>
         </v-card>
       </v-col>
@@ -46,9 +46,9 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ລາຍຈ່າຍທັງໝົດ</h3>
-              <span>{{
+              <!-- <span>{{
                 cardExpenses ? '120,000,000 ກິບ' : '50,000,000 ກິບ'
-              }}</span>
+              }}</span> -->
             </div>
             <div>
               <v-icon color="white" size="50"
@@ -58,10 +58,10 @@
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
           <div class="d-flex">
-            <v-icon v-ripple color="white" @click="Expenses()">{{
+            <!-- <v-icon v-ripple color="white" @click="Expenses()">{{
               `mdi-arrow-${cardExpenses ? 'down' : 'up'}-circle-outline`
-            }}</v-icon>
-            <div>{{ cardExpenses ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div>
+            }}</v-icon> -->
+            <!-- <div>{{ cardExpenses ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div> -->
           </div>
         </v-card>
       </v-col>
@@ -77,9 +77,9 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ກຳໄລທັງໝົດ</h3>
-              <span>{{
+              <!-- <span>{{
                 cardProfit ? '120,000,000 ກິບ' : '50,000,000 ກິບ'
-              }}</span>
+              }}</span> -->
             </div>
             <div>
               <v-icon color="white" size="50">mdi-chart-bar</v-icon>
@@ -87,10 +87,10 @@
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
           <div class="d-flex">
-            <v-icon v-ripple color="white" @click="Profit()">{{
+            <!-- <v-icon v-ripple color="white" @click="Profit()">{{
               `mdi-arrow-${cardProfit ? 'down' : 'up'}-circle-outline`
             }}</v-icon>
-            <div>{{ cardProfit ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div>
+            <div>{{ cardProfit ? 'ພາຍໃນປີ' : 'ພາຍໃນເດືອນ' }}</div> -->
           </div>
         </v-card>
       </v-col>
@@ -182,7 +182,7 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ໃບບິນສັ່ງຊື້ໃໝ່</h3>
-              <h2 class="flashing-ligh" :class="animateClass">{{ 0 }}</h2>
+              <!-- <h2 class="flashing-ligh" :class="animateClass">{{ 0 }}</h2> -->
             </div>
             <div>
               <v-icon color="white" size="50">mdi-cash-multiple</v-icon>

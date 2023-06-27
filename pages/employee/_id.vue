@@ -124,7 +124,7 @@
             filled
             dense
             :items="['ຊາຍ', 'ຍິງ']"
-            label="User Status*"
+            label="Gender*"
             clearable
             clear-icon="mdi-close-circle-outline"
             required
@@ -155,6 +155,7 @@
 
         <v-col cols="12">
           <v-card-actions>
+            {{ getEmployee }}
             <v-spacer></v-spacer>
             <v-btn
               style="font-size: 20px; font-weight: bold"
@@ -206,11 +207,30 @@ export default {
     getDistrict() {
       return this.$store.state.district.byProvinceId || []
     },
+    getEmployee() {
+      return this.$store.state.employee.byId || []
+    },
   },
 
   mounted() {
     this.$store.dispatch('province/selectProvince')
-    this.$store.dispatch('district/selectDistrict')
+    this.$store
+      .dispatch('employee/selectEmployeeById', this.$route.params.id)
+      .then(() => {
+        const employee = this.getEmployee
+        this.employees.firstName = employee.firstName
+        this.employees.lastName = employee.lastName
+        this.employees.tel = employee.phone
+        this.employees.email = employee.email
+        this.employees.village = employee.village
+        this.employees.districtId = employee.districtId
+        this.employees.provinceId = employee.provinceId
+        this.employees.gender = employee.gender
+        this.urlImage = employee.profile
+      })
+      .catch((error) => {
+        console.error('Failed to fetch employee data:', error)
+      })
   },
   methods: {
     onProvinceSelected() {

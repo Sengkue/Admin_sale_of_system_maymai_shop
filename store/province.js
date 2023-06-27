@@ -12,7 +12,6 @@ export const state = () => ({
     selectProvince({commit}){
         this.$axios.get('/province').then((res)=>{
             commit('setProvince', res.data.result)
-            console.log('show:',res.data.result)
         })
     }
   }

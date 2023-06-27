@@ -1,6 +1,7 @@
 export const state = () => ({
     AllDistrict:'',
-    OneDistrict:''
+    OneDistrict:'',
+    byProvinceId: '',
   })
   
   export const mutations={
@@ -9,6 +10,9 @@ export const state = () => ({
     },
     setOneDistrict(state, data){
         state.OneDistrict = data
+      },
+      setByProvinceId(state, data){
+        state.byProvinceId = data
       }
   }
   
@@ -16,13 +20,11 @@ export const state = () => ({
     selectDistrict({commit}){
         this.$axios.get('/district').then((res)=>{
             commit('setDistrict', res.data.result)
-            console.log('show111:',res.data.result)
         })
     },
-    selectOneDistrict({commit},id){
-        this.$axios.get(`/district/${id}`).then((res)=>{
-            commit('setOneDistrict', res.data.result)
-            console.log('show111:',res.data.result)
+    getByProvinceId({commit},id){
+        this.$axios.get(`district/province/${id}`).then((res)=>{
+            commit('setByProvinceId', res.data.result)
         })
     }
   }
