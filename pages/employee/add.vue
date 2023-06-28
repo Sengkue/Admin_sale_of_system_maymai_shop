@@ -10,8 +10,8 @@
             v-model="employees.firstName"
             filled
             dense
-            :rules="[(v) => !!v || 'employeefirstName is require']"
             :counter="100"
+            :rules="[(v) => !!v || 'employeefirstName is require']"
             label="ຊື່ພະນັກງານ"
             required
             clearable
@@ -105,20 +105,7 @@
             clear-icon="mdi-close-circle-outline"
           ></v-text-field>
         </v-col>
-
         <v-col cols="6">
-          <v-select
-            v-model="employees.status"
-            filled
-            dense
-            :items="['admin', 'user']"
-            label="User Status*"
-            clearable
-            clear-icon="mdi-close-circle-outline"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="12">
           <v-select
             v-model="employees.gender"
             filled
@@ -228,8 +215,7 @@ export default {
           return response?.data?.url
         })
         .catch((error) => {
-          console.error('File upload failed')
-          console.error(error)
+          this.$toast.success('File upload failed', error)
         })
 
       const data = {
@@ -243,7 +229,6 @@ export default {
         phone: this.employees.tel,
         profile: this.urlImage,
       }
-      console.log('update:', data)
       this.$store.dispatch('employee/insert', data)
     },
 

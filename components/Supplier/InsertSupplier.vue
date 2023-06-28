@@ -25,9 +25,9 @@
                       </v-avatar>
                     </div>
                     <v-file-input
+                    id="file"
+                    v-model="file"
                       :rules="imageRules"
-                      id="file"
-                      v-model="file"
                       label="Image"
                       class="d-none"
                       prepend-icon="mdi-camera"
@@ -43,22 +43,22 @@
                 </v-col>
                 <v-col cols="12" class="py-0" sm="6">
                   <v-text-field
+                  v-model="name"
                     :rules="nameRules"
                     clearable
                     outlined
                     dense
-                    v-model="name"
                     label="ຊື່*"
                     required
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" class="py-0" sm="6">
                   <v-text-field
+                  v-model="phone"
                     :rules="telephoneRules"
                     clearable
                     outlined
                     dense
-                    v-model="phone"
                     label="ເບີ*"
                     required
                   ></v-text-field>
@@ -94,30 +94,30 @@
                 </v-col>
                 <v-col cols="12" class="py-0" sm="6">
                   <v-text-field
+                  v-model="village"
                     clearable
                     outlined
                     dense
-                    v-model="village"
                     label="village"
                     required
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" class="py-0">
                   <v-text-field
+                  v-model="address"
                     clearable
                     outlined
                     dense
-                    v-model="address"
                     label="address"
                     required
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" class="py-0">
                   <v-text-field
+                  v-model="description"
                     clearable
                     outlined
                     dense
-                    v-model="description"
                     label="Description*"
                     class="custom-textarea"
                   ></v-text-field>
@@ -138,8 +138,8 @@
               color="blue darken-1"
               :loading="loading"
               text
-              @click="insert()"
               :disabled="!valid"
+              @click="insert()"
             >
               Save
             </v-btn>
@@ -239,8 +239,7 @@ export default {
           return response?.data?.url
         })
         .catch((error) => {
-          console.error('File upload failed')
-          console.error(error)
+          this.$toast.success('File upload failed',error)
         })
 
       const data = {
@@ -249,6 +248,7 @@ export default {
         phone: this.phone,
         provinceId: this.provinceId,
         districtId: this.districtId,
+        village: this.village,
         description: this.description,
         profile: this.urlImage,
       }

@@ -137,7 +137,7 @@ export default {
         },
         //  ຈັດການຂໍ້ມູນພີ້ນຖາມ
         {
-          icon: 'mdi-dots-triangle',
+          icon: 'mdi-group',
           title: 'ຈັດການຂໍ້ມູນພື້ນຖານ',
           children: [
             {

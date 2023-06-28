@@ -84,7 +84,7 @@
                       color="blue"
                       :loading="loading"
                       :disabled="category == ''"
-                      @click="insert()"
+                      @click="update()"
                     >
                       <v-icon>mdi-check</v-icon>
                       ອັດເດດ
@@ -192,6 +192,7 @@ export default {
       await this.$store.dispatch('category/update', { updateId, data })
       setTimeout(() => {
         this.loading = false
+      this.dialog = false
         this.$store.dispatch('category/selectCategory')
         this.category = ''
       }, 1000)

@@ -19,10 +19,10 @@
         >
           <v-img
             class="shadow-img"
-            lazy-src="user.png"
+            lazy-src="no_user.png"
             max-height="250"
             max-width="250"
-            :src="`https://loyal-api.itcapital.la/${getOneUser.picture}`"
+            :src="`${getOneUser.profile}`"
           />
         </div>
         <v-card-title class="box2">

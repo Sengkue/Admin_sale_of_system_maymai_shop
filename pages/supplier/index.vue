@@ -24,8 +24,8 @@
             <v-row>
               <v-col cols="12" sm="6">
                 <v-text-field
+                v-model="search"
                   prepend-inner-icon="mdi-magnify"
-                  v-model="search"
                   label="ຄົ້ນຫາ"
                   outlined
                   hide-details
@@ -121,7 +121,6 @@
             </v-card>
           </v-col>
         </v-row>
-        {{ getEdit }}
       </v-card>
     </div>
     <div v-if="getEdit">
@@ -186,7 +185,7 @@ export default {
       await this.$store.dispatch("supplier/selectAll");
       this.loading = false;
     } catch (error) {
-      console.log("error!");
+      this.$toast.success("error!");
     }
   },
 
@@ -235,6 +234,8 @@ export default {
       const id = item.id;
       await this.$store.dispatch("supplier/selectOne", { id });
       this.$store.commit("supplier/setEdit", true);
+      this.$store.dispatch('province/selectProvince')
+    this.$store.dispatch('district/selectDistrict')
       this.isLoading = false;
     },
     async Insert() {

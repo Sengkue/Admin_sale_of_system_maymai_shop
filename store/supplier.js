@@ -37,7 +37,6 @@ export const actions = {
       .get("/supplier")
       .then((data) => {
         commit("setSelectAll", data.data);
-        console.log('show supplier:', data.data)
       })
       .catch((error) => {
         this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
@@ -87,9 +86,9 @@ export const actions = {
       },
     };
     await this.$axios
-      .post("/uploads/lawyer-images", formData, config)
+      .post("upload/single", formData, config)
       .then((data) => {
-        commit("setImage", data.data.images[0].image);
+        commit("setImage", data.data.url);
       })
       .catch((error) => {
         this.$toast.error("ຮູບພາບມີບັນຫາ!", error);

@@ -2,18 +2,18 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="800px">
       <v-card>
-        <v-card-title>
+        <v-card class="red white--text d-flex justify-center py-2">
           <span class="text-h5 shadow"> Edit supplier</span>
-          <v-spacer />
-          <v-btn
+
+          <!-- <v-btn
             color="error darken-1"
             class="mt-n6 mr-n6"
             text
             @click="back()"
           >
             <v-icon>mdi-close-box-multiple</v-icon> Close
-          </v-btn>
-        </v-card-title>
+          </v-btn> -->
+        </v-card>
 
         <div class="d-flex justify-center mb-5"></div>
 
@@ -46,56 +46,84 @@
               <v-row>
                 <v-col cols="12" sm="6" class="py-0">
                   <v-text-field
+                  v-model="name"
                     :rules="nameRules"
                     clearable
                     outlined
                     dense
-                    v-model="name"
                     label="ຊື່*"
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" class="py-0">
+                <v-col cols="12" class="py-0" sm="6">
                   <v-text-field
-                    :rules="surnameRules"
-                    clearable
-                    outlined
-                    dense
-                    v-model="surname"
-                    label="ນາມສະກຸນ*"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" class="py-0">
-                  <v-text-field
+                  v-model="phone"
                     :rules="telephoneRules"
                     clearable
                     outlined
                     dense
-                    v-model="tel"
-                    label="ເບີ"
+                    label="ເບີ*"
                     required
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" class="py-0"
-                  ><v-text-field
-                    :rules="emailRules"
+                <v-col cols="6">
+                  <v-select
+                    v-model="provinceId"
+                    outlined
+                    dense
+                    :items="getProvince"
+                    item-value="id"
+                    item-text="provinceName"
+                    label="ແຂວງ"
+                    required
+                    clearable
+                    clear-icon="mdi-close-circle-outline"
+                    @change="onProvinceSelected"
+                  ></v-select>
+                </v-col>
+                <v-col cols="6">
+                  <v-select
+                    v-model="districtId"
+                    outlined
+                    dense
+                    :items="getDistrict"
+                    item-value="id"
+                    item-text="districtName"
+                    label="ເມືອງ"
+                    required
+                    clearable
+                    clear-icon="mdi-close-circle-outline"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" class="py-0" sm="6">
+                  <v-text-field
+                    v-model="village"
                     clearable
                     outlined
                     dense
-                    v-model="email"
-                    label="Email*"
+                    label="village"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" class="py-0">
+                  <v-text-field
+                    v-model="address"
+                    clearable
+                    outlined
+                    dense
+                    label="address"
                     required
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" class="py-0">
-                  <v-textarea
+                  <v-text-field
+                    v-model="description"
                     clearable
                     outlined
                     dense
-                    v-model="task"
-                    label="task*"
-                    required
-                  ></v-textarea>
+                    label="Description*"
+                    class="custom-textarea"
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -113,8 +141,8 @@
             color="blue darken-1"
             text
             :loading="loading"
-            @click="updateItem()"
             :disabled="!valid"
+            @click="updateItem()"
           >
             Save
           </v-btn>
@@ -149,6 +177,7 @@ export default {
       (v) => /^\d+$/.test(v) || 'Telephone must contain only digits',
     ],
     districtId: '',
+    village: '',
     // emailRules: [
     //   (v) => !!v || 'E-mail is required',
     //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
@@ -158,6 +187,7 @@ export default {
     loading: false,
     success: false,
     error: false,
+    imagedata: '',
   }),
   computed: {
     getPercentage: {
@@ -169,22 +199,35 @@ export default {
     getOneUser() {
       return this.$store.state.supplier.StateSelectOne
     },
+    getProvince() {
+      return this.$store.state.province.AllProvince || []
+    },
+    getDistrict() {
+      return this.$store.state.district.byProvinceId || []
+    },
   },
   created() {
     this.dialog = this.$store.state.supplier.edit
     if (this.getOneUser) {
       this.supplierId = this.getOneUser.id
       this.name = this.getOneUser.name
-      // this.surname = this.getOneUser.surname;
-      this.tel = this.getOneUser.phone
-
-      // this.email = this.getOneUser.email;
+      this.phone = this.getOneUser.phone
+      this.provinceId = this.getOneUser.provinceId
+      this.districtId = this.getOneUser.districtId
+      this.village = this.getOneUser.village
       this.file = this.getOneUser.profile
       this.task = this.getOneUser.description
       this.image = this.getOneUser.profile
+      this.address = this.getOneUser.address
+      this.description = this.getOneUser.description
     }
+    this.onProvinceSelected()
   },
   methods: {
+    onProvinceSelected() {
+      const id = this.provinceId
+      this.$store.dispatch('district/getByProvinceId', id)
+    },
     onFileChange(e) {
       if (e) {
         this.url = URL.createObjectURL(e)
@@ -198,26 +241,28 @@ export default {
     },
     async updateItem() {
       this.uploadImage = true
-      let imagedata = ''
       const id = this.supplierId
       this.$refs.form.validate()
       if (!this.valid) return
       this.loading = true
       if (this.files !== null) {
         await this.$store.dispatch('supplier/upload', this.files)
-        imagedata = await this.$store.state.supplier.image
+        this.imagedata = await this.$store.state.supplier.image
       } else {
-        imagedata = this.getOneUser.picture
+        this.imagedata = this.getOneUser.picture
       }
       try {
         const formData = {
           name: this.name,
-          surname: this.surname,
-          tel: this.tel,
-          email: this.email,
-          task: this.task,
-          picture: imagedata,
+          address: this.address,
+          phone: this.phone,
+          provinceId: this.provinceId,
+          districtId: this.districtId,
+          village: this.village,
+          description: this.description,
+          profile: this.imagedata,
         }
+
         await this.$store.dispatch('supplier/update', { formData, id })
         this.uploadImage = false
         this.$store.commit('supplier/setEdit', false)

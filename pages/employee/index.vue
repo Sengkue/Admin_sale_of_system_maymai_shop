@@ -13,11 +13,11 @@
           <template #top>
             <v-toolbar flat>
               <v-text-field
+              v-model="search"
                 append-icon="mdi-magnify"
                 placeholder="ຄົ້ນຫາ"
                 outlined
                 dense
-                v-model="search"
                 class="mt-4"
               ></v-text-field>
               <v-spacer></v-spacer>
@@ -47,7 +47,6 @@
             </v-row>
           </template>
         </v-data-table>
-        <div>{{ getEmployee }}</div>
       </v-card-text>
     </v-card>
   </div>
@@ -167,7 +166,6 @@ export default {
       })
     },
     editAction(item) {
-      this.$store.dispatch(`employee/setUpdate`, item)
       this.$router.push(`employee/${item.id}`)
     },
   },
