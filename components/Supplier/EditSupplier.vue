@@ -21,10 +21,7 @@
           <div>
             <v-avatar size="120">
               <v-img v-if="url" :src="url"></v-img>
-              <v-img
-                v-else
-                :src="`https://loyal-api.itcapital.la/${file}`"
-              ></v-img>
+              <v-img v-else :src="`${file}`"></v-img>
             </v-avatar>
           </div>
           <v-file-input
@@ -75,7 +72,7 @@
                     outlined
                     dense
                     v-model="tel"
-                    label="ເບີ*"
+                    label="ເບີ"
                     required
                   ></v-text-field>
                 </v-col>
@@ -136,28 +133,28 @@ export default {
     dialog: false,
     valid: false,
     file: null,
-    name: "",
+    name: '',
     nameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.length <= 50) || "Name must be less than 50 characters",
+      (v) => !!v || 'Name is required',
+      (v) => (v && v.length <= 50) || 'Name must be less than 50 characters',
     ],
-    surname: "",
+    provinceId: '',
     surnameRules: [
-      (v) => !!v || "Surname is required",
-      (v) => (v && v.length <= 50) || "Surname must be less than 50 characters",
+      (v) => !!v || 'Surname is required',
+      (v) => (v && v.length <= 50) || 'Surname must be less than 50 characters',
     ],
-    tel: "",
+    phone: '',
     telephoneRules: [
-      (v) => !!v || "Telephone is required",
-      (v) => /^\d+$/.test(v) || "Telephone must contain only digits",
+      (v) => !!v || 'Telephone is required',
+      (v) => /^\d+$/.test(v) || 'Telephone must contain only digits',
     ],
-    email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+/.test(v) || "E-mail must be valid",
-      (v) => (v && v.length <= 50) || "E-mail must be less than 50 characters",
-    ],
-    supplierId: "",
+    districtId: '',
+    // emailRules: [
+    //   (v) => !!v || 'E-mail is required',
+    //   (v) => /.+@.+/.test(v) || 'E-mail must be valid',
+    //   (v) => (v && v.length <= 50) || 'E-mail must be less than 50 characters',
+    // ],
+    supplierId: '',
     loading: false,
     success: false,
     error: false,
@@ -165,52 +162,52 @@ export default {
   computed: {
     getPercentage: {
       get() {
-        return this.$store.state.supplier.uploadProgress;
+        return this.$store.state.supplier.uploadProgress
       },
       set(value) {},
     },
     getOneUser() {
-      return this.$store.state.supplier.StateSelectOne;
+      return this.$store.state.supplier.StateSelectOne
     },
   },
   created() {
-    this.dialog = this.$store.state.supplier.edit;
+    this.dialog = this.$store.state.supplier.edit
     if (this.getOneUser) {
-      this.supplierId = this.getOneUser.id;
-      this.name = this.getOneUser.name;
+      this.supplierId = this.getOneUser.id
+      this.name = this.getOneUser.name
       // this.surname = this.getOneUser.surname;
-      this.tel = this.getOneUser.phone;
+      this.tel = this.getOneUser.phone
 
       // this.email = this.getOneUser.email;
-      this.file = this.getOneUser.profile;
-      this.task = this.getOneUser.description;
-      this.image = this.getOneUser.profile;
+      this.file = this.getOneUser.profile
+      this.task = this.getOneUser.description
+      this.image = this.getOneUser.profile
     }
   },
   methods: {
     onFileChange(e) {
       if (e) {
-        this.url = URL.createObjectURL(e);
+        this.url = URL.createObjectURL(e)
       }
     },
     upload() {
-      document.getElementById("file").click();
+      document.getElementById('file').click()
     },
     back() {
-      this.$store.commit("supplier/setEdit", false);
+      this.$store.commit('supplier/setEdit', false)
     },
     async updateItem() {
-      this.uploadImage = true;
-      let imagedata = '';
-      const id = this.supplierId;
-      this.$refs.form.validate();
-      if (!this.valid) return;
-      this.loading = true;
+      this.uploadImage = true
+      let imagedata = ''
+      const id = this.supplierId
+      this.$refs.form.validate()
+      if (!this.valid) return
+      this.loading = true
       if (this.files !== null) {
-        await this.$store.dispatch("supplier/upload", this.files);
-         imagedata = await this.$store.state.supplier.image;
+        await this.$store.dispatch('supplier/upload', this.files)
+        imagedata = await this.$store.state.supplier.image
       } else {
-         imagedata = this.getOneUser.picture;
+        imagedata = this.getOneUser.picture
       }
       try {
         const formData = {
@@ -220,19 +217,19 @@ export default {
           email: this.email,
           task: this.task,
           picture: imagedata,
-        };
-        await this.$store.dispatch("supplier/update", { formData, id });
-        this.uploadImage = false;
-        this.$store.commit("supplier/setEdit", false);
-        this.$store.dispatch("supplier/selectAll");
-        this.success = true;
-        this.$refs.form.reset();
+        }
+        await this.$store.dispatch('supplier/update', { formData, id })
+        this.uploadImage = false
+        this.$store.commit('supplier/setEdit', false)
+        this.$store.dispatch('supplier/selectAll')
+        this.success = true
+        this.$refs.form.reset()
       } catch (error) {
-        this.error = true;
+        this.error = true
       } finally {
-        this.loading = false;
+        this.loading = false
       }
     },
   },
-};
+}
 </script>

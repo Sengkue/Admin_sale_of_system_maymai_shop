@@ -29,41 +29,43 @@
           <v-row>
             <v-col cols="12">
               <div class="d-flex">
-                <div  style="font-size: 16px; font-weight: bold;">
-                  ຊື່:
-                </div>
+                <div style="font-size: 16px; font-weight: bold">ຊື່:</div>
                 <span class="pl-2"> {{ getOneUser.name }}</span>
               </div>
               <v-divider />
               <div class="d-flex">
-                <div style="font-size: 16px; font-weight: bold;">
-                  ນາມສະກຸນ:
-                </div>
-                <span class="pl-2"> {{ getOneUser.surname }}</span>
+                <div style="font-size: 16px; font-weight: bold">phone:</div>
+                <span class="pl-2"> {{ getOneUser.phone }}</span>
               </div>
               <v-divider />
 
               <div class="d-flex">
-                <div style="font-size: 16px; font-weight: bold;">
-                  email:
-                </div>
-                <span class="pl-2"> {{ getOneUser.email }}</span>
+                <div style="font-size: 16px; font-weight: bold">Address:</div>
+                <span class="pl-2"> {{ getOneUser.address }}</span>
               </div>
               <v-divider />
 
               <div class="d-flex">
-                <div style="font-size: 16px; font-weight: bold;">
-                  ເບີ:
-                </div>
-                <span class="pl-2"> {{ getOneUser.tel }}</span>
+                <div style="font-size: 16px; font-weight: bold">province</div>
+                <span class="pl-2"> {{ getOneUser.province }}</span>
+              </div>
+              <v-divider />
+              <div class="d-flex">
+                <div style="font-size: 16px; font-weight: bold">district</div>
+                <span class="pl-2"> {{ getOneUser.district }}</span>
+              </div>
+              <v-divider />
+              <div class="d-flex">
+                <div style="font-size: 16px; font-weight: bold">village</div>
+                <span class="pl-2"> {{ getOneUser.village }}</span>
               </div>
               <v-divider />
               <div>
-                <div class=" text-caption text-sm-body-2 text-md-body-1">
+                <div class="text-caption text-sm-body-2 text-md-body-1">
                   task:
                 </div>
                 <v-card-text max-height="200" style="border: 1px solid silver">
-                  {{ getOneUser.task }}</v-card-text
+                  {{ getOneUser.description }}</v-card-text
                 >
               </div>
               <v-divider />
@@ -78,22 +80,22 @@
 <script>
 export default {
   data: () => ({
-    dialog: "",
+    dialog: '',
   }),
   computed: {
     getOneUser() {
-      return this.$store.state.supplier.StateSelectOne;
+      return this.$store.state.supplier.StateSelectOne
     },
   },
   mounted() {
-    this.dialog = this.$store.state.supplier.view;
+    this.dialog = this.$store.state.supplier.view
   },
   methods: {
     back() {
-      this.$store.commit("supplier/setView", false);
+      this.$store.commit('supplier/setView', false)
     },
   },
-};
+}
 </script>
 <style lang="scss" scoped>
 .shadow-img {
