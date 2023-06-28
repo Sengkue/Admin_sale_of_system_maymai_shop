@@ -1,18 +1,22 @@
 export const state = () => ({
-  profile:{},
-  Allcategory:'',
+  StateSelectAll:[],
+  StateSelectOne: "",
   edit: false,
   view: false,
   insert: false,
-  findOne:''
-})
+  image: null,
+  uploadProgress: 0, // new state property
+});
 
-export const mutations={
-  setProfile(state, data){
-    state.profile = data
+export const mutations = {
+  setImage(state, data) {
+    state.image = data;
   },
-  setAllcategory(state, data){
-    state.Allcategory = data
+  setSelectAll(state, data) {
+    state.StateSelectAll = data;
+  },
+  setSelectOne(state, data) {
+    state.StateSelectOne = data;
   },
   setView(state, data) {
     state.view = data;
@@ -23,70 +27,85 @@ export const mutations={
   setInsert(state, data) {
     state.insert = data;
   },
-  setFindOne(state, data) {
-    state.findOne = data;
+  setUploadProgress(state, progress) {
+    state.uploadProgress = progress;
   },
-}
-
+};
 export const actions = {
-  async update({ commit }, data) {
-    try {
-      const id = data.updateId;
-      const items = data.data;
-      await this.$axios.put(`/category/${id}`, items);
-      this.$toast.success('Category updated successfully');
-    } catch (error) {
-      this.$toast.error('update Category fail!!! ', error)
-      
-    }
-  },
-  
-  async selectOne({ commit }, id) {
-    try {
-      const response = await this.$axios.get(`/category/${id}`);
-      commit('setFindOne', response.data.result);
-    } catch (error) {
-      // Handle the error here
-      this.$toast.error('Select Category fail!!! ', error)
-      // You can perform additional actions like displaying an error toast or updating the state
-    }
-  },
-  
- async insert({ commit }, category) {
-
-   await this.$axios.post('category', category)
-      .then((res) => {
-       this.$toast.success('Insert Category success.')
+  async selectAll({ commit }) {
+    await this.$axios
+      .get("/supplier")
+      .then((data) => {
+        commit("setSelectAll", data.data);
+        console.log('show supplier:', data.data)
       })
       .catch((error) => {
-       this.$toast.error('Insert Category fail!!! ', error)
-         });
-  },
-  
-  async selectCategory({ commit }) {
-    try { 
-      await this.$axios.get('/category').then((res)=>{
-        commit('setAllcategory', res.data.result);
+        this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
       });
-    } catch (error) {
-      this.$toast.error('An error occurred while fetching categories'); }
   },
-  
-  
+  async selectOne({ commit }, data) {
+    const id = data.id;
+    await this.$axios
+      .get(`/supplier/${id}`)
+      .then((data) => {
+        commit("setSelectOne", data.data);
+      })
+      .catch((error) => {
+        this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
+      });
+  },
+  async delete({ commit }, data) {
+    const id = data.deleteId;
+    await this.$axios
+      .delete(`/supplier/${id}`)
+      .then((data) => {
+      })
+      .catch((error) => {
+        this.$toast.error("ການລືບຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
+      });
+  },
+  async insert({ commit }, data) {
+    await this.$axios
+      .post("supplier/", data)
+      .then((data) => {
+        this.$toast.success("ການເພີ່ມຂໍ້ມູນຂອງທ່ານສຳເລັດ!");
+        commit("setUploadProgress", 0);
+      })
+      .catch((error) => {
+        this.$toast.error("ການເພີ່ມຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
+      });
+  },
+  async upload({ commit }, data) {
+    const formData = new FormData();
+    formData.append("file", data);
+    const config = {
+      onUploadProgress: function (progressEvent) {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        commit("setUploadProgress", percentCompleted);
+      },
+    };
+    await this.$axios
+      .post("/uploads/lawyer-images", formData, config)
+      .then((data) => {
+        commit("setImage", data.data.images[0].image);
+      })
+      .catch((error) => {
+        this.$toast.error("ຮູບພາບມີບັນຫາ!", error);
+      });
+  },
 
-  async login({ commit }, form) {
-    try {
-      const res = await this.$axios.post('/category/login', form);
-      this.$cookies.set('token', res.data.token);
-      this.$cookies.set('status', res.data.status);
-      this.$cookies.set('name', res.data.employeeFirstName ? res.data.employeeFirstName : res.data.ownerFirstName);
-      this.$router.push('/');
-      this.$toast.success('welcome to maymai shop pos')
-    } catch (error) {
-      // Handle the error here
-      this.$toast.error('Login fail, please check your number and password! ',error);
-      // You can perform additional actions like displaying an error toast or updating the state
-    }
+  async update({ commit }, data) {
+    const id = data.id;
+    const dataItems = data.formData;
+    await this.$axios
+      .put(`/supplier/${id}`, dataItems)
+      .then((data) => {
+        this.$toast.success("ການແກ້ໄຂຂໍ້ມູນຂອງທ່ານສຳເລັດ!");
+      })
+      .catch((error) => {
+        this.$toast.error("ຮູການແກ້ໄຂຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
+      });
   },
-  
 };

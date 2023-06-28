@@ -1,113 +1,256 @@
 <template>
-    <v-card class="elevation-0">
-      <v-row justify="center">
-        <h2 class="mt-5 mb-5">ຈັດການຂໍ້ມູນຜູ້ສະໜອງ</h2>
-      </v-row>
-      <v-data-table
-        :headers="headers"
-        :items="suplier"
-        :search="search"
-        item-key="idx"
-        sort-by="name"
-        class="elevation-2 table"
-      >
-        <template #top>
-          <v-toolbar flat>
-            <v-toolbar-title>ຈັດການຂໍ້ມູນຜູ້ສະໜອງ</v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
-            <v-spacer></v-spacer>
-            <v-text-field
-              outlined
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="ຄົ້ນຫາ"
-              single-line
-              hide-details
-              dense
-            >
-            </v-text-field>
-            <v-spacer></v-spacer>
-            <v-btn
-              class="mb-2"
-              style="font-size: 17px; font-weight: bold"
-              color="primary"
-              to="supplier/add"
-            >
-              <v-icon large>mdi-plus</v-icon>
-              ເພີ່ມຜູ້ສະໜອງ
-            </v-btn>
-          </v-toolbar>
-          <v-divider></v-divider>
-        </template>
-  
-        <template v-slot:item="{ item }">
-          <tr v-ripple="{ class: `white--text` }">
-            <td>{{ item.idx }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.tel }}</td>
-            <td>{{ item.email }}</td>
-            <td>{{ item.address }}</td>
-            <td>
-              <v-row>
-                <v-icon @click="EditSuplier(item)" class="mr-2" color="primary"
-                  >mdi-pencil</v-icon
+  <div>
+    <div>
+      <v-card class="px-5">
+        <v-row>
+          <v-col cols="12" sm="12">
+            <div class="d-flex justify-center">
+              <v-card class="px-5 py-2" elevation="0">
+                <h2>ຈັດການຂໍ້ມນຜູ້ສະໜອງ</h2>
+              </v-card>
+            </div>
+          </v-col>
+          <v-col v-if="isLoading" cols="12" sm="12">
+            <div class="d-flex justify-center">
+              <v-progress-circular
+                :size="40"
+                :width="5"
+                color="teal"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+          </v-col>
+          <v-col cols="12" sm="12" class="mt-2">
+            <v-row>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  prepend-inner-icon="mdi-magnify"
+                  v-model="search"
+                  label="ຄົ້ນຫາ"
+                  outlined
+                  hide-details
+                  clearable
+                  dense
+                  small
+                  class="box2"
                 >
-                <v-icon color="red" @click="DeleteSuplier(item)"
-                  >mdi-trash-can-outline</v-icon
-                >
-              </v-row>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
-  
-      <v-dialog v-model="dialogDelete" max-width="500px">
-        <v-card rounded>
-          <v-card-title class="headline justify-center"
-            >Delete suplier</v-card-title
-          >
-          <v-divider class></v-divider>
-          <v-card-text>Are you sure you want to delete this item?</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="error" text @click="closeDelete">Cancel</v-btn>
-            <v-btn color="green accent-3" text @click="deleteSuplierConfirm"
-              >OK</v-btn
-            >
-            <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-card>
-  </template>
-  <script>
-  export default {
-    data() {
-      return {
-        search: '',
-        dialogDelete: false,
-        deleteItem: [],
-        headers: [
-          { text: 'ລໍາດັບ', value: 'idx' },
-          { text: 'ຊື່ຜູ້ສະໜອງ', value: 'name' },
-          { text: 'ເບີ້ໂທ', value: 'tel' },
-          { text: 'ອີເມວ', value: 'email' },
-          { text: 'ທີ່ຢູ່', value: 'address' },
-          { text: 'Actions', value: 'actions', sortable: false },
-        ],
-        suplier: [
-          {
-            idx: '1',
-            name: 'tou',
-            tel: '02097181800',
-            email: 'touyang@gmail.com',
-            address: 'dongdork',
-          },
-        ],
-      }
+                </v-text-field></v-col
+              >
+              <v-col cols="12" sm="6">
+                <div class="d-flex justify-end">
+                  <v-btn class="mt-1" color="teal" dark @click="Insert"
+                    ><v-icon>mdi-plus-box</v-icon>ເພີ່ມໃໝ່</v-btn
+                  >
+                </div>
+              </v-col>
+            </v-row>
+            <div></div>
+          </v-col>
+          <v-col cols="12" sm="12">
+            <v-card>
+              <v-data-table
+                :headers="headers"
+                :items="getRow"
+                :search="search"
+                :items-per-page="10"
+                class="elevation-1"
+                :loading="loading"
+              >
+                <template #[`item.profile`]="{ item }">
+                  <div>
+                    <v-img
+                      :src="`${item.profile}`"
+                      width="60"
+                    ></v-img>
+                  </div>
+                </template>
+                <template #[`item.createdAt`]="{ value }">
+                  {{ value | DateToText }}
+                </template>
+                <template #[`item.updatedAt`]="{ value }">
+                  {{ value | DateToText }}
+                </template>
+                <template #[`item.actions`]="{ item }">
+                    <v-tooltip top color="red">
+                      <template #activator="{ on }">
+                        <v-btn
+                          icon
+                          text
+                          color="red"
+                          @click="deleteItem(item.id)"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                      </template>
+                      Delete
+                    </v-tooltip>
+
+                    <v-tooltip top color="green">
+                      <template #activator="{ on }">
+                        <v-btn
+                          class=" mx-n3"
+                          icon
+                          text
+                          color="green"
+                          @click="edit(item)"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                      </template>
+                      Edit
+                    </v-tooltip>
+
+                    <v-tooltip top color="blue">
+                      <template #activator="{ on }">
+                        <v-btn
+                          color="blue"
+                          text
+                          icon
+                          @click="viewDetail(item)"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-eye</v-icon>
+                        </v-btn>
+                      </template>
+                      View
+                    </v-tooltip>
+                  </template>
+              </v-data-table>
+            </v-card>
+          </v-col>
+        </v-row>
+        {{ getEdit }}
+      </v-card>
+    </div>
+    <div v-if="getEdit">
+      <SupplierEditSupplier />
+    </div>
+    <div v-if="getView">
+      <SupplierViewSupplier />
+    </div>
+    <div v-if="getInsert">
+      <SupplierInsertSupplier />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isLoading: false,
+      loading: false,
+      viewLoading: false,
+      search: "",
+      showDialog: "",
+      headers: [
+        { text: "ລຳດັບ", value: "index" },
+        { text: "ຮູບ", value: "profile" },
+        { text: "ຊື່", value: "name" },
+        // { text: "ນາມສະກຸນ", value: "surname" },
+        // { text: "email", value: "email" },
+        { text: "ເບີ", value: "phone" },
+        { text: "Create", value: "createdAt" },
+        { text: "updatedAt", value: "updatedAt" },
+        { text: "Actions", value: "actions" },
+      ],
+    };
+  },
+  computed: {
+    getRow() {
+      return this.$store.state.supplier.StateSelectAll.map((item, index) => {
+        return {
+          index: index + 1,
+          ...item,
+        };
+      });
     },
-    EditSuplier(item) {
-      this.$router.push(`edite/${item.sup_id}`)
+    getEdit() {
+      return this.$store.state.supplier.edit;
     },
-  }
-  </script>
+    getView() {
+      return this.$store.state.supplier.view;
+    },
+    getInsert() {
+      return this.$store.state.supplier.insert;
+    },
+    getOneUser() {
+      return this.$store.state.supplier.StateSelectOne;
+    },
+  },
+  async mounted() {
+    try {
+      this.loading = true;
+      await this.$store.dispatch("supplier/selectAll");
+      this.loading = false;
+    } catch (error) {
+      console.log("error!");
+    }
+  },
+
+  methods: {
+    async deleteItem(item) {
+      const deleteId = item;
+      await this.$swal
+        .fire({
+          title: "ທ່ານແນ່ໃຈບໍ?",
+          text: `ທີ່ຈະລືບຂໍ້ມູນລາຍການນີ້!`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "ຢືນຢັນລືບ!",
+          cancelButtonText: "ຍົກເລີກ",
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.loading = true;
+            await this.$store.dispatch("supplier/delete", { deleteId });
+            await this.$store.dispatch("supplier/selectAll");
+
+            this.loading = false;
+            this.$swal.fire({
+              title: "ລືບສຳເລັດ!",
+              text: "ຂໍ້ມູນໄດ້ຖືກລືບແລ້ວ.",
+              icon: "success",
+              confirmButtonText: "OKAY",
+              customClass: {
+                container: "my-swal-container",
+              },
+            });
+          }
+        });
+    },
+    async viewDetail(item) {
+      this.isLoading = true;
+      const id = item.id;
+      await this.$store.dispatch("supplier/selectOne", { id });
+      this.$store.commit("supplier/setView", true);
+      this.isLoading = false;
+    },
+    async edit(item) {
+      this.isLoading = true;
+      const id = item.id;
+      await this.$store.dispatch("supplier/selectOne", { id });
+      this.$store.commit("supplier/setEdit", true);
+      this.isLoading = false;
+    },
+    async Insert() {
+      this.isLoading = false;
+      await this.$store.commit("supplier/setInsert", true);
+      this.$store.dispatch('province/selectProvince')
+    this.$store.dispatch('district/selectDistrict')
+      this.isLoading = false;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.my-swal-container {
+  padding: 25px;
+  margin: 25px;
+}
+</style>
