@@ -69,7 +69,7 @@
         <v-btn text rounded>
           <v-badge color="success" dot
             ><span class="btn"
-              >ຜູ້ເຂົ້າໃໍຊ້ລະບົບ : {{ $cookies.get('name') }}</span
+              >ຜູ້ເຂົ້າໃໍຊ້: {{ $cookies.get('name') }}</span
             ></v-badge
           >
         </v-btn>

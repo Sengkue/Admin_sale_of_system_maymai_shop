@@ -6,11 +6,15 @@ export const state = () => ({
   insert: false,
   image: null,
   uploadProgress: 0, // new state property
+  ProductId:''
 });
 
 export const mutations = {
   setImage(state, data) {
     state.image = data;
+  },
+  setProductId(state, data) {
+    state.ProductId = data;
   },
   setSelectAll(state, data) {
     state.StateSelectAll = data;
@@ -67,34 +71,36 @@ export const actions = {
     await this.$axios
       .post("product/", data)
       .then((data) => {
+        commit('setProductId:', data.data.result.id)
+        console.log('setProductId:', data.data.result.id)
         this.$toast.success("ການເພີ່ມຂໍ້ມູນຂອງທ່ານສຳເລັດ!");
         commit("setUploadProgress", 0);
-        this.$router.push('/product')
       })
       .catch((error) => {
         this.$toast.error("ການເພີ່ມຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
       });
   },
-  async upload({ commit }, data) {
-    const formData = new FormData();
-    formData.append("file", data);
-    const config = {
-      onUploadProgress: function (progressEvent) {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
-        commit("setUploadProgress", percentCompleted);
-      },
-    };
-    await this.$axios
-      .post("upload/single", formData, config)
-      .then((data) => {
-        commit("setImage", data.data.url);
-      })
-      .catch((error) => {
-        this.$toast.error("ຮູບພາບມີບັນຫາ!", error);
-      });
-  },
+  
+  // async upload({ commit }, data) {
+  //   const formData = new FormData();
+  //   formData.append("file", data);
+    // const config = {
+    //   onUploadProgress: function (progressEvent) {
+    //     const percentCompleted = Math.round(
+    //       (progressEvent.loaded * 100) / progressEvent.total
+    //     );
+    //     commit("setUploadProgress", percentCompleted);
+    //   },
+    // };
+  //   await this.$axios
+  //     .post("upload/single", formData, config)
+  //     .then((data) => {
+  //       commit("setImage", data.data.url);
+  //     })
+  //     .catch((error) => {
+  //       this.$toast.error("ຮູບພາບມີບັນຫາ!", error);
+  //     });
+  // },
 
   async update({ commit }, data) {
     const id = data.id;
