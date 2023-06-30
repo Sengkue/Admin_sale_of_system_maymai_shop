@@ -1,6 +1,6 @@
 export const state = () => ({
   profile:{},
-  Allcategory:'',
+  Allcategory:[],
   edit: false,
   view: false,
   insert: false,

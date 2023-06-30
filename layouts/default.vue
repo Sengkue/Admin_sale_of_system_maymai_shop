@@ -63,7 +63,6 @@
         <v-img class="ma-1" :src="require('@/static/images/logo.png')" />
       </v-avatar>
       <!-- <h2>Sale System Of Maymai Shop</h2> -->
-      <v-spacer></v-spacer>
       <h2 style="color: #004d40">ລະບົບຂາຍ ຮ້ານຂາຍເຄື່ອງແມ່ໄໝ</h2>
       <v-spacer />
       <div v-ripple class="text-center px-3 cursor-pointer">

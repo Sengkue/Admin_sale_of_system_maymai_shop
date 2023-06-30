@@ -1,181 +1,257 @@
 <template>
+  <div>
     <div>
-       <v-card flat>
-        <v-row justify="center" class="mt-2">
-            <h2 >
-                ຈັດການຂໍ້ມູນສິນຄ້າ
-            </h2>
-        </v-row>
-        <v-card-text>
-          <v-data-table :headers="headers" :items="items" :search="search">
-          <template #top>
-            <v-toolbar flat>
-              <v-toolbar-title>ລາຍຊື່ສິນຄ້າ</v-toolbar-title>
-              <v-divider inset vertical class="mx-4"></v-divider>
-              <v-text-field
-                    append-icon="mdi-magnify"
-                    placeholder="ຄົ້ນຫາ"
-                    outlined
-                    dense
-                    v-model="search"
-                    class="mt-4"
-                  ></v-text-field>
-              <v-spacer></v-spacer>
-              
-              <v-btn color="primary" to="/product/add">
-                <v-icon>mdi-plus</v-icon>
-                ເພີ່ມສິນຄ້າ
-              </v-btn>
-              <!-- <v-dialog v-model="dialog" max-width="500px">
-                <template #activator="{ on, attrs }">
-                  <v-btn class="mt-n5" color="primary" dark v-bind="attrs" v-on="on" to="/product/add">
-                    <v-icon left>mdi-plus</v-icon> ເພີ່ມ
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-text-field  v-model="search" outlined append-icon="mdi-magnify" class="mt-4" placeholder="ຄົ້ນຫາ" dense
-                    ></v-text-field>
-                </template>
-
-                <v-card>
-                  <v-toolbar dense color="primary" dark>
-                    <v-row justify="center">
-                      {{ formTitle }}
-                    </v-row>
-                  </v-toolbar>
-                  <v-card-text>
-                    <v-form v-model="valid">
-                      <v-row justify="center" class="mt-3">
-                        <v-col cols="12" class="mb-n5">
-                          <v-text-field  v-model="editItem.category_name"  label="ຊື່ປະເພດສິນຄ້າ"  dense outlined  required
-                            :rules="[
-                              (val) => !!val || 'ກະລຸນາປ້ອນຊື່ສິນຄ້າ.',
-                            ]"/>
-                        </v-col>
-                      </v-row>
-                    </v-form>
-                  </v-card-text>
-                  <v-divider></v-divider>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn class="btn-hover" color="blue" @click="close">
-                      <v-icon>mdi-check</v-icon>
-                      ບັນທຶກ
-                    </v-btn>
-
-                    <v-btn class="btn-hover" color="red" @click="close">
-                      <v-icon>mdi-close</v-icon>
-                      ຍົກເລີກ
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog> -->
-            </v-toolbar>
-          </template>
-          <template #[`item.actions`]="{ item }">
-            <v-row no-gutters justify="end">
-              <v-btn color="#dc3455" dark small class="mr-2" @click="deleteAction(item)">
-                <v-icon left>mdi-delete</v-icon>
-                ລືບ</v-btn>
-              <v-btn color="#28a745" dark small @click="editAction(item)">
-                <v-icon left>mdi-pen</v-icon>
-                ແກ້ໄຂ</v-btn>
+      <v-card class="px-5">
+        <v-row>
+          <v-col cols="12" sm="12">
+            <div class="d-flex justify-center">
+              <v-card class="px-5 py-2" elevation="0">
+                <h2>ຈັດການຂໍ້ມນຜູ້ສະໜອງ</h2>
+              </v-card>
+            </div>
+          </v-col>
+          <v-col v-if="isLoading" cols="12" sm="12">
+            <div class="d-flex justify-center">
+              <v-progress-circular
+                :size="40"
+                :width="5"
+                color="teal"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+          </v-col>
+          <v-col cols="12" sm="12" class="mt-2">
+            <v-row>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                v-model="search"
+                  prepend-inner-icon="mdi-magnify"
+                  label="ຄົ້ນຫາ"
+                  outlined
+                  hide-details
+                  clearable
+                  dense
+                  small
+                  class="box2"
+                >
+                </v-text-field></v-col
+              >
+              <v-col cols="12" sm="6">
+                <div class="d-flex justify-end">
+                  <v-btn class="mt-1" color="teal" dark @click="Insert"
+                    ><v-icon>mdi-plus-box</v-icon>ເພີ່ມໃໝ່</v-btn
+                  >
+                </div>
+              </v-col>
             </v-row>
-          </template>
+            <div></div>
+          </v-col>
+          <v-col cols="12" sm="12">
+            <v-card>
+              <v-data-table
+                :headers="headers"
+                :items="getRow"
+                :search="search"
+                :items-per-page="10"
+                class="elevation-1"
+                :loading="loading"
+              >
+                <template #[`item.profile`]="{ item }">
+                  <div>
+                    <v-img
+                      :src="`${item.profile}`"
+                      width="60"
+                    ></v-img>
+                  </div>
+                </template>
+                <template #[`item.createdAt`]="{ value }">
+                  {{ value | DateToText }}
+                </template>
+                <template #[`item.updatedAt`]="{ value }">
+                  {{ value | DateToText }}
+                </template>
+                <template #[`item.actions`]="{ item }">
+                    <v-tooltip top color="red">
+                      <template #activator="{ on }">
+                        <v-btn
+                          icon
+                          text
+                          color="red"
+                          @click="deleteItem(item.id)"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                      </template>
+                      Delete
+                    </v-tooltip>
 
-        </v-data-table>
-      </v-card-text>
-       </v-card>
+                    <v-tooltip top color="green">
+                      <template #activator="{ on }">
+                        <v-btn
+                          class=" mx-n3"
+                          icon
+                          text
+                          color="green"
+                          @click="edit(item)"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                      </template>
+                      Edit
+                    </v-tooltip>
+
+                    <v-tooltip top color="blue">
+                      <template #activator="{ on }">
+                        <v-btn
+                          color="blue"
+                          text
+                          icon
+                          @click="viewDetail(item)"
+                          v-on="on"
+                        >
+                          <v-icon>mdi-eye</v-icon>
+                        </v-btn>
+                      </template>
+                      View
+                    </v-tooltip>
+                  </template>
+              </v-data-table>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card>
     </div>
+    <div v-if="getEdit">
+      <productEditproduct />
+    </div>
+    <div v-if="getView">
+      <productViewproduct />
+    </div>
+    <div v-if="getInsert">
+      <productInsertproduct />
+    </div>
+  </div>
 </template>
+
 <script>
 export default {
   data() {
     return {
-      editItem: {},
-      editIndex: -1,
-      search: '',
-      valid: false,
-      dialog: false,
+      isLoading: false,
+      loading: false,
+      viewLoading: false,
+      search: "",
+      showDialog: "",
       headers: [
-        {
-          text: 'ລຳດັບ',
-          value: 'id'
-        },
-        {
-          text: 'ຮູບພາບ',
-          value: 'img'
-        },
-        {
-          text: 'ສິນຄ້າ',
-          value: 'product'
-        },
-        {
-          text: 'ສີ',
-          value: 'color'
-        },
-        {
-          text: 'ຊື່ປະເພດສິນຄ້າ',
-          value: 'category_name'
-        },
-        {
-          text: 'ຂະໜາດ/ເບິ້',
-          value: 'size'
-        },
-        {
-          text: 'ຈຳນວນ',
-          value: 'item'
-        },
-        {
-          text: 'ລາຄາ(ກີບ)',
-          value: 'price'
-        },
-        {
-          text: 'ສະຖານະ',
-          value: 'status'
-        },
-
-        {
-          text: 'Actions',
-          value: 'actions'
-        },
-
+        { text: "ລຳດັບ", value: "index" },
+        { text: "ຮູບ", value: "profile" },
+        { text: "Barcode", value: "Barcode" },
+        { text: "ຊື່", value: "name" },
+        { text: "ປະເພດ", value: "category" },
+        { text: "ຈຳນວນ", value: "quantity" },
+        { text: "ລາຄາຊື້", value: "cost_price" },
+        { text: "ລາຄາຂາຍ", value: "sale_price" },
+        // { text: "ຜູ້ສະໜອງ", value: "supplier_name" },
+        // { text: "ຄຳອະທິບາຍ", value: "description" },
+        { text: "Create", value: "createdAt" },
+        { text: "updatedAt", value: "updatedAt" },
+        { text: "Actions", value: "actions" },
       ],
-      items: [
-        {
-          id: '1',
-          img:'',
-          product:'mall',
-          color: 'red',
-          category_name: 'ເສື້ອຍາວ',
-          size: 'S'
-        },
-      
-      ]
-
-    }
+    };
   },
   computed: {
-    formTitle() {
-      return this.editIndex === -1 ? "ເພີ່ມຂໍ້ມູນ" : "ແກ້ໄຂຂໍ້ມູນ"
+    getRow() {
+      return this.$store.state.product.StateSelectAll.map((item, index) => {
+        return {
+          index: index + 1,
+          ...item,
+        };
+      });
+    },
+    getEdit() {
+      return this.$store.state.product.edit;
+    },
+    getView() {
+      return this.$store.state.product.view;
+    },
+    getInsert() {
+      return this.$store.state.product.insert;
+    },
+    getOneUser() {
+      return this.$store.state.product.StateSelectOne;
+    },
+  },
+  async mounted() {
+    try {
+      this.loading = true;
+      await this.$store.dispatch("product/selectAll");
+      this.loading = false;
+    } catch (error) {
+      this.$toast.success("error!");
     }
   },
+
   methods: {
-    openDialog() {
-      this.dialog = true
+    async deleteItem(item) {
+      const deleteId = item;
+      await this.$swal
+        .fire({
+          title: "ທ່ານແນ່ໃຈບໍ?",
+          text: `ທີ່ຈະລືບຂໍ້ມູນລາຍການນີ້!`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "ຢືນຢັນລືບ!",
+          cancelButtonText: "ຍົກເລີກ",
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.loading = true;
+            await this.$store.dispatch("product/delete", { deleteId });
+            await this.$store.dispatch("product/selectAll");
+
+            this.loading = false;
+            this.$swal.fire({
+              title: "ລືບສຳເລັດ!",
+              text: "ຂໍ້ມູນໄດ້ຖືກລືບແລ້ວ.",
+              icon: "success",
+              confirmButtonText: "OKAY",
+              customClass: {
+                container: "my-swal-container",
+              },
+            });
+          }
+        });
     },
-    close() {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editItem = Object.assign({}, null)
-        this.editIndex = -1;
-      })
+    async viewDetail(item) {
+      this.isLoading = true;
+      const id = item.id;
+      await this.$store.dispatch("product/selectOne", { id });
+      this.$store.commit("product/setView", true);
+      this.isLoading = false;
     },
-    editAction(list) {
-      this.editedIndex = this.item.indexOf(list);
-      this.editItem = Object.assign({}, list);
-      this.dialog = true;
-    }
-  }
-}
+    async edit(item) {
+      this.isLoading = true;
+      const id = item.id;
+      await this.$store.dispatch("product/selectOne", { id });
+      this.$store.commit("product/setEdit", true);
+      this.$store.dispatch('province/selectProvince')
+    this.$store.dispatch('district/selectDistrict')
+      this.isLoading = false;
+    },
+    Insert() {
+      this.$router.push('/product/add')
+    },
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+.my-swal-container {
+  padding: 25px;
+  margin: 25px;
+}
+</style>

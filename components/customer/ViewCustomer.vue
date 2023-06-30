@@ -1,0 +1,88 @@
+<template>
+  <v-row>
+    <v-dialog v-model="dialog" persistent max-width="800px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5 shadow">customer Details</span>
+          <v-spacer />
+          <v-btn
+            color="error darken-1"
+            class="mt-n10 mr-n6"
+            text
+            @click="back()"
+            ><v-icon>mdi-close-box-multiple</v-icon> Close
+          </v-btn>
+        </v-card-title>
+        <div
+          class="d-flex justify-center pb-2"
+          style="box-shadow: 2px 2px 3px #999"
+        >
+          <v-img
+            class="shadow-img"
+            lazy-src="no_user.png"
+            max-height="250"
+            max-width="250"
+            :src="`${getOneUser.c_profile}`"
+            contain
+          />
+        </div>
+        <v-card-title class="box2">
+          <v-row>
+            <v-col cols="12">
+              <div class="d-flex">
+                <div style="font-size: 16px; font-weight: bold">ຊື່:</div>
+                <span class="pl-2"> {{ getOneUser.c_fname }}</span>
+              </div>
+              <v-divider />
+              <div class="d-flex">
+                <div style="font-size: 16px; font-weight: bold">ນາມສະກຸນ:</div>
+                <span class="pl-2"> {{ getOneUser.c_lname }}</span>
+              </div>
+              <div class="d-flex">
+                <div style="font-size: 16px; font-weight: bold">phone:</div>
+                <span class="pl-2"> {{ getOneUser.c_phone }}</span>
+              </div>
+              <v-divider />
+
+              <div class="d-flex">
+                <div style="font-size: 16px; font-weight: bold">Gender:</div>
+                <span class="pl-2"> {{ getOneUser.c_gender }}</span>
+              </div>
+              <v-divider />
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-card-text> </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-row>
+</template>
+<script>
+export default {
+  data: () => ({
+    dialog: '',
+  }),
+  computed: {
+    getOneUser() {
+      return this.$store.state.customer.StateSelectOne
+    },
+  },
+  mounted() {
+    this.dialog = this.$store.state.customer.view
+  },
+  methods: {
+    back() {
+      this.$store.commit('customer/setView', false)
+    },
+  },
+}
+</script>
+<style lang="scss" scoped>
+.shadow-img {
+  padding: 5px;
+  box-shadow: 2px 2px 4px #999;
+  border-radius: 5%;
+  border: 5px solid teal;
+  box-shadow: 12px;
+}
+</style>
