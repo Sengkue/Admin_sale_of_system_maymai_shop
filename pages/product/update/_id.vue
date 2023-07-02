@@ -1,13 +1,14 @@
 <template>
   <v-row justify="center">
     <v-card>
-      <v-form ref="form" v-model="valid">
+      <v-form ref="form" >
         <v-card class="teal white--text text-center py-5 mb-n8">
-          <h2>ສ້າງສິນຄ້າ</h2>
+          <h2>ແກ້ໄຂສິນຄ້າ</h2>
         </v-card>
         <v-card-text>
           <v-container>
             <v-row>
+              <!-- Profile Image -->
               <v-col cols="6" class="">
                 <div class="justify-center text-center mt-5">
                   <div>
@@ -27,21 +28,21 @@
                     id="file"
                     v-model="file"
                     :rules="imageRules"
-                    label="Image"
+                    label="ຮູບສິນຄ້າ"
                     class="d-none"
                     prepend-icon="mdi-camera"
                     @change="onFileChange"
                     @click="upload"
                   ></v-file-input>
-                  <!--------------------------- buttom profile -->
+                  <!-- Profile Button -->
                   <v-btn class="mt-2" color="primary" small @click="upload">
                     <v-icon>mdi-tray-arrow-up</v-icon>
-                    Profile
+                    ແກ້ໄຂຮູບສິນຄ້າ
                   </v-btn>
                 </div>
               </v-col>
 
-              <!--------------------------- input images banner profile -->
+              <!-- Banners -->
               <v-col cols="6" class="mt-4">
                 <v-row>
                   <v-col cols="12">
@@ -72,7 +73,7 @@
                 </v-row>
               </v-col>
 
-              <!-- -------------------   input text field -->
+              <!-- Input Fields -->
               <v-col cols="12" sm="6" class="py-0">
                 <v-text-field
                   v-model="name"
@@ -187,16 +188,16 @@
             </div>
           </div>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="back()"> Close </v-btn>
+          <v-btn color="blue darken-1" text @click="back()">ປິດ</v-btn>
           <v-btn
             color="blue darken-1"
             :loading="loading"
-            text
-            :disabled="!valid"
-            @click="insert()"
-          >
-            Save
-          </v-btn>
+                 text
+                 @click="update()"
+                 >
+                 ບັນທືກ
+                </v-btn>
+                <!-- :disabled="!valid" -->
         </v-card-actions>
       </v-form>
     </v-card>
@@ -206,7 +207,7 @@
 export default {
   data: () => ({
     uploadImage: false,
-    valid: false,
+    // valid: false,
     file: null,
     file1: null,
     url: null,
@@ -228,12 +229,6 @@ export default {
     getPercentage: 0,
   }),
   computed: {
-    // getPercentage: {
-    //   get() {
-    //     return this.$store.state.product.uploadProgress
-    //   },
-    //   set(value) {},
-    // },
     getSupplier() {
       return this.$store.state.supplier.StateSelectAll
     },
@@ -255,6 +250,25 @@ export default {
     this.$store.dispatch('supplier/selectAll')
     this.$store.dispatch('category/selectCategory')
   },
+  created() {
+    this.productId = this.$route.params.id
+    this.$axios.get(`/product/${this.productId}`).then((res) => {
+        this.name = res.data.result.name
+        this.category = res.data.result.category_id
+        this.description = res.data.result.description
+        this.quantity = res.data.result.quantity
+        this.sale_price = res.data.result.sale_price
+        this.cost_price = res.data.result.cost_price
+        this.Barcode = res.data.result.Barcode
+        this.supplier_id = res.data.result.supplier_id
+        this.urlImage = res.data.result.profile
+        this.url = res.data.result.profile
+        
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
   methods: {
     onFileChange(e) {
       if (e) {
@@ -271,22 +285,25 @@ export default {
     back() {
       this.$router.push('/product')
     },
-    async insert() {
+    async update() {
       this.uploadImage = true
       const file = this.file
       const formData = new FormData()
       formData.append('file', file)
       this.$refs.form.validate()
-      if (!this.valid) return
+      // if (!this.valid) return
       this.loading = true
-      this.urlImage = await this.$axios
-        .post('upload/single', formData)
-        .then((response) => {
-          return response?.data?.url
-        })
-        .catch((error) => {
-          this.$toast.success('File upload failed', error)
-        })
+      if(this.file !==null){
+        this.urlImage = await this.$axios
+          .post('upload/single', formData)
+          .then((response) => {
+            return response?.data?.url
+          })
+          .catch((error) => {
+            this.$toast.success('File upload failed', error)
+          })
+
+      }
       const data = {
         name: this.name,
         category: this.category,
@@ -298,10 +315,7 @@ export default {
         supplier_id: this.supplier_id,
         profile: this.urlImage,
       }
-      this.productId = await this.$axios.post('product/', data).then((res) => {
-        return res?.data?.result?.id
-      })
-
+      await this.$axios.put(`product/${this.$route.params.id}`, data)
       const formDatas = new FormData()
       for (const file of this.selectedFiles) {
         formDatas.append('files', file)
@@ -314,11 +328,12 @@ export default {
           this.getPercentage = percentCompleted
         },
       }
-      if(this.productId.length>0){
+      if(this.productId !==null && this.selectedFiles !==null){
       const res = await this.$axios.post('/upload/multiple', formDatas, config)
       await res.data.files.map((image) => {
         const imageUrl = image.url
-        const name = image.originalName
+        // const name = image.originalName
+        const name = '555'
         return this.$axios.post(`/image`, {
           productId: this.productId,
           url: imageUrl,
@@ -327,41 +342,26 @@ export default {
       })
     }
       await this.$store.dispatch('product/selectAll')
-      this.$router.push('/product')
-      this.uploadImage = false
+      this.$toast.success('Updated successfully')
       this.loading = false
+      this.uploadImage = false
+      this.reset()
+      this.$router.push('/product')
     },
+    reset(){
+      this.name = "";
+        this.category = ""; 
+        this.description = ""; 
+        this.quantity = ""; 
+        this.sale_price = "";
+        this.cost_price = ""; 
+        this.Barcode = ""; 
+        this.supplier_id = ""; 
+        this.urlImage = ""; 
+        this.url = ""; 
+        this.selectedFiles=""
+    }
   },
+
 }
 </script>
-
-<style lang="scss" scoped>
-.loading-graphic {
-  width: 100%;
-  height: 30px;
-  background-color: #ddd;
-}
-
-.loading-bar {
-  height: 100%;
-  background-color: #0078d4;
-  text-align: right;
-  transition: width 0.3s;
-}
-
-.loading-number {
-  display: inline-block;
-  padding: 5px;
-  font-size: 12px;
-  color: #fff;
-}
-.shadow {
-  border-bottom: 2px solid black;
-  border-right: 2px solid black;
-  padding: 5px;
-  box-shadow: 2px 2px 4px #999;
-}
-.custom-textarea textarea {
-  height: 10px; /* Set the desired height */
-}
-</style>

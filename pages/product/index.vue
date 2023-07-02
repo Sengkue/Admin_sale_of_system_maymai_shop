@@ -6,7 +6,7 @@
           <v-col cols="12" sm="12">
             <div class="d-flex justify-center">
               <v-card class="px-5 py-2" elevation="0">
-                <h2>ຈັດການຂໍ້ມນຜູ້ສະໜອງ</h2>
+                <h2>ຈັດການຂໍ້ມູນສິນຄ້າ</h2>
               </v-card>
             </div>
           </v-col>
@@ -233,10 +233,10 @@ export default {
     async edit(item) {
       this.isLoading = true
       const id = item.id
-      await this.$store.dispatch('product/selectOne', { id })
-      this.$store.commit('product/setEdit', true)
-      this.$store.dispatch('province/selectProvince')
-      this.$store.dispatch('district/selectDistrict')
+      // await this.$store.dispatch('product/selectOne', { id })
+    //  await this.$store.dispatch('supplier/selectAll')
+    // await  this.$store.dispatch('category/selectCategory')
+    await  this.$router.push('/product/update/'+id)
       this.isLoading = false
     },
     Insert() {

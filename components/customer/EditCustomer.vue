@@ -21,7 +21,6 @@
           <div>
             <v-avatar size="120">
               <v-img v-if="url" :src="url"></v-img>
-              <v-img v-else :src="`${file}`"></v-img>
             </v-avatar>
           </div>
           <v-file-input
@@ -177,8 +176,9 @@ export default {
       this.fname = this.getOneUser.c_fname
       this.lname = this.getOneUser.c_lname
       this.phone = this.getOneUser.c_phone
-      this.file = this.getOneUser.c_profile
-      this.image = this.getOneUser.c_profile
+      // this.file = this.getOneUser.c_profile
+      // this.image = this.getOneUser.c_profile
+      this.url = this.getOneUser.c_profile
       this.gender = this.getOneUser.c_gender
     }
     this.onProvinceSelected()
@@ -209,7 +209,7 @@ export default {
         await this.$store.dispatch('customer/upload', this.files)
         this.imagedata = await this.$store.state.customer.image
       } else {
-        this.imagedata = this.getOneUser.picture
+        this.imagedata = this.getOneUser.c_profile
       }
       try {
         const formData = {
@@ -218,7 +218,7 @@ export default {
           c_phone: this.phone,
           c_gender: this.gender,
           c_password: '',
-          profile: this.imagedata,
+          c_profile:this.imagedata,
         }
 
         await this.$store.dispatch('customer/update', { formData, id })

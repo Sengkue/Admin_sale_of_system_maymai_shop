@@ -3,6 +3,9 @@
   font-family: 'Noto Sans Lao Looped', sans-serif;
    font-family: 'Noto Serif Lao', serif;
 }
+.cursor{
+  cursor: pointer;
+}
 .colorLike{
   background-color: #DBE9FD;
 }

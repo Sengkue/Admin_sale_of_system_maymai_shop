@@ -141,27 +141,27 @@ export default {
           children: [
             {
               icon: 'mdi-tshirt-crew',
-              title: 'ສິນຄ້າ',
+              title: 'ຈັດການຂໍ້ມູນສິນຄ້າ',
               to: { name: 'product' },
             },
             {
               icon: 'mdi-shape',
-              title: 'ຂໍ້ມູນປະເພດ',
+              title: 'ຈັດການຂໍ້ມູນປະເພດສິນຄ້າ',
               to: { name: 'category' },
             },
             {
               icon: 'mdi-account-tie',
-              title: 'ຂໍ້ມູນພະນັກງານ',
+              title: 'ຈັດການຂໍ້ມູນພະນັກງານ',
               to: { name: 'employee' },
             },
             {
               icon: 'mdi-account-cowboy-hat',
-              title: 'ຂໍ້ມູນຜູ້ສະໜອງ',
+              title: 'ຈັດການຂໍ້ມູນຜູ້ສະໜອງ',
               to: { name: 'supplier' },
             },
             {
               icon: 'mdi-account',
-              title: 'ຂໍ້ມູນລູກຄ້າ',
+              title: 'ຈັດການຂໍ້ມູນລູກຄ້າ',
               to: { name: 'customer' },
             },
             {
@@ -172,11 +172,6 @@ export default {
           ],
         },
         {
-          icon: 'mdi-widgets',
-          title: 'ຂາຍສິນຄ້າ',
-          to: 'sale',
-        },
-        {
           icon: 'mdi-message-arrow-right',
           title: 'ສັ່ງຊື້ສິນຄ້າ',
           to: 'order',
@@ -185,6 +180,11 @@ export default {
           icon: 'mdi-table-arrow-left',
           title: 'ນໍາເຂົ້າສິນຄ້າ',
           to: 'import',
+        },
+        {
+          icon: 'mdi-widgets',
+          title: 'ຂາຍສິນຄ້າ',
+          to: 'sale',
         },
         //  ລາຍງານ
         {
@@ -229,7 +229,7 @@ export default {
           children: [
             {
               icon: 'mdi-account-group',
-              title: 'ຈັດການສິດຜູ້ໃໍຊ້ລະບົບ',
+              title: 'ຈັດການຜູ້ນຳໃຊ້ລະບົບ',
               to: '/user',
             }
           ],
