@@ -36,6 +36,7 @@ export const mutations = {
   },
 };
 export const actions = {
+
   async selectAll({ commit }) {
     await this.$axios
       .get("/product")
@@ -72,7 +73,6 @@ export const actions = {
       .post("product/", data)
       .then((data) => {
         commit('setProductId:', data.data.result.id)
-        console.log('setProductId:', data.data.result.id)
         this.$toast.success("ການເພີ່ມຂໍ້ມູນຂອງທ່ານສຳເລັດ!");
         commit("setUploadProgress", 0);
       })

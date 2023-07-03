@@ -314,18 +314,22 @@ export default {
           this.getPercentage = percentCompleted
         },
       }
-      if(this.productId.length>0){
-      const res = await this.$axios.post('/upload/multiple', formDatas, config)
-      await res.data.files.map((image) => {
-        const imageUrl = image.url
-        const name = image.originalName
-        return this.$axios.post(`/image`, {
-          productId: this.productId,
-          url: imageUrl,
-          altText: name,
+      if (this.productId.length > 0) {
+        const res = await this.$axios.post(
+          '/upload/multiple',
+          formDatas,
+          config
+        )
+        await res.data.files.map((image) => {
+          const imageUrl = image.url
+          const name = image.originalName
+          return this.$axios.post(`/image`, {
+            productId: this.productId,
+            url: imageUrl,
+            altText: name,
+          })
         })
-      })
-    }
+      }
       await this.$store.dispatch('product/selectAll')
       this.$router.push('/product')
       this.uploadImage = false
@@ -361,7 +365,7 @@ export default {
   padding: 5px;
   box-shadow: 2px 2px 4px #999;
 }
-.custom-textarea textarea {
-  height: 10px; /* Set the desired height */
-}
+// .custom-textarea textarea {
+//   height: 10px; /* Set the desired height */
+// }
 </style>

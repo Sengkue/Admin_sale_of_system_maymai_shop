@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 export const state = () => ({
   profile:{},
   AllUser:{},
@@ -49,16 +50,29 @@ export const actions = {
   async login({ commit }, form) {
     try {
       const res = await this.$axios.post('/user/login', form);
+  
+      // Set the token cookie
       this.$cookies.set('token', res.data.token);
+  
+      // Decode the token to get the ID
+      const decodedToken = jwt.decode(res.data.token);
+      const id = decodedToken && decodedToken.id;
+  
+      // Set the ID cookie
+      this.$cookies.set('id', id);
+  
+      // Set other cookies
       this.$cookies.set('status', res.data.status);
       this.$cookies.set('name', res.data.employeeFirstName ? res.data.employeeFirstName : res.data.ownerFirstName);
+  
       this.$router.push('/');
-      this.$toast.success('welcome to maymai shop pos')
+      this.$toast.success('Welcome to Maymai Shop POS');
     } catch (error) {
       // Handle the error here
-      this.$toast.error('Login fail, please check your number and password! ',error);
+      this.$toast.error('Login failed, please check your number and password!', error);
       // You can perform additional actions like displaying an error toast or updating the state
     }
-  },
+  }
+  
   
 };

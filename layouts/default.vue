@@ -10,13 +10,15 @@
       <v-list v-for="(item, i) in items" :key="i" dense class="pt-0" tile flat>
         <!-- Menu drop down -->
         <v-list-group v-if="item.children" :prepend-icon="item.icon" no-action>
-        <!-- title name of topic -->
+          <!-- title name of topic -->
           <template #activator>
-            <v-list-item-title class="py-1 ml-n5" style="font-weight: bold; font-size: 18px">{{
-              item.title
-            }}</v-list-item-title>
+            <v-list-item-title
+              class="py-1 ml-n5"
+              style="font-weight: bold; font-size: 18px"
+              >{{ item.title }}</v-list-item-title
+            >
           </template>
-        <!-- child lists menu display icon and title-->
+          <!-- child lists menu display icon and title-->
           <v-list-item
             v-for="(child, j) in item.children"
             :key="j"
@@ -25,11 +27,11 @@
             exact
             active-class="blue-grey lighten-4"
           >
-         <!-- child list icon -->
+            <!-- child list icon -->
             <v-list-item-action class="ml-n6">
               <v-icon>{{ child.icon }}</v-icon>
             </v-list-item-action>
-         <!-- child list title -->
+            <!-- child list title -->
             <v-list-item-title class="ml-n6" style="font-size: 15px">{{
               child.title
             }}</v-list-item-title>
@@ -57,7 +59,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app >
+    <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-avatar size="45" class="mr-1 ml-2" color="red">
         <v-img class="ma-1" :src="require('@/static/images/logo.png')" />
@@ -132,7 +134,7 @@ export default {
         {
           icon: 'mdi-view-dashboard',
           title: 'ໜ້າຫຼັກ',
-          to:"/",
+          to: '/',
         },
         //  ຈັດການຂໍ້ມູນພີ້ນຖາມ
         {
@@ -142,49 +144,49 @@ export default {
             {
               icon: 'mdi-tshirt-crew',
               title: 'ຈັດການຂໍ້ມູນສິນຄ້າ',
-              to: { name: 'product' },
+              to: { name: '/product' },
             },
             {
               icon: 'mdi-shape',
               title: 'ຈັດການຂໍ້ມູນປະເພດສິນຄ້າ',
-              to: { name: 'category' },
+              to: { name: '/category' },
             },
             {
               icon: 'mdi-account-tie',
               title: 'ຈັດການຂໍ້ມູນພະນັກງານ',
-              to: { name: 'employee' },
+              to: { name: '/employee' },
             },
             {
               icon: 'mdi-account-cowboy-hat',
               title: 'ຈັດການຂໍ້ມູນຜູ້ສະໜອງ',
-              to: { name: 'supplier' },
+              to: { name: '/supplier' },
             },
             {
               icon: 'mdi-account',
               title: 'ຈັດການຂໍ້ມູນລູກຄ້າ',
-              to: { name: 'customer' },
+              to: { name: '/customer' },
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຈັດການໂປຼໂມຊັນ',
-              to: { name: 'promotion' },
+              to: { name: '/promotion' },
             },
           ],
         },
         {
           icon: 'mdi-message-arrow-right',
           title: 'ສັ່ງຊື້ສິນຄ້າ',
-          to: 'order',
+          to: '/order',
         },
         {
           icon: 'mdi-table-arrow-left',
           title: 'ນໍາເຂົ້າສິນຄ້າ',
-          to: 'import',
+          to: '/import',
         },
         {
           icon: 'mdi-widgets',
           title: 'ຂາຍສິນຄ້າ',
-          to: 'sale',
+          to: '/sale',
         },
         //  ລາຍງານ
         {
@@ -199,22 +201,22 @@ export default {
             {
               icon: 'mdi-chart-bell-curve',
               title: 'ຂໍ້ມູນການຂາຍ',
-              to: '/report/admin.sale' ,
+              to: '/report/admin.sale',
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນລູກຄ້າ',
-              to:'/report/admin.customer' ,
+              to: '/report/admin.customer',
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນພະນັກງານ',
-              to:'/report/admin.employee',
+              to: '/report/admin.employee',
             },
             {
               icon: 'mdi-baby-carriage',
               title: 'ຂໍ້ມູນການສັງຊື້',
-              to: '/report/admin.order' ,
+              to: '/report/admin.order',
             },
             // {
             //   icon: 'mdi-folder-file',
@@ -231,18 +233,17 @@ export default {
               icon: 'mdi-account-group',
               title: 'ຈັດການຜູ້ນຳໃຊ້ລະບົບ',
               to: '/user',
-            }
+            },
           ],
         },
       ],
     }
-    
   },
   methods: {
     logout() {
-      this.$cookies.remove("token");
-      this.$cookies.remove("status");
-       this.$router.push("/login");
+      this.$cookies.remove('token')
+      this.$cookies.remove('status')
+      this.$router.push('/login')
     },
   },
 }

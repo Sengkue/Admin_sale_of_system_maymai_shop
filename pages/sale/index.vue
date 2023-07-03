@@ -60,10 +60,15 @@
                   </v-col>
                 </v-row>
               </v-col>
-              <v-col v-for="(item, index) in filteredRow" :key="index" cols="3">
+              <v-col
+                v-for="(item, index) in filteredRow"
+                :key="index"
+                cols="3"
+                class="ma-0 py-1 px-1"
+              >
                 <v-card
                   v-ripple
-                  max-width="150px"
+                  max-width="180px"
                   elevation="10"
                   class="cursor"
                   @click="AddToOrder(item.id)"
@@ -89,6 +94,15 @@
                           >{{ li.order_amount }}</v-chip
                         >
                       </div>
+
+                      <v-chip
+                        v-if="item.quantity === 0"
+                        small
+                        color="error"
+                        class="rounded-br-xl ma-n2"
+                        label
+                        >{{ 0 }}</v-chip
+                      >
                     </v-img>
                     <v-card-text>
                       <div class="font-weight-black">{{ item.name }}</div>
@@ -99,6 +113,11 @@
                   </div>
                 </v-card>
               </v-col>
+              <tr>
+                {{
+                  ListOrder
+                }}
+              </tr>
             </v-row>
             <!-- card image 1 -->
           </v-col>
@@ -187,7 +206,7 @@
                 <div class="modal-dialog">
                   <div class="pa-10">
                     <div class="d-flex justify-space-between">
-                      <h4 class="modal-title" id="myModalLabel">ຊຳລະສິນຄ້າ</h4>
+                      <h4 id="myModalLabel" class="modal-title">ຊຳລະສິນຄ້າ</h4>
                       <v-btn text @click="dialog = false"
                         ><v-icon color="red">mdi-close</v-icon></v-btn
                       >
@@ -215,7 +234,6 @@
                       </h4>
                       <h4
                         class="card-title text-danger d-flex justify-space-between"
-                        v-if="calculatedCashBack > 0"
                       >
                         <span> <strong> ເງິນທອນ: </strong></span>
                         <span
@@ -229,49 +247,85 @@
                           v-model="CashAmount"
                           type="number"
                           outlined
-                          clearable
-                          clear-icon="mdi-close-circle-outline"
                           class="form-control"
-                          style="text-align: right"
+                          :style="{ textAlign: 'right' }"
                         />
                       </div>
                       <div class="justify-space-center d-flex">
                         <v-row style="width: 250px">
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(1)">1</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(2)">2</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(3)">3</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(4)">4</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(5)">5</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(6)">6</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(7)">7</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(8)">8</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum(9)">9</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
                             <v-btn @click="AddNum('00')">00</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
-                            <v-btn @click="AddNum(0)">0</v-btn>
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
+                            <v-btn @click="AddNum('0')">0</v-btn>
                           </v-col>
-                          <v-col cols="4" class=" blue white--text text-center my-n1 mx-n1">
-                            <v-btn @click="AddNum('-')"><v-icon>mdi-arrow-left</v-icon></v-btn>
+                          <v-col
+                            cols="4"
+                            class="blue white--text text-center my-n1 mx-n1"
+                          >
+                            <v-btn @click="AddNum('-')"
+                              ><v-icon>mdi-arrow-left</v-icon></v-btn
+                            >
                           </v-col>
                         </v-row>
                       </div>
@@ -282,8 +336,9 @@
                           type="button"
                           class="mt-5 green white--text"
                           width="100%"
-                          @click="ConfirmPay()"
+                          :loading="loading"
                           :disabled="CheckCPay"
+                          @click="ConfirmPay()"
                         >
                           <v-icon>mdi-money</v-icon> ຍືນຍັນຊຳລ່ະເງິນ
                         </v-btn>
@@ -313,6 +368,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       CashBack: '',
       CashAmount: '',
       dialog: false,
@@ -322,6 +378,7 @@ export default {
       subtotal: null,
       ListOrder: [],
       DataProduct: [],
+      sale_id: '',
     }
   },
   computed: {
@@ -333,13 +390,16 @@ export default {
       }
     },
     calculatedCashBack() {
-      return parseInt(this.CashAmount) - parseInt(this.TotalAmount);
+      return parseInt(this.CashAmount) - parseInt(this.TotalAmount) || 0
     },
     TotalAmount() {
       return this.ListOrder.reduce(
         (num, item) => num + item.sale_price * item.order_amount,
         0
       )
+    },
+    TotalQuantity() {
+      return this.ListOrder.reduce((num, item) => num + item.order_amount, 0)
     },
     check_pay() {
       if (this.TotalAmount) {
@@ -375,28 +435,59 @@ export default {
   },
 
   methods: {
-    ConfirmPay() {
-            this.$axios.get("/sanctum/csrf-cookie").then((response) => {
-                this.$axios
-                    .post("/api/transection/add", {
-                        acc_type: "income",
-                        listorder: this.ListOrder,
-                    })
-                    .then((response) => {
-                        if (response.data.success) {
-                            this.dialog = false;
-                            this.ListOrder = [];
-                            this.CashAmount = "";
-                            this.GetStore();
-                        } else {
-                            console.log(response.data.message);
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-            });
-        },
+    async ConfirmPay() {
+      const currentDate = new Date()
+      const formattedDate = currentDate.toISOString() // Convert date to ISO 8601 format
+      this.loading = true
+      const data = {
+        customer_id: '',
+        promotion_id: '',
+        employee_id: this.$cookies.get('id'),
+        sale_date: formattedDate,
+        sale_total: this.TotalAmount,
+        sale_quantity: this.TotalQuantity,
+        sale_type: 'pos',
+        sale_status: 'Completed',
+      }
+
+      await this.$axios
+        .post('/sale', data)
+        .then((response) => {
+          this.sale_id = response.data.result.id
+
+          // send data to sale_detail---------------------------
+          this.ListOrder.map((item) => {
+            const productId = item.id
+            const Qt = item.order_amount
+            const price = item.sale_price
+            return this.$axios.post('/saleDetail', {
+              sale_id: this.sale_id,
+              product_id: productId,
+              sale_price: price,
+              quantity: Qt,
+            })
+          })
+          // send subtract quantity----------------------------
+          this.ListOrder.map((item) => {
+            const id = item.id
+            const Qt = item.order_amount
+            return this.$axios.put(`/product/${id}/subtract-quantity`, {
+              quantity: Qt,
+            })
+          })
+          this.loading = false
+          this.dialog = false
+          this.$router.push('/sale/' + this.sale_id)
+          this.$toast.success('sale completed')
+          this.$store.dispatch('product/selectAll')
+          this.ListOrder = []
+          this.CashAmount = 0
+        })
+        .catch((error) => {
+          this.$toast.error(error)
+        })
+    },
+
     AddNum(num) {
       if (num === '-') {
         this.CashAmount = this.CashAmount.slice(0, -1)
