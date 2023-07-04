@@ -6,7 +6,8 @@ export const state = () => ({
   insert: false,
   image: null,
   uploadProgress: 0, // new state property
-  ProductId:''
+  ProductId:'',
+  banner:[]
 });
 
 export const mutations = {
@@ -21,6 +22,9 @@ export const mutations = {
   },
   setSelectOne(state, data) {
     state.StateSelectOne = data;
+  },
+  setSelectBanner(state,data){
+   state.banner = data;
   },
   setView(state, data) {
     state.view = data;
@@ -47,12 +51,22 @@ export const actions = {
         this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
       });
   },
-  async selectOne({ commit }, data) {
-    const id = data.id;
+  async selectOne({ commit }, id) {
     await this.$axios
       .get(`/product/${id}`)
       .then((data) => {
-        commit("setSelectOne", data.data);
+        commit("setSelectOne", data.data.result);
+      })
+      .catch((error) => {
+        this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
+      });
+  },
+
+  async selectBanner({ commit }, id) {
+    await this.$axios
+      .get(`/image/product/${id}`)
+      .then((data) => {
+        commit("setSelectBanner", data.data.data);
       })
       .catch((error) => {
         this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);

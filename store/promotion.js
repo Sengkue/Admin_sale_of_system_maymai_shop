@@ -1,6 +1,6 @@
 export const state = () => ({
   StateSelectAll:[],
-  StateSelectOne: "",
+  StateSelectOne:{},
   edit: false,
   view: false,
   insert: false,

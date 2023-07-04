@@ -1,5 +1,6 @@
 import Vue from "vue";
 import dayjs from 'dayjs'
+import moment from 'moment';
 import 'dayjs/locale/lo'; // import the Thai locale
 
 // Make sure to pick a unique name for the flag
@@ -35,6 +36,9 @@ if (!Vue.__my_mixin__) {
 
       formatDateLo(date) {
         return dayjs(date).locale('lo').format('D MMMM YYYY, HH:mm:ss');
+      },
+      formatDateBill(date) {
+        return moment(date).format('DD/MM/YYYY, HH:mm:ss');
       },
     },
   }); // Set up your mixin then

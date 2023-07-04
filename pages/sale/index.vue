@@ -42,21 +42,14 @@
             <v-row>
               <v-col cols="12">
                 <v-row>
-                  <v-col cols="8">
+                  <v-col cols="12">
                     <v-text-field
                       v-model="search"
                       label="Search"
                       outlined
                       dense
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="4">
-                    <v-text-field
-                      outlined
-                      dense
                       prepend-inner-icon="mdi-barcode-scan"
-                    >
-                    </v-text-field>
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-col>
@@ -101,8 +94,9 @@
                         color="error"
                         class="rounded-br-xl ma-n2"
                         label
-                        >{{ 0 }}</v-chip
                       >
+                        ໝົດ!
+                      </v-chip>
                     </v-img>
                     <v-card-text>
                       <div class="font-weight-black">{{ item.name }}</div>
@@ -195,6 +189,9 @@
                         </v-btn>
                       </td>
                     </tr>
+                    <tr>
+                      <td>{{ getPromotion }}</td>
+                    </tr>
                   </table>
                 </v-col>
               </v-row>
@@ -223,12 +220,28 @@
                         >
                       </h4>
                       <h4
+                        v-if="promotionSum && promotionSum > 0"
+                        class="card-title d-flex justify-space-between"
+                      >
+                        <span class="text-info">
+                          <strong> ຮັບໂປໂມຊັນຍັງເຫຼືອພຽງ: </strong></span
+                        >
+                        <span class="green--text"
+                          ><strong
+                            >{{
+                              formatPrice(TotalAmount - promotionSum)
+                            }}
+                            ກີບ</strong
+                          ></span
+                        >
+                      </h4>
+                      <h4
                         class="card-title text-info d-flex justify-space-between"
                       >
                         <span> <strong> ຮັບເງິນນຳລູກຄ້າ: </strong></span>
                         <span
-                          ><strong
-                            >{{ formatPrice(CashAmount) }} ກີບ</strong
+                          ><strong>
+                            {{ formatPrice(CashAmount) }} ກີບ</strong
                           ></span
                         >
                       </h4>
@@ -345,10 +358,22 @@
                       </div>
                     </div>
                     <v-card-actions>
-                      <v-spacer />
-                      <v-btn type="button" @click="dialog = false">
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
+                      {{ promotionSum }}
+                      <div>ຮັບສ່ວນຫຼຸດ!: {{ promotion }}%</div>
+                      <v-spacer></v-spacer>
+                      <v-select
+                        v-model="promotion_id"
+                        :items="getPromotion"
+                        filled
+                        dense
+                        item-value="id"
+                        item-text="condition"
+                        label="ໂປໂມຊັນ"
+                        required
+                        clearable
+                        clear-icon="mdi-close-circle-outline"
+                        @change="onPromotionSelect"
+                      ></v-select>
                     </v-card-actions>
                   </div>
                   <!-- /.modal-content -->
@@ -379,22 +404,49 @@ export default {
       ListOrder: [],
       DataProduct: [],
       sale_id: '',
+      promotion_id: null,
+      promotion: 0,
     }
   },
   computed: {
+    getPromotion() {
+      return this.$store.state.promotion.StateSelectAll
+    },
     CheckCPay() {
-      if (parseInt(this.CashAmount) - parseInt(this.TotalAmount) >= 0) {
+      if (
+        parseInt(this.CashAmount) -
+          parseInt(
+            this.promotion
+              ? this.TotalAmount - this.promotionSum
+              : this.TotalAmount
+          ) >=
+        0
+      ) {
         return false
       } else {
         return true
       }
     },
     calculatedCashBack() {
-      return parseInt(this.CashAmount) - parseInt(this.TotalAmount) || 0
+      return (
+        parseInt(this.CashAmount) -
+          parseInt(
+            this.promotion_id
+              ? this.TotalAmount - this.promotionSum
+              : this.TotalAmount
+          ) || 0
+      )
     },
     TotalAmount() {
       return this.ListOrder.reduce(
         (num, item) => num + item.sale_price * item.order_amount,
+        0
+      )
+    },
+    promotionSum() {
+      return this.ListOrder.reduce(
+        (num, item) =>
+          num + item.sale_price * item.order_amount * (this.promotion / 100),
         0
       )
     },
@@ -425,23 +477,32 @@ export default {
           ...item,
         }
       }).filter((item) => {
-        // Modify the condition as per your filtering requirements
-        return item.name.toLowerCase().includes(searchTerm)
+        // Modify the condition to search by name or barcode
+        const nameMatch = item.name?.toLowerCase().includes(searchTerm)
+        const barcodeMatch = item.Barcode?.toLowerCase().includes(searchTerm)
+        const categoryMatch = item.category?.toLowerCase().includes(searchTerm)
+        return nameMatch || barcodeMatch || categoryMatch
       })
     },
   },
   mounted() {
     this.$store.dispatch('product/selectAll')
+    this.$store.dispatch('promotion/selectAll')
   },
 
   methods: {
+    onPromotionSelect() {
+      const item = this.getPromotion.find((i) => i.id === this.promotion_id)
+      this.promotion = item.discount || null
+    },
+
     async ConfirmPay() {
       const currentDate = new Date()
       const formattedDate = currentDate.toISOString() // Convert date to ISO 8601 format
       this.loading = true
       const data = {
         customer_id: '',
-        promotion_id: '',
+        promotion_id: this.promotion_id,
         employee_id: this.$cookies.get('id'),
         sale_date: formattedDate,
         sale_total: this.TotalAmount,
@@ -460,8 +521,12 @@ export default {
             const productId = item.id
             const Qt = item.order_amount
             const price = item.sale_price
+            const nameG = item.name
+            const categoryG = item.category
             return this.$axios.post('/saleDetail', {
               sale_id: this.sale_id,
+              name: nameG,
+              category: categoryG,
               product_id: productId,
               sale_price: price,
               quantity: Qt,
@@ -513,6 +578,7 @@ export default {
               id: item.id,
               name: item.name,
               sale_price: item.sale_price,
+              category: item.category,
               order_amount: 1,
             })
           }
@@ -530,6 +596,7 @@ export default {
               this.ListOrder.push({
                 id: item.id,
                 name: item.name,
+                category: item.category,
                 sale_price: item.sale_price,
                 order_amount: 1,
               })

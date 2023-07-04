@@ -59,7 +59,7 @@ export default {
     },
     "~/plugins/global.js",
     { src: '~/plugins/dayjs.js' },
-    { src: '~/plugins/sweetalert2.js', mode: 'client' }
+    { src: '~/plugins/sweetalert2.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
