@@ -45,15 +45,12 @@
                   :src="banner.url"
                   :alt="banner.altText"
                   width="100"
-                  container
+                  contain
                 ></v-img>
               </v-scale-transition>
             </v-row>
           </v-card>
         </v-slide-item>
-      </v-col>
-      <v-col cols="12">
-        {{ getBanner.url }}
       </v-col>
     </v-row>
   </div>

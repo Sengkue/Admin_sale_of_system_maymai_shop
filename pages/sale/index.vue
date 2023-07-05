@@ -189,9 +189,9 @@
                         </v-btn>
                       </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td>{{ getPromotion }}</td>
-                    </tr>
+                    </tr> -->
                   </table>
                 </v-col>
               </v-row>
@@ -358,8 +358,16 @@
                       </div>
                     </div>
                     <v-card-actions>
-                      {{ promotionSum }}
-                      <div>ຮັບສ່ວນຫຼຸດ!: {{ promotion }}%</div>
+                      <div class="d-flex">
+                        <div>
+                          ຮັບສ່ວນຫຼຸດ!: {{ promotion ? promotion : '0' }}%
+                        </div>
+                        <v-divider vertical class="mx-2"></v-divider>
+                        <div>
+                          ໄລເປັນເງີນ:
+                          {{ formatPrice(promotionSum ? promotionSum : 0) }}ກີບ
+                        </div>
+                      </div>
                       <v-spacer></v-spacer>
                       <v-select
                         v-model="promotion_id"

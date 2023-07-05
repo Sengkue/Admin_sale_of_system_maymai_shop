@@ -21,8 +21,16 @@
         <td>{{ formatPrice(item.sale_price * item.quantity) }}</td>
       </template>
     </v-data-table>
-    <p class="total-price">Total Price: {{ formatPrice(totalPrice) }}</p>
-    <v-btn class="print-button" @click="generateAndPrintBill">Print Bill</v-btn>
+    <p class="total-price">ລວມເງິນທັງໝົດ: {{ formatPrice(totalPrice) }}ກິບ</p>
+    <div v-if="getSale.promotionDiscount > 0" class="total-price">
+      <p>ຮັບສ່ວນຫຼຸດ: {{ getSale.promotionDiscount }}%</p>
+      <p class="total-price green--text">
+        ຍັງເຫຼຶອພຽງ: {{ formatPrice(calculatePromotion) }}ກິບ
+      </p>
+    </div>
+    <v-btn class="print-button primary" @click="generateAndPrintBill"
+      >Print Bill</v-btn
+    >
   </div>
 </template>
 
@@ -70,6 +78,12 @@ export default {
       return this.getDetail.reduce((total, item) => {
         return total + item.sale_price * item.quantity
       }, 0)
+    },
+    calculatePromotion() {
+      return (
+        this.totalPrice -
+        (this.getSale.promotionDiscount * this.totalPrice) / 100
+      )
     },
   },
   mounted() {
@@ -160,6 +174,18 @@ export default {
           this.totalPrice
         )}kip</p>`
       )
+
+      // Add promotion discount if applicable
+      if (this.getSale.promotionDiscount > 0) {
+        printWindow.document.write(`
+      <div class="total-price">
+        <p>ຮັບສ່ວນຫຼຸດ: ${this.getSale.promotionDiscount}%</p>
+        <p class="total-price green--text">
+          ຍັງເຫຼຶອພຽງ: ${this.formatPrice(this.calculatePromotion)}ກິບ
+        </p>
+      </div>
+    `)
+      }
 
       printWindow.document.write('</body></html>')
       printWindow.document.close()

@@ -131,7 +131,7 @@ export default {
         {
           icon: 'mdi-view-dashboard',
           title: 'ໜ້າຫຼັກ',
-          to:"/",
+          to: '/',
         },
         //  ຈັດການຂໍ້ມູນພີ້ນຖາມ
         {
@@ -198,22 +198,22 @@ export default {
             {
               icon: 'mdi-chart-bell-curve',
               title: 'ຂໍ້ມູນການຂາຍ',
-              to: '/report/admin.sale' ,
+              to: '/report/admin.sale',
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນລູກຄ້າ',
-              to:'/report/admin.customer' ,
+              to: '/report/admin.customer',
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນພະນັກງານ',
-              to:'/report/admin.employee',
+              to: '/report/admin.employee',
             },
             {
               icon: 'mdi-baby-carriage',
               title: 'ຂໍ້ມູນການສັງຊື້',
-              to: '/report/admin.order' ,
+              to: '/report/order',
             },
             // {
             //   icon: 'mdi-folder-file',

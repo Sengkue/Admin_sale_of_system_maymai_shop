@@ -167,6 +167,11 @@ export default {
               to: { name: 'customer' },
             },
             {
+              icon: 'mdi-store',
+              title: 'ຈັດການຂໍ້ມູນເຈົ້າຂອງຮ້ານ',
+              to: { name: 'owner' },
+            },
+            {
               icon: 'mdi-folder-file',
               title: 'ຈັດການໂປຼໂມຊັນ',
               to: { name: 'promotion' },
@@ -196,27 +201,27 @@ export default {
             {
               icon: 'mdi-tshirt-crew',
               title: 'ຂໍ້ມູນສິນຄ້າ',
-              to: '/report/admin.product',
+              to: '/report/product',
             },
             {
               icon: 'mdi-chart-bell-curve',
               title: 'ຂໍ້ມູນການຂາຍ',
-              to: '/report/admin.sale',
+              to: '/report/sale',
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນລູກຄ້າ',
-              to: '/report/admin.customer',
+              to: '/report/customer',
             },
             {
               icon: 'mdi-folder-file',
               title: 'ຂໍ້ມູນພະນັກງານ',
-              to: '/report/admin.employee',
+              to: '/report/employee',
             },
             {
               icon: 'mdi-baby-carriage',
               title: 'ຂໍ້ມູນການສັງຊື້',
-              to: '/report/admin.order',
+              to: '/report/order',
             },
             // {
             //   icon: 'mdi-folder-file',
