@@ -152,6 +152,7 @@
               ຍົກເລິກ
             </v-btn>
             <v-btn
+              :loading="loading"
               style="font-size: 20px; font-weight: bold"
               class="primary white--text mr-5 mt-2"
               @click="submit"
@@ -170,6 +171,7 @@
 export default {
   data() {
     return {
+      loading:false,
       url: null,
       employees: {
         firstName: '',
@@ -205,6 +207,7 @@ export default {
       this.$store.dispatch('district/getByProvinceId', id)
     },
     async submit() {
+      this.loading = true
       const file = this.employees.profile
       const formData = new FormData()
       formData.append('file', file)
@@ -229,7 +232,8 @@ export default {
         phone: this.employees.tel,
         profile: this.urlImage,
       }
-      this.$store.dispatch('employee/insert', data)
+     await this.$store.dispatch('employee/insert', data)
+      this.loading = false
     },
 
     handleFileUpload(event) {

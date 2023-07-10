@@ -40,7 +40,13 @@ export const mutations = {
   },
 };
 export const actions = {
-
+  getBySupplier({commit},id){
+    if( id!== "" ){
+      this.$axios.get( `/product/supplier/${id}`).then((res)=>{
+        commit("setSelectAll", res.data.result);
+      })
+    }
+  },
   async selectAll({ commit }) {
     await this.$axios
       .get("/product")

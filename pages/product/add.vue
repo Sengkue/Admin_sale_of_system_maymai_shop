@@ -20,7 +20,7 @@
                       "
                     >
                       <v-img v-if="url" :src="url"></v-img>
-                      <v-img v-else src="logo.png"></v-img>
+                      <v-img v-else src="/images/logo.png"></v-img>
                     </v-avatar>
                   </div>
                   <v-file-input
@@ -75,7 +75,7 @@
               <!-- -------------------   input text field -->
               <v-col cols="12" sm="6" class="py-0">
                 <v-text-field
-                  v-model="name"
+                  v-model="product_data.name"
                   prepend-inner-icon="mdi-shopping"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -87,7 +87,7 @@
               </v-col>
               <v-col cols="12" sm="6" class="py-0">
                 <v-text-field
-                  v-model="Barcode"
+                  v-model="product_data.Barcode"
                   prepend-inner-icon="mdi-barcode-scan"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -99,7 +99,7 @@
               </v-col>
               <v-col cols="6" class="py-0">
                 <v-select
-                  v-model="category"
+                  v-model="product_data.category_id"
                   filled
                   dense
                   :items="getCategory"
@@ -114,7 +114,7 @@
               </v-col>
               <v-col cols="6" class="py-0">
                 <v-select
-                  v-model="supplier_id"
+                  v-model="product_data.supplier_id"
                   filled
                   dense
                   :items="getSupplier"
@@ -130,7 +130,7 @@
 
               <v-col cols="12" class="py-0" sm="6">
                 <v-text-field
-                  v-model="cost_price"
+                  v-model="product_data.cost_price"
                   prepend-inner-icon="mdi-cellphone"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -142,7 +142,7 @@
               </v-col>
               <v-col cols="12" sm="6" class="py-0">
                 <v-text-field
-                  v-model="sale_price"
+                  v-model="product_data.sale_price"
                   prepend-inner-icon="mdi-cellphone"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -152,9 +152,9 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" class="py-0">
+              <v-col cols="6" class="py-0">
                 <v-text-field
-                  v-model="quantity"
+                  v-model="product_data.quantity"
                   prepend-inner-icon="mdi-cellphone"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -164,9 +164,33 @@
                   required
                 ></v-text-field>
               </v-col>
+              <v-col cols="6" class="py-0">
+                <v-text-field
+                  v-model="product_data.size_id"
+                  prepend-inner-icon="mdi-cellphone"
+                  clearable
+                  clear-icon="mdi-close-circle-outline"
+                  filled
+                  dense
+                  label="ເບີ"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="py-0">
+                <v-text-field
+                  v-model="product_data.color"
+                  prepend-inner-icon="mdi-cellphone"
+                  clearable
+                  clear-icon="mdi-close-circle-outline"
+                  filled
+                  dense
+                  label="ສີ"
+                  required
+                ></v-text-field>
+              </v-col>
               <v-col cols="12" class="py-0">
                 <v-textarea
-                  v-model="description"
+                  v-model="product_data.description"
                   prepend-inner-icon="mdi-semantic-web"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -213,19 +237,26 @@ export default {
     url1: null,
     imageRules: [(v) => !!v || 'Image is required'],
     loading: false,
-    modal: '',
-    name: '',
-    category: '',
-    description: '',
-    quantity: '',
-    sale_price: '',
-    cost_price: '',
-    Barcode: '',
-    supplier_id: '',
-    urlImage: '',
-    selectedFiles: '',
-    productId: '',
+    modal: null,
+    urlImage: null,
+    selectedFiles: null,
+    productId: null,
     getPercentage: 0,
+    product_data:{
+      name:null,
+      category_id:null,
+      description:null,
+      sale_price:null,
+      cost_price:null,
+      supplier_id:null,
+      profile:null,
+      quantity:null,
+      size_id:null,
+      color:null,
+      Barcode:null  
+    },
+    config:null,
+    
   }),
   computed: {
     // getPercentage: {
@@ -287,38 +318,20 @@ export default {
         .catch((error) => {
           this.$toast.success('File upload failed', error)
         })
-      const data = {
-        name: this.name,
-        category: this.category,
-        description: this.description,
-        quantity: this.quantity,
-        sale_price: this.sale_price,
-        cost_price: this.cost_price,
-        Barcode: this.Barcode,
-        supplier_id: this.supplier_id,
-        profile: this.urlImage,
-      }
-      this.productId = await this.$axios.post('product/', data).then((res) => {
+
+      this.product_data.profile = this.urlImage;
+      console.log('show product data:', this.product_data)
+      this.productId = await this.$axios.post('product/', this.product_data).then((res) => {
         return res?.data?.result?.id
       })
-
-      const formDatas = new FormData()
-      for (const file of this.selectedFiles) {
-        formDatas.append('files', file)
-      }
-      const config = {
-        onUploadProgress: function (progressEvent) {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          )
-          this.getPercentage = percentCompleted
-        },
-      }
-      if (this.productId.length > 0) {
+      if (this.selectedFiles !=='' && this.selectedFiles !==null) {
+        const formDatas = new FormData()
+        for (const file of this.selectedFiles) {
+          formDatas.append('files', file)
+        }
         const res = await this.$axios.post(
           '/upload/multiple',
           formDatas,
-          config
         )
         await res.data.files.map((image) => {
           const imageUrl = image.url

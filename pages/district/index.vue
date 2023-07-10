@@ -179,6 +179,7 @@ export default {
     edit(item) {
       this.categoryId = item.id
       this.category = item.category
+      this.dialog = true
       this.hideBtn = 1
       this.title = 'update category'
     },
@@ -229,7 +230,6 @@ export default {
         })
     },
     async insert() {
-      this.loading = true
       const data = {
         category: this.category,
       }

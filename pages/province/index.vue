@@ -6,7 +6,7 @@
       </v-row>
       <!-- <v-divider class="mt-12"></v-divider> -->
       <v-card-text>
-        <v-data-table :headers="headers" :items="getCategory" :search="search">
+        <v-data-table :headers="headers" :items="getProvince" :search="search">
           <template #top>
             <v-toolbar flat>
               <!-- <v-toolbar-title>ລາຍຊື່ປະເພດສິນຄ້າ</v-toolbar-title> -->
@@ -48,15 +48,15 @@
                       <v-row justify="center" class="mt-3">
                         <v-col cols="12" class="mb-n5">
                           <v-text-field
-                            v-model="category"
-                            label="ຊື່ປະເພດສິນຄ້າ"
+                            v-model="province"
+                            label="ຊື່ແຂວງ"
                             dense
                             outlined
                             required
                             clearable
                             clear-icon="mdi-close-circle-outline"
                             :rules="[
-                              (val) => !!val || 'ກະລຸນາປ້ອນຊື່ປະເພດສິນຄ້າ.',
+                              (val) => !!val || 'ກະລຸນາປ້ອນຊື່ແຂວງ.',
                             ]"
                           />
                         </v-col>
@@ -135,7 +135,7 @@ export default {
       search: '',
       valid: false,
       dialog: false,
-      category: '',
+      province: null,
       loading: false,
       hideBtn: '',
       headers: [
@@ -145,7 +145,7 @@ export default {
         },
         {
           text: 'ຊື່ປະເພດສິນຄ້າ',
-          value: 'category',
+          value: 'province',
         },
         {
           text: 'Actions',
@@ -157,8 +157,8 @@ export default {
     }
   },
   computed: {
-    getCategory() {
-      const allCategory = this.$store.state.category.Allcategory
+    getProvince() {
+      const allCategory = this.$store.state.address.Allcategory
       if (allCategory && allCategory.rows) {
         return allCategory.rows.map((item, index) => {
           return {
@@ -179,6 +179,7 @@ export default {
     edit(item) {
       this.categoryId = item.id
       this.category = item.category
+      this.dialog = true
       this.hideBtn = 1
       this.title = 'update category'
     },
@@ -229,12 +230,11 @@ export default {
         })
     },
     async insert() {
-      this.loading = true
       const data = {
         category: this.category,
       }
-      await this.$store.dispatch('category/insert', data)
-      await this.$store.dispatch('category/selectCategory')
+      await this.$store.dispatch('address/insertProvince', data)
+      await this.$store.dispatch('address/selectProvince')
       this.dialog = false
       this.category = ''
     },

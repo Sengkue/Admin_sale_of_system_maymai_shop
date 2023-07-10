@@ -205,7 +205,6 @@ export default {
       file: null,
       selectedFiles: '',
       url: null,
-      imageRules: [(v) => !!v || 'Image is required'],
       a: {
         firstName: '',
         lastName: '',
@@ -216,29 +215,8 @@ export default {
         address: '',
         description: '',
       },
-      valid: false,
       urlImage: '',
     }
-  },
-
-  mounted(){
-    this.$store.dispatch('owner/selectBanner')
-  },
-  
-  created(){
-  this.$axios.get(`/owner/${this.$route.params.id}`).then((res)=>{
-    console.log('show owner22222', res.data.result)
-      const data = res.data.result;
-        this.a.firstName = data.firstName
-        this.a.lastName = data.lastName
-        this.a.shopName = data.shopName
-        this.a.phone = data.phone
-        this.a.email = data.email
-        this.a.gender = data.gender
-        this.a.address = data.address
-        this.a.description = data.description
-        this.url = data.profile
-  })
   },
   methods: {
     onFileChange(e) {
@@ -254,18 +232,16 @@ export default {
     },
     async submit() {
       const file = this.file
-      if(file !==null){
-        const formData = new FormData()
-        formData.append('file', file)
-        this.urlImage = await this.$axios
-          .post('upload/single', formData)
-          .then((response) => {
-            return response?.data?.url
-          })
-          .catch((error) => {
-            this.$toast.success('File upload failed', error)
-          })
-      }
+      const formData = new FormData()
+      formData.append('file', file)
+      this.urlImage = await this.$axios
+        .post('upload/single', formData)
+        .then((response) => {
+          return response?.data?.url
+        })
+        .catch((error) => {
+          this.$toast.success('File upload failed', error)
+        })
       const data = {
         firstName: this.a.firstName,
         lastName: this.a.lastName,
@@ -279,14 +255,10 @@ export default {
       }
 
       await this.$axios
-        .put('/owner', data)
+        .post('/owner', data)
         .then((response) => {
+          console.log('Data added successfully', response.data)
           this.owner_id = response.data.result.id
-        })
-        .catch((error) => {
-          console.error('Error adding data', error)
-        })
-        if(this.selectedFiles !== null){
           const formDatas = new FormData()
           for (const file of this.selectedFiles) {
             formDatas.append('files', file)
@@ -300,7 +272,10 @@ export default {
               })
             })
           })
-        }
+        })
+        .catch((error) => {
+          console.error('Error adding data', error)
+        })
       this.$store.dispatch('owner/selectOwner')
       this.$store.dispatch('owner/selectBanner')
       this.resetForm()

@@ -172,6 +172,11 @@ export default {
               to: { name: 'owner' },
             },
             {
+              icon: 'mdi-account-group',
+              title: 'ຈັດການຜູ້ນຳໃຊ້ລະບົບ',
+              to: '/user',
+            },
+            {
               icon: 'mdi-folder-file',
               title: 'ຈັດການໂປຼໂມຊັນ',
               to: { name: 'promotion' },
@@ -230,17 +235,6 @@ export default {
             // },
           ],
         },
-        {
-          icon: 'mdi-cog',
-          title: 'ຕັ້ງຄ້າ',
-          children: [
-            {
-              icon: 'mdi-account-group',
-              title: 'ຈັດການຜູ້ນຳໃຊ້ລະບົບ',
-              to: '/user',
-            },
-          ],
-        },
       ],
     }
   },
@@ -248,6 +242,8 @@ export default {
     logout() {
       this.$cookies.remove('token')
       this.$cookies.remove('status')
+      this.$cookies.remove('id')
+      this.$cookies.remove('name')
       this.$router.push('/login')
     },
   },

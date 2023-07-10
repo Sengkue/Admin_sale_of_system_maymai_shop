@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 export const state = () => ({
   profile:{},
   AllUser:{},
@@ -55,11 +55,15 @@ export const actions = {
       this.$cookies.set('token', res.data.token);
   
       // Decode the token to get the ID
-      const decodedToken = jwt.decode(res.data.token);
-      const id = decodedToken && decodedToken.id;
-  
-      // Set the ID cookie
-      this.$cookies.set('id', id);
+      // const decodedToken = jwt.decode(res.data.token);
+
+      if(res.data.employee_id !== null){
+        // Set the ID cookie
+        this.$cookies.set('id', res.data.employee_id);
+      }else{
+         // Set the ID cookie
+         this.$cookies.set('id', res.data.owner_id);
+      }
   
       // Set other cookies
       this.$cookies.set('status', res.data.status);

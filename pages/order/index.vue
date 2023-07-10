@@ -6,25 +6,20 @@
     <v-divider></v-divider>
     <v-stepper v-model="e1" class="elevation-0 grey lighten-5">
       <v-stepper-header>
-        <router-link to="">
-          <v-btn
-            class="mt-4"
-            text
-            style="font-size: 20px; "
-          >
-            <v-icon large left>mdi-history</v-icon>
-            ປະຫວັດການສັ່ງຊື້ສິນຄ້າ
-          </v-btn>
-        </router-link>
+        <v-btn class="mt-4" text style="font-size: 20px" to="/order/history">
+          <v-icon large left>mdi-history</v-icon>
+          ປະຫວັດການສັ່ງຊື້ສິນຄ້າ
+        </v-btn>
+
         <v-spacer></v-spacer>
         <template v-for="n in steps">
           <v-stepper-step
-            dense
-            flat
             :key="`${n}-step`"
+            dense
             :complete="e1 > n"
             :step="n"
             editable
+            flat
           >
             <h2 v-if="n == 1">ເລືອກສິນຄ້າ</h2>
             <h2 v-if="n == 2">ຢຶນຢັນສັ່ງຊື້ສິນຄ້າ</h2>
@@ -33,7 +28,7 @@
           <v-divider v-if="n !== steps" :key="n"></v-divider>
         </template>
         <v-spacer></v-spacer>
-        <v-chip @click="steps2" class="ma-5" color="#004D40" outlined>
+        <v-chip class="ma-5" color="#004D40" outlined @click="steps2">
           <v-avatar left>
             <v-icon>mdi-cart</v-icon>
           </v-avatar>
@@ -43,28 +38,29 @@
 
       <v-stepper-items>
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
-          <!-- __________________________________________________111____________________________________________________________ -->
+          <!-- _________________111_____________________ -->
 
           <v-card
             v-if="n == 1 || e1 == 1"
             class="grey lighten-5 elevation-2 ma-0"
           >
+            <!-- {{ products }} -->
             <div>
               <v-data-table
-                :headers="materialHeaders"
-                :items="material"
-                :search="search"
+                :headers="productHeaders"
+                :items="products"
+                :search="searchA"
                 item-key="pro_name"
-                sort-by="idex"
+                sort-by="index"
                 class="elevation-2 table"
               >
                 <template #top>
                   <v-toolbar flat>
                     <v-toolbar-title>ລາຍການຂໍ້ມູນສິນຄ້າ</v-toolbar-title>
                     <v-divider class="mx-4" inset vertical></v-divider>
-                    <v-spacer></v-spacer>
+
                     <v-text-field
-                      v-model="search"
+                      v-model="searchA"
                       append-icon="mdi-magnify"
                       label="ຄົ້ນຫາ"
                       outlined
@@ -73,34 +69,62 @@
                       hide-details
                     ></v-text-field>
                     <v-spacer></v-spacer>
+                    <v-select
+                      v-model="supplier_id"
+                      hide-details
+                      filled
+                      dense
+                      :items="getSupplier"
+                      item-value="id"
+                      item-text="name"
+                      label="ຜູ້ສະໜອງ"
+                      required
+                      prepend-inner-icon="mdi-store-outline"
+                      clearable
+                      clear-icon="mdi-close-circle-outline"
+                      @change="onProvinceSelected"
+                    >
+                      <template #item="{ item }">
+                        <div
+                          class="select-item d-flex align-center justify-center"
+                        >
+                          <v-img
+                            :src="item.profile"
+                            class="item-image"
+                            width="80px"
+                          />
+                          <span>{{ item.name }}</span>
+                        </div>
+                      </template>
+                    </v-select>
                   </v-toolbar>
                   <v-divider></v-divider>
                 </template>
                 <template #item="{ item }">
                   <tr v-ripple="{ class: `white--text` }">
-                    <td>{{ item.idx }}</td>
+                    <td>{{ item.index }}</td>
                     <td align="center">
-                      <v-card
-                        height="100"
-                        width="100"
-                        :img="fectImg(item.image)"
-                      ></v-card>
+                      <v-card flat width="100">
+                        <v-img
+                          :src="item.profile"
+                          height="100"
+                          width="100"
+                        ></v-img>
+                      </v-card>
                     </td>
-                    <td>{{ item.pro_name }}</td>
+                    <td>{{ item.name }}</td>
                     <td>{{ item.category }}</td>
                     <td>{{ item.color }}</td>
-                    <td>{{ item.size }}</td>
-                    <!-- <td>{{ item.unit }}</td> -->
+                    <td>{{ item.size_id }}</td>
                     <td>
                       <v-row>
                         <v-btn
-                          @click="AddItem(item)"
                           class="mx-2"
-                          fab
-                          dark
+                          style="font-size: 14px; font-weight: bold"
                           :color="item.check"
+                          @click="AddItem(item)"
                         >
-                          <v-icon large>{{ item.icon }}</v-icon>
+                          ເລືອກສິນສິນຄ້າ
                         </v-btn>
                       </v-row>
                     </td>
@@ -112,11 +136,11 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                @click="steps2"
-                style="font-size: 20px; font-weight: bold"
-                color="#00E5FF"
-                rounded
                 class="mt-5"
+                style="font-size: 18px; font-weight: bold; color: white"
+                color="green"
+                rounded
+                @click="steps2"
               >
                 ໄປໜ້າກະຕ່າສິນຄ້າ
                 <v-icon large right
@@ -125,16 +149,15 @@
               </v-btn>
             </v-card-actions>
           </v-card>
-          <!-- __________________________________________________222____________________________________________________________ -->
+
+          <!-- _________________222_____________________ -->
 
           <v-card v-if="n == 2" class="elevation-0 ma-0">
             <v-data-table
               :headers="headers"
               :items="orderList"
-              :search="search"
               hide-default-footer
               item-key="name"
-              v-model="selected"
               sort-by="calories"
               class="elevation-2"
             >
@@ -143,48 +166,6 @@
                   <v-toolbar flat>
                     <v-toolbar-title>ລາຍການສັ່ງຊື້ສິນຄ້າ</v-toolbar-title>
                     <v-divider class="mx-4" inset vertical></v-divider>
-                    <v-spacer></v-spacer>
-                    <v-text-field
-                      v-model="suplierItem.name"
-                      readonly
-                      prepend-icon="mdi-account"
-                      label="Suppier"
-                      single-line
-                      hide-details
-                    ></v-text-field>
-                    <v-spacer></v-spacer>
-
-                    <v-dialog v-model="dialogDelete" max-width="500px">
-                      <v-card>
-                        <v-card-title
-                          style="
-                            font-size: 25px;
-                            font-weight: bold;
-                            
-                          "
-                        >
-                          ທ່ານຕ້ອງການລຶບຂໍ້ມູນລາຍການນີ້ບໍ...?
-                        </v-card-title>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn
-                            color="error"
-                            text
-                            style="font-size: 20px; "
-                            @click="close"
-                            >ຍົກເລິກ</v-btn
-                          >
-                          <v-btn
-                            color="primary"
-                            text
-                            style="font-size: 20px; "
-                            @click="deleteItemConfirm"
-                            >ຢຶນຢັນລຶບ</v-btn
-                          >
-                          <v-spacer></v-spacer>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
                   </v-toolbar>
                 </div>
               </template>
@@ -194,18 +175,20 @@
                   <td>{{ item.index }}</td>
                   <td>
                     <v-img
-                      :src="fectImg(item.image)"
+                      :src="item.profile"
                       contain
                       height="100"
                       width="100"
                     ></v-img>
                   </td>
-                  <td>{{ item.pro_name }}</td>
+                  <td>{{ item.name }}</td>
                   <td>{{ item.category }}</td>
                   <td>{{ item.color }}</td>
-                  <td>{{ item.size }}</td>
+                  <td>{{ item.size_id }}</td>
                   <td>
                     <v-text-field
+                      v-model="item.quantity"
+                      v-ripple="{ class: `white--text` }"
                       class="mt-5 tcenter"
                       filled
                       dense
@@ -213,22 +196,19 @@
                       prepend-inner-icon="mdi-minus"
                       append-icon="mdi-plus"
                       autofocus
-                      v-model="item.qty"
                       hint="ຈໍານວນທີ່ຕ້ອງການ"
                       @click:append="Add(pro)"
                       @click:prepend-inner="Minus(item)"
-                      @keypress="InputQty($event, item)"
-                      @keyup="ZeroQty(item)"
-                      v-ripple="{ class: `white--text` }"
+                      @keypress="Inputquantity($event, item)"
+                      @keyup="Zeroquantity(item)"
                     >
                       <template slot="append">
                         <v-btn
                           style="margin-top: -7px; margin-right: -20px"
                           color="green"
                           icon
-                          @click="Add(item)"
                         >
-                          <v-icon large>mdi-plus</v-icon>
+                          <v-icon large @click="Add(item)">mdi-plus</v-icon>
                         </v-btn>
                       </template>
                       <template slot="prepend-inner">
@@ -236,17 +216,15 @@
                           style="margin-top: -7px; margin-left: -20px"
                           color="green"
                           icon
-                          @click="Minus(item)"
                         >
-                          <v-icon large>mdi-minus</v-icon>
+                          <v-icon large @click="Minus(item)">mdi-minus</v-icon>
                         </v-btn>
                       </template>
                     </v-text-field>
                   </td>
-                  <!-- <td>{{ item.unit }}</td> -->
                   <td>
                     <v-row>
-                      <v-icon color="red" large @click="deleteItem(item)"
+                      <v-icon color="red" large @click="deleteItem(item.id)"
                         >mdi-delete</v-icon
                       >
                     </v-row>
@@ -258,25 +236,23 @@
                 <v-row class="ma-5" align="center" justify="center">
                   <v-spacer></v-spacer>
                   <v-btn
-                    @click="clear"
-                    style="font-size: 20px; font-weight: bold"
-                    color="#FF8A65"
+                    style="font-size: 16px; font-weight: bold; color: white"
+                    color="red accent-2"
                     rounded
                     class="mt-2 mr-7 mb-5"
                   >
-                    <v-icon left large>mdi-close-circle</v-icon>ຍົກເລິກ
+                    <v-icon left>mdi-close-circle</v-icon>ຍົກເລິກ
                   </v-btn>
 
                   <v-btn
-                    @click="saveOrder"
-                    style="font-size: 20px; font-weight: bold"
-                    color="#1DE9B6"
+                    style="font-size: 16px; font-weight: bold; color: white"
+                    color="primary accent-4"
                     rounded
                     class="mt-2 mr-5 mb-5"
-                    :disabled="emty"
+                    :loading="loading"
+                    @click="saveOrder"
                   >
-                    <v-icon large left>mdi-check-circle</v-icon
-                    >ຢຶນຢັນສັ່ງຊື້ສິນຄ້າ
+                    <v-icon left>mdi-check-circle</v-icon>ຢຶນຢັນສັ່ງຊື້ສິນຄ້າ
                   </v-btn>
                 </v-row>
               </template>
@@ -285,82 +261,32 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-    <v-dialog v-model="dialogSuplier" max-width="700px">
-      <v-card class="ma-2">
-        <v-data-table
-          :headers="headersSuplier"
-          :items="suplier"
-          :search="sreachSuppier"
-          item-key="idx"
-          sort-by="name"
-          class="elevation-2 table"
-        >
-          <template #top>
-            <v-toolbar flat>
-              <v-toolbar-title>ຂໍ້ມູນຜູ້ສະໜອງ</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
-              <v-spacer></v-spacer>
-            </v-toolbar>
-            <v-divider></v-divider>
-          </template>
-          <template #item="{ item }">
-            <tr v-ripple="{ class: `white--text` }">
-              <td>
-                <v-row class="justify-center">
-                  <v-icon
-                    @click="ChoiceSuplier(item)"
-                    class="mr-2"
-                    color="success"
-                    >mdi-account-check</v-icon
-                  >
-                </v-row>
-              </td>
-              <td>{{ item.idx }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.tel }}</td>
-              <td>{{ item.email }}</td>
-              <td>{{ item.address }}</td>
-            </tr>
-          </template>
-        </v-data-table>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="CloseSuplier">OK</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      loading:false,
+      supplier_id: '',
+      searchA: '',
       e1: 1,
       steps: 2,
       dialog: false,
       dialogDelete: false,
       dialogSuplier: false,
-      materialHeaders: [
-        { text: 'ລໍາດັບ', value: 'idex' },
+      productHeaders: [
+        { text: 'ລໍາດັບ', value: 'index', width: '7%' },
         {
           text: 'ຮູບ',
           align: 'center',
           sortable: false,
-          value: 'image',
+          value: 'profile',
         },
         { text: 'ສິນຄ້າ', value: 'name' },
         { text: 'ປະເພດ', value: 'category' },
         { text: 'ສີ', value: 'color' },
         { text: 'ຂະໜາດ/ເບີ້', value: 'size' },
-        // { text: 'ຫົວໜ່ວຍ', value: 'unit' },
         { text: 'ເລຶອກ', value: 'actions', sortable: false },
       ],
       headers: [
@@ -369,41 +295,170 @@ export default {
           text: 'ຮູບ',
           align: 'start',
           sortable: false,
-          value: 'image',
+          value: 'profile',
         },
-        { text: 'ສິນຄ້າ', value: 'pro_name' },
+        { text: 'ສິນຄ້າ', value: 'name' },
         { text: 'ປະເພດ', value: 'category' },
         { text: 'ສີ', value: 'color' },
-        { text: 'ຂະໜາດ', value: 'size' },
-        { text: 'ຈໍານວນ', value: 'qty' },
-        // { text: 'ຫົວໜ່ວຍ', value: 'unit' },
+        { text: 'ຂະໜາດ', value: 'size_id' },
+        { text: 'ຈໍານວນ', value: 'quantity' },
         { text: 'ລຶບ', value: 'actions', sortable: false },
       ],
-      sreachSuppier: '',
-      headersSuplier: [
-        { text: 'Actions', value: 'actions', sortable: false },
-        { text: 'ລໍາດັບ', value: 'idx' },
-        { text: 'ຊື່ຜູ້ສະໜອງ', value: 'name' },
-        { text: 'ເບີ້ໂທ', value: 'tel' },
-        { text: 'ອີເມວ', value: 'email' },
-        { text: 'ທີ່ຢູ່', value: 'address' },
-      ],
-      suplierItem: {
+      pro_id: '',
+      orderList: [],
+      orderby: {
+        order_id: null,
+        emp_id: '',
+        sup_id: '',
+        pro_id: '',
+        quantity: '',
+        orderdetail: [],
+      },
+    }
+  },
+  computed: {
+    products() {
+      return this.$store.state.product.StateSelectAll.map((item, index) => {
+        return {
+          index: index + 1,
+          ...item,
+        }
+      })
+    },
+    getSupplier() {
+      return this.$store.state.supplier.StateSelectAll
+    },
+    TotalQuantity() {
+      return this.orderList.reduce((num, item) => num + item.quantity, 0)
+    },
+  },
+  mounted() {
+    this.$store.dispatch('product/selectAll')
+    this.$store.dispatch('supplier/selectAll')
+  },
+  methods: {
+    onProvinceSelected() {
+      if (this.supplier_id === null) {
+        this.$store.dispatch('product/selectAll')
+      } else {
+        this.$store.dispatch('product/getBySupplier', this.supplier_id)
+      }
+    },
+    AddItem(item) {
+      item.icon = 'mdi-check'
+      item.check = 'green'
+      if (this.orderList.length > 0) {
+        for (const key in this.orderList) {
+          const el = this.orderList[key]
+          if (el.pro_id === item.id) {
+            this.orderList.splice(key, 1)
+          }
+        }
+      }
+      const mater = {
+        index: item.index,
+        product_id: item.id,
+        name: item.name,
+        category: item.category,
+        color: item.color,
+        size_id: item.size_size,
+        quantity: item.quantity,
+        profile: item.profile,
+      }
+      this.orderList.push(mater)
+    },
+    Add(item) {
+      if (typeof item.quantity === 'string' && item.quantity === '') {
+        item.quantity = 1
+        return
+      }
+      item.quantity = parseInt(item.quantity) + 1
+    },
+    Minus(item) {
+      if (parseInt(item.quantity, 10) < 2) return
+      item.quantity = parseInt(item.quantity, 10) - 1
+    },
+    Zeroquantity(item) {
+      if (
+        parseInt(item.quantity) < 1 ||
+        (typeof item.quantity === 'string' && item.quantity.length < 1) ||
+        typeof item.quantity === 'undefined'
+      ) {
+        item.quantity = 1
+      }
+    },
+    Inputquantity(evt, item) {
+      // evt = evt ? evt : window.event;
+      const charCode = evt.which ? evt.which : evt.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        // alert("Enter Only Number ? (0-9)");
+        evt.preventDefault()
+      } else {
+        if (
+          (typeof item.quantity === 'string' && item.quantity === '') ||
+          typeof item.quantity === 'undefined'
+        ) {
+          item.quantity = 1
+        } else {
+          item.quantity = parseInt(item.quantity)
+        }
+        return true
+      }
+    },
+    deleteItem(id) {
+      this.orderList.splice(this.orderList.map((i) => i.id).indexOf(id), 1)
+    },
+
+    close() {
+      this.dialogDelete = false
+    },
+    steps2() {
+      this.e1 = 2
+    },
+    clear() {
+      this.orderby = {
+        emp_id: '',
+        sup_id: '',
+        orderdetail: [],
+      }
+      this.orderList = []
+      this.suplierItem = {
         sup_id: '',
         name: '',
         tel: '',
         email: '',
         address: '',
-      },
-      m_id: '',
-      orderList: [],
-      orderby: {
-        m_order_id: null,
-        emp_id: '',
-        sup_id: '',
-        orderdetail: [],
-      },
-    }
+      }
+      for (const key in this.material) {
+        const element = this.material[key]
+        element.icon = 'mdi-plus'
+        element.check = '#0288D1'
+      }
+      this.e1 = 1
+    },
+    async saveOrder() {
+      const currentDate = new Date()
+      const formattedDate = currentDate.toISOString() // Convert date to ISO 8601 format
+      this.loading = true
+      const data = {
+        employee_id: this.$cookies.get('id'),
+        order_date: formattedDate,
+        status: "pending",
+      }
+      await this.$store.dispatch('order/Insert', data)
+      await this.orderList.map((item) => {
+        const productId = item.product_id
+        const orderQuantify = item.quantity
+        return this.$axios.post('/order_detail', {
+          product_id: productId,
+          order_quantity: orderQuantify,
+          order_id: this.$store.state.order.order_id ,
+        })
+      })
+      this.loading = false
+      this.$router.push('/order/bill/' + this.$store.state.order.order_id)
+      this.clear()
+    },
   },
 }
 </script>

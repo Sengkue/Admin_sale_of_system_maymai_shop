@@ -483,7 +483,7 @@ export default {
         return {
           index: index + 1,
           ...item,
-        }
+        } 
       }).filter((item) => {
         // Modify the condition to search by name or barcode
         const nameMatch = item.name?.toLowerCase().includes(searchTerm)
