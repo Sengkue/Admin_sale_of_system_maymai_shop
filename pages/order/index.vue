@@ -58,7 +58,6 @@
                   <v-toolbar flat>
                     <v-toolbar-title>ລາຍການຂໍ້ມູນສິນຄ້າ</v-toolbar-title>
                     <v-divider class="mx-4" inset vertical></v-divider>
-
                     <v-text-field
                       v-model="searchA"
                       append-icon="mdi-magnify"
@@ -90,7 +89,7 @@
                         >
                           <v-img
                             :src="item.profile"
-                            class="item-image"
+                            class="item-image mr-2"
                             width="80px"
                           />
                           <span>{{ item.name }}</span>
@@ -120,11 +119,12 @@
                       <v-row>
                         <v-btn
                           class="mx-2"
-                          style="font-size: 14px; font-weight: bold"
+                           rounded
+                          style="font-size: 14px; font-weight: bold; "
                           :color="item.check"
                           @click="AddItem(item)"
                         >
-                          ເລືອກສິນສິນຄ້າ
+                          <v-icon large :color="item.check? 'white':'black'">{{item.check ? 'mdi-check':'mdi-plus'}}</v-icon>
                         </v-btn>
                       </v-row>
                     </td>
@@ -240,6 +240,7 @@
                     color="red accent-2"
                     rounded
                     class="mt-2 mr-7 mb-5"
+                    @click="cancelSelect()"
                   >
                     <v-icon left>mdi-close-circle</v-icon>ຍົກເລິກ
                   </v-btn>
@@ -347,6 +348,7 @@ export default {
     AddItem(item) {
       item.icon = 'mdi-check'
       item.check = 'green'
+      console.log('show', item)
       if (this.orderList.length > 0) {
         for (const key in this.orderList) {
           const el = this.orderList[key]
@@ -355,17 +357,22 @@ export default {
           }
         }
       }
-      const mater = {
-        index: item.index,
-        product_id: item.id,
-        name: item.name,
-        category: item.category,
-        color: item.color,
-        size_id: item.size_size,
-        quantity: item.quantity,
-        profile: item.profile,
+      const checkList = this.orderList.find((i) => i.product_id === item.id)
+      if(checkList === undefined){
+        const mater = {
+          index: item.index,
+          product_id: item.id,
+          name: item.name,
+          category: item.category,
+          color: item.color,
+          size_id: item.size_size,
+          quantity: item.quantity,
+          profile: item.profile,
+          checkColor: item.check
+        }
+        this.orderList.push(mater)
       }
-      this.orderList.push(mater)
+      console.log('show color', this.orderList)
     },
     Add(item) {
       if (typeof item.quantity === 'string' && item.quantity === '') {
@@ -407,6 +414,7 @@ export default {
     },
     deleteItem(id) {
       this.orderList.splice(this.orderList.map((i) => i.id).indexOf(id), 1)
+      
     },
 
     close() {
@@ -459,6 +467,10 @@ export default {
       this.$router.push('/order/bill/' + this.$store.state.order.order_id)
       this.clear()
     },
+    cancelSelect(){
+    this.$store.dispatch('product/selectAll')
+    this.orderList = []
+    }
   },
 }
 </script>

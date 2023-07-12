@@ -7,7 +7,6 @@ export const state = () => ({
   image: null,
   uploadProgress: 0, // new state property
   ProductId:'',
-  banner:[]
 });
 
 export const mutations = {
@@ -22,9 +21,6 @@ export const mutations = {
   },
   setSelectOne(state, data) {
     state.StateSelectOne = data;
-  },
-  setSelectBanner(state,data){
-   state.banner = data;
   },
   setView(state, data) {
     state.view = data;
@@ -68,16 +64,6 @@ export const actions = {
       });
   },
 
-  async selectBanner({ commit }, id) {
-    await this.$axios
-      .get(`/image/product/${id}`)
-      .then((data) => {
-        commit("setSelectBanner", data.data.data);
-      })
-      .catch((error) => {
-        this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
-      });
-  },
   async delete({ commit }, data) {
     const id = data.deleteId;
     await this.$axios

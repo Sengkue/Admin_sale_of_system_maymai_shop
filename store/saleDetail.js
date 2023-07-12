@@ -1,11 +1,7 @@
 export const state = () => ({
     StateSelectAll:[],
     StateSelectOne:[],
-    edit: false,
-    view: false,
-    insert: false,
     image: null,
-    uploadProgress: 0, // new state property
   });
   
   export const mutations = {
@@ -18,18 +14,7 @@ export const state = () => ({
     setSelectOne(state, data) {
       state.StateSelectOne = data;
     },
-    setView(state, data) {
-      state.view = data;
-    },
-    setEdit(state, data) {
-      state.edit = data;
-    },
-    setInsert(state, data) {
-      state.insert = data;
-    },
-    setUploadProgress(state, progress) {
-      state.uploadProgress = progress;
-    },
+
   };
   export const actions = {
     async selectAll({ commit }) {
@@ -50,7 +35,9 @@ export const state = () => ({
           commit("setSelectOne", data.data.result);
         })
         .catch((error) => {
-          this.$toast.error("ການດືງຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
+          this.$toast.error("ບໍ່ມີຂໍ້ມູນ!", error);
+          commit("setSelectOne1",null);
+
         });
     },
     async delete({ commit }, data) {
@@ -107,5 +94,5 @@ export const state = () => ({
           this.$toast.error("ຮູການແກ້ໄຂຂໍ້ມູນຂອງທ່ານມີບັນຫາ!", error);
         });
     },
+
   };
-  

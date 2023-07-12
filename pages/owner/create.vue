@@ -17,13 +17,12 @@
                 "
               >
                 <v-img v-if="url" :src="url"></v-img>
-                <v-img v-else src="logo.png"></v-img>
+                <v-img v-else src="/images/logo.png"></v-img>
               </v-avatar>
             </div>
             <v-file-input
               id="file"
               v-model="file"
-              :rules="imageRules"
               label="Image"
               class="d-none"
               prepend-icon="mdi-camera"
@@ -146,32 +145,6 @@
             clear-icon="mdi-close-circle-outline"
           ></v-text-field>
         </v-col>
-
-        <v-col cols="8" class="mt-4">
-          <v-row>
-            <v-col cols="12">
-              <v-file-input
-                v-model="selectedFiles"
-                accept="image/*"
-                label="ເລືອກຮູບ Banners"
-                multiple
-                filled
-                show-size
-                prepend-icon="mdi-camera"
-              >
-              </v-file-input>
-            </v-col>
-            <v-col cols="8" class="mb-5 mt-n5 d-flex flex-wrap">
-              <div
-                v-for="(item, index) in selectedFiles"
-                :key="index"
-                class="mx-1"
-              >
-                <v-img :src="getFileUrl(item)" width="60" height="70"></v-img>
-              </div>
-            </v-col>
-          </v-row>
-        </v-col>
         <v-col cols="4">
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -184,6 +157,7 @@
               ຍົກເລິກ
             </v-btn>
             <v-btn
+              :loading="loading"
               style="font-size: 20px; font-weight: bold"
               class="primary white--text mr-5 mt-2"
               @click="submit"
@@ -202,20 +176,21 @@
 export default {
   data() {
     return {
+      loading:false,
       file: null,
-      selectedFiles: '',
       url: null,
       a: {
-        firstName: '',
-        lastName: '',
-        shopName: '',
-        phone: '',
-        email: '',
-        gender: '',
-        address: '',
-        description: '',
+        firstName: null,
+        lastName: null,
+        shopName: null,
+        phone: null,
+        email: null,
+        gender: null,
+        address: null,
+        description: null,
+        profile:null
       },
-      urlImage: '',
+      urlImage: null,
     }
   },
   methods: {
@@ -224,17 +199,15 @@ export default {
         this.url = URL.createObjectURL(e)
       }
     },
-    getFileUrl(file) {
-      return URL.createObjectURL(file)
-    },
     upload() {
       document.getElementById('file').click()
     },
     async submit() {
+      this.loading = true
       const file = this.file
       const formData = new FormData()
       formData.append('file', file)
-      this.urlImage = await this.$axios
+      this.a.profile = await this.$axios
         .post('upload/single', formData)
         .then((response) => {
           return response?.data?.url
@@ -242,43 +215,18 @@ export default {
         .catch((error) => {
           this.$toast.success('File upload failed', error)
         })
-      const data = {
-        firstName: this.a.firstName,
-        lastName: this.a.lastName,
-        shopName: this.a.shopName,
-        phone: this.a.phone,
-        email: this.a.email,
-        gender: this.a.gender,
-        address: this.a.address,
-        description: this.a.description,
-        profile: this.urlImage,
-      }
 
       await this.$axios
-        .post('/owner', data)
+        .post('/owner', this.a)
         .then((response) => {
-          console.log('Data added successfully', response.data)
-          this.owner_id = response.data.result.id
-          const formDatas = new FormData()
-          for (const file of this.selectedFiles) {
-            formDatas.append('files', file)
-          }
-          this.$axios.post('/upload/multiple', formDatas).then((res) => {
-            res.data.files.map((image) => {
-              const imageUrl = image.url
-              return this.$axios.post('/banner', {
-                ownerId: this.owner_id,
-                url: imageUrl,
-              })
-            })
-          })
+          this.$toast.success('create owner information success')
         })
         .catch((error) => {
-          console.error('Error adding data', error)
+          this.$toast.error('Error adding data', error)
         })
+        this.loading = false
       this.$store.dispatch('owner/selectOwner')
       this.$store.dispatch('owner/selectBanner')
-      this.resetForm()
       this.$router.push('/owner')
     },
   },

@@ -188,6 +188,7 @@ export default {
           title: 'ສັ່ງຊື້ສິນຄ້າ',
           to: '/order',
         },
+
         {
           icon: 'mdi-table-arrow-left',
           title: 'ນໍາເຂົ້າສິນຄ້າ',
@@ -197,6 +198,22 @@ export default {
           icon: 'mdi-widgets',
           title: 'ຂາຍສິນຄ້າ',
           to: '/sale',
+        },
+        {
+          icon: 'mdi-cart-variant',
+          title: 'ສັ່ງຊື້ອອນໄລ',
+          children: [
+            {
+              icon: 'mdi-cart-arrow-down',
+              title: 'ລາຍການສັ່ງຊື້ໃໝ່',
+              to: '/order_online',
+            },
+            {
+              icon: 'mdi-cart-check',
+              title: 'ລາຍການສັ່ງຊື້ສຳເລັດ',
+              to: '/order_online/success',
+            }
+          ],
         },
         //  ລາຍງານ
         {

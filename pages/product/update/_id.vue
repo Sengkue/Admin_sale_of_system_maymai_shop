@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-card>
-      <v-form ref="form" >
+      <v-form ref="form">
         <v-card class="teal white--text text-center py-5 mb-n8">
           <h2>ແກ້ໄຂສິນຄ້າ</h2>
         </v-card>
@@ -57,18 +57,68 @@
                     >
                     </v-file-input>
                   </v-col>
-                  <v-col cols="12" class="mb-5 mt-n5 d-flex flex-wrap">
+                  <v-col v-if="selectedFiles !== null && selectedFiles !== ''" cols="12" class="mt-n5 d-flex flex-wrap">
                     <div
                       v-for="(item, index) in selectedFiles"
                       :key="index"
-                      class="mx-1"
+                      class="pa-0 ma-0"
                     >
                       <v-img
                         :src="getFileUrl(item)"
                         width="60"
                         height="70"
+                        contain
                       ></v-img>
                     </div>
+                  </v-col>
+                  <v-col cols="12" style="border: 1px solid black"
+                    class="d-flex flex-wrap mb-1 pa-0" >
+                      <template v-for="(item, i) in getProductBanner">
+                        <v-col
+                          :key="i"
+                          cols="3"
+                          md="2"
+                        >
+                          <v-hover v-slot="{ hover }">
+                            <div
+                              :elevation="hover ? 12 : 2"
+                              :class="{ 'on-hover': hover }"
+                            >
+                              <v-img :src="item.url"  width="70"
+                              height="80" contain>
+                                <v-card-title class="text-h6 white--text">
+                                  <v-row
+                                    class="fill-height flex-column"
+                                    justify="space-between"
+                                  >
+                                    <div class="align-self-center mt-5">
+                                      <v-btn 
+                                        :class="{ 'show-btns': hover }"
+                                        :color="transparent"
+                                        icon
+                                        :style="
+                                        hover
+                                          ? 'border: 3px solid white; border-radius: 50%; box-shadow: 0 0 10px black;'
+                                          : ''
+                                      "
+                                      @click="deleteBanner(item.id)"
+                                      >
+                                        <v-icon
+                                          :class="{ 'show-btns': hover }"
+                                          :color="transparent"
+                                          large
+                                        >
+                                        mdi-delete-forever
+                                        </v-icon>
+                                      </v-btn>
+                                    </div>
+                                  </v-row>
+                                </v-card-title>
+                              </v-img>
+                            </div>
+                          </v-hover>
+                        </v-col>
+                      </template>
                   </v-col>
                 </v-row>
               </v-col>
@@ -192,12 +242,12 @@
           <v-btn
             color="blue darken-1"
             :loading="loading"
-                 text
-                 @click="update()"
-                 >
-                 ບັນທືກ
-                </v-btn>
-                <!-- :disabled="!valid" -->
+            text
+            @click="update()"
+          >
+            ບັນທືກ
+          </v-btn>
+          <!-- :disabled="!valid" -->
         </v-card-actions>
       </v-form>
     </v-card>
@@ -207,7 +257,7 @@
 export default {
   data: () => ({
     uploadImage: false,
-    // valid: false,
+    transparent: 'rgba(255, 255, 255, 0)',
     file: null,
     file1: null,
     url: null,
@@ -229,6 +279,9 @@ export default {
     getPercentage: 0,
   }),
   computed: {
+    getProductBanner() {
+      return this.$store.state.banner.banner
+    },
     getSupplier() {
       return this.$store.state.supplier.StateSelectAll
     },
@@ -249,10 +302,13 @@ export default {
   mounted() {
     this.$store.dispatch('supplier/selectAll')
     this.$store.dispatch('category/selectCategory')
+    this.$store.dispatch('banner/selectById', this.$route.params.id)
   },
   created() {
     this.productId = this.$route.params.id
-    this.$axios.get(`/product/${this.productId}`).then((res) => {
+    this.$axios
+      .get(`/product/${this.productId}`)
+      .then((res) => {
         this.name = res.data.result.name
         this.category = res.data.result.category_id
         this.description = res.data.result.description
@@ -263,13 +319,17 @@ export default {
         this.supplier_id = res.data.result.supplier_id
         this.urlImage = res.data.result.profile
         this.url = res.data.result.profile
-        
       })
       .catch((err) => {
         console.log(err)
       })
   },
   methods: {
+    async deleteBanner(id) {
+      await this.$axios.delete(`/image/${id}`)
+      await this.$store.dispatch('banner/selectById', this.$route.params.id)
+
+    },
     onFileChange(e) {
       if (e) {
         this.url = URL.createObjectURL(e)
@@ -293,7 +353,7 @@ export default {
       this.$refs.form.validate()
       // if (!this.valid) return
       this.loading = true
-      if(this.file !==null){
+      if (this.file !== null) {
         this.urlImage = await this.$axios
           .post('upload/single', formData)
           .then((response) => {
@@ -302,7 +362,6 @@ export default {
           .catch((error) => {
             this.$toast.success('File upload failed', error)
           })
-
       }
       const data = {
         name: this.name,
@@ -328,19 +387,23 @@ export default {
           this.getPercentage = percentCompleted
         },
       }
-      if(this.productId !==null && this.selectedFiles !==null){
-      const res = await this.$axios.post('/upload/multiple', formDatas, config)
-      await res.data.files.map((image) => {
-        const imageUrl = image.url
-        // const name = image.originalName
-        const name = '555'
-        return this.$axios.post(`/image`, {
-          productId: this.productId,
-          url: imageUrl,
-          altText: name,
+      if (this.productId !== null && this.selectedFiles !== null) {
+        const res = await this.$axios.post(
+          '/upload/multiple',
+          formDatas,
+          config
+        )
+        await res.data.files.map((image) => {
+          const imageUrl = image.url
+          // const name = image.originalName
+          const name = '555'
+          return this.$axios.post(`/image`, {
+            productId: this.productId,
+            url: imageUrl,
+            altText: name,
+          })
         })
-      })
-    }
+      }
       await this.$store.dispatch('product/selectAll')
       this.$toast.success('Updated successfully')
       this.loading = false
@@ -348,20 +411,32 @@ export default {
       this.reset()
       this.$router.push('/product')
     },
-    reset(){
-      this.name = "";
-        this.category = ""; 
-        this.description = ""; 
-        this.quantity = ""; 
-        this.sale_price = "";
-        this.cost_price = ""; 
-        this.Barcode = ""; 
-        this.supplier_id = ""; 
-        this.urlImage = ""; 
-        this.url = ""; 
-        this.selectedFiles=""
-    }
+    reset() {
+      this.name = ''
+      this.category = ''
+      this.description = ''
+      this.quantity = ''
+      this.sale_price = ''
+      this.cost_price = ''
+      this.Barcode = ''
+      this.supplier_id = ''
+      this.urlImage = ''
+      this.url = ''
+      this.selectedFiles = ''
+    },
   },
-
 }
 </script>
+<style lang="scss" scoped>
+.v-card {
+  transition: opacity 0.4s ease-in-out;
+}
+
+.v-card:not(.on-hover) {
+  opacity: 0.6;
+}
+
+.show-btns {
+  color: rgb(255, 0, 0) !important;
+}
+</style>

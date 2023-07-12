@@ -47,71 +47,71 @@
                       v-model="search"
                       label="Search"
                       outlined
+                      hide-details
                       dense
                       prepend-inner-icon="mdi-barcode-scan"
                     ></v-text-field>
                   </v-col>
                 </v-row>
               </v-col>
-              <v-col
-                v-for="(item, index) in filteredRow"
-                :key="index"
-                cols="3"
-                class="ma-0 py-1 px-1"
-              >
-                <v-card
-                  v-ripple
-                  max-width="180px"
-                  elevation="10"
-                  class="cursor"
-                  @click="AddToOrder(item.id)"
-                >
-                  <div class="">
-                    <v-img
-                      :src="item.profile"
-                      contain
-                      style="
-                        width: 100%;
-                        height: 140px;
-                        object-fit: cover;
-                        object-position: center;
-                      "
+              <v-col cols="12" class="scroll-container">
+                <v-row>
+                  <v-col
+                    v-for="(item, index) in filteredRow"
+                    :key="index"
+                    cols="3"
+                    class="ma-0 py-1 px-1"
+                  >
+                    <v-card
+                      v-ripple
+                      max-width="180px"
+                      elevation="10"
+                      class="cursor"
+                      @click="AddToOrder(item.id)"
                     >
-                      <div v-for="li in ListOrder" :key="li.id">
-                        <v-chip
-                          v-if="item.id === li.id"
-                          small
-                          color="warning"
-                          class="box-item rounded-bl-xl"
-                          label
-                          >{{ li.order_amount }}</v-chip
+                      <div class="">
+                        <v-img
+                          :src="item.profile"
+                          contain
+                          style="
+                            width: 100%;
+                            height: 140px;
+                            object-fit: cover;
+                            object-position: center;
+                          "
                         >
-                      </div>
+                          <div v-for="li in ListOrder" :key="li.id">
+                            <v-chip
+                              v-if="item.id === li.id"
+                              small
+                              color="warning"
+                              class="box-item rounded-bl-xl"
+                              label
+                              >{{ li.order_amount }}</v-chip
+                            >
+                          </div>
 
-                      <v-chip
-                        v-if="item.quantity === 0"
-                        small
-                        color="error"
-                        class="rounded-br-xl ma-n2"
-                        label
-                      >
-                        ໝົດ!
-                      </v-chip>
-                    </v-img>
-                    <v-card-text>
-                      <div class="font-weight-black">{{ item.name }}</div>
-                      <div class="info--text">
-                        {{ formatPrice(item.sale_price) }}kip
+                          <v-chip
+                            v-if="item.quantity === 0"
+                            small
+                            color="error"
+                            class="rounded-br-xl ma-n2"
+                            label
+                          >
+                            ໝົດ!
+                          </v-chip>
+                        </v-img>
+                        <v-card-text>
+                          <div class="font-weight-black">{{ item.name }}</div>
+                          <div class="info--text">
+                            {{ formatPrice(item.sale_price) }}kip
+                          </div>
+                        </v-card-text>
                       </div>
-                    </v-card-text>
-                  </div>
-                </v-card>
+                    </v-card>
+                  </v-col>
+                </v-row>
               </v-col>
-              <tr>
-                {{
-                  ListOrder
-                }}
-              </tr>
             </v-row>
             <!-- card image 1 -->
           </v-col>
@@ -414,6 +414,22 @@ export default {
       sale_id: '',
       promotion_id: null,
       promotion: 0,
+      sale_data: {
+        customer_id: null,
+        promotion_id: null,
+        employee_id: null,
+        sale_date: null,
+        sale_total: null,
+        sale_quantity: null,
+        sale_type: null,
+        sale_status: null,
+      },
+      sale_detail_data: {
+        sale_id: null,
+        product_id: null,
+        sale_price: null,
+        quantity: null,
+      },
     }
   },
   computed: {
@@ -483,7 +499,7 @@ export default {
         return {
           index: index + 1,
           ...item,
-        } 
+        }
       }).filter((item) => {
         // Modify the condition to search by name or barcode
         const nameMatch = item.name?.toLowerCase().includes(searchTerm)
@@ -508,37 +524,27 @@ export default {
       const currentDate = new Date()
       const formattedDate = currentDate.toISOString() // Convert date to ISO 8601 format
       this.loading = true
-      const data = {
-        customer_id: '',
-        promotion_id: this.promotion_id,
-        employee_id: this.$cookies.get('id'),
-        sale_date: formattedDate,
-        sale_total: this.TotalAmount,
-        sale_quantity: this.TotalQuantity,
-        sale_type: 'pos',
-        sale_status: 'Completed',
-      }
+
+      this.sale_data.promotion_id = this.promotion_id
+      this.sale_data.employee_id = this.$cookies.get('id')
+      this.sale_data.sale_date = formattedDate
+      this.sale_data.sale_total = this.TotalAmount
+      this.sale_data.sale_quantity = this.TotalQuantity
+      this.sale_data.sale_type = 'pos'
+      this.sale_data.sale_status = 'Completed'
 
       await this.$axios
-        .post('/sale', data)
+        .post('/sale', this.sale_data)
         .then((response) => {
           this.sale_id = response.data.result.id
 
           // send data to sale_detail---------------------------
           this.ListOrder.map((item) => {
-            const productId = item.id
-            const Qt = item.order_amount
-            const price = item.sale_price
-            const nameG = item.name
-            const categoryG = item.category
-            return this.$axios.post('/saleDetail', {
-              sale_id: this.sale_id,
-              name: nameG,
-              category: categoryG,
-              product_id: productId,
-              sale_price: price,
-              quantity: Qt,
-            })
+            this.sale_detail_data.sale_id = this.sale_id
+            this.sale_detail_data.product_id = item.id
+            this.sale_detail_data.sale_price = item.sale_price
+            this.sale_detail_data.quantity = item.order_amount
+            return this.$axios.post('/saleDetail', this.sale_detail_data)
           })
           // send subtract quantity----------------------------
           this.ListOrder.map((item) => {
@@ -886,5 +892,9 @@ td:last-child {
 
 .w-250 {
   width: 250px;
+}
+.scroll-container {
+  height: 560px;
+  overflow-y: auto;
 }
 </style>

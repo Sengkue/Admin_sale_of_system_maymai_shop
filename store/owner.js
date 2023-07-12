@@ -1,7 +1,8 @@
 export const state = () => ({
     AllOwner:[],
-    Banner:{},
-    ownerId:{}
+    Banner:[],
+    ownerId:{},
+    insert:false
   })
   
   export const mutations={
@@ -13,6 +14,9 @@ export const state = () => ({
     },
     setBanner(state, data){
       state.Banner = data
+    },
+    setInsert(state, data){
+      state.insert = data
     }
   }
   

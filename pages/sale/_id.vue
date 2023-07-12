@@ -14,8 +14,8 @@
         <p>Phone: (020) 7878-1525</p>
       </div>
     </div>
-    <p class="bill-date">Date:{{ formatDateLo(getSale.sale_date) }}</p>
-
+    <p class="bill-date"> ວັນທີຂາຍ: {{ formatDateLo(getSale.sale_date) }}</p>
+    <p class="bill-date"> ພະນັກງານຂາຍ: {{ getSale.employeeName }}</p>
     <v-data-table :items="getDetail" :headers="headers" class="product-table">
       <template #[`item.total`]="{ item }">
         <td>{{ formatPrice(item.sale_price * item.quantity) }}</td>
@@ -46,11 +46,11 @@ export default {
       headers: [
         {
           text: 'Name',
-          value: 'name',
+          value: 'productName',
         },
         {
           text: 'Category',
-          value: 'category',
+          value: 'categoryName',
         },
         {
           text: 'Price',
@@ -160,9 +160,13 @@ export default {
 
       // Add bill date
       printWindow.document.write(
-        `<p class="bill-date">Date: ${this.formatDateLo(
+        `<p class="bill-date">ວັນທີຂາຍ: ${this.formatDateLo(
           this.getSale.sale_date
         )}</p>`
+      )
+      printWindow.document.write(
+        `<p class="bill-date">ພະນັກງານຂາຍ: ${
+          this.getSale.employeeName}</p>`
       )
 
       // Add table
@@ -172,7 +176,7 @@ export default {
       printWindow.document.write(
         `<p class="total-price">Total Price: ${this.formatPrice(
           this.totalPrice
-        )}kip</p>`
+        )}ກີບ</p>`
       )
 
       // Add promotion discount if applicable
@@ -181,7 +185,7 @@ export default {
       <div class="total-price">
         <p>ຮັບສ່ວນຫຼຸດ: ${this.getSale.promotionDiscount}%</p>
         <p class="total-price green--text">
-          ຍັງເຫຼຶອພຽງ: ${this.formatPrice(this.calculatePromotion)}ກິບ
+          ຍັງເຫຼຶອພຽງ: ${this.formatPrice(this.calculatePromotion)}ກີບ
         </p>
       </div>
     `)
