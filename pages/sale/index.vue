@@ -531,7 +531,7 @@ export default {
       this.sale_data.sale_total = this.TotalAmount
       this.sale_data.sale_quantity = this.TotalQuantity
       this.sale_data.sale_type = 'pos'
-      this.sale_data.sale_status = 'Completed'
+      this.sale_data.sale_status = 'completed'
 
       await this.$axios
         .post('/sale', this.sale_data)

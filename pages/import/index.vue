@@ -37,12 +37,12 @@
               item-value="id"
               item-text="id"
               dense
-              @change="Selected"
               deletable-chips
               prepend-icon="mdi-file-find"
               label="ປ້ອນເລກໃບສັ່ງຊື້ສິນຄ້າ"
               single-line
               hide-details
+              @change="Selected"
             >
               <template #item="{ item }">
                 <div class="select-item d-flex align-center justify-center">
@@ -61,7 +61,7 @@
       </template>
 
       <!-- ____Body______ -->
-      <template #body="{ items, headers }">
+      <template #body="{headers ,items}">
         <tbody>
           <tr
             v-for="(item, idx) in items"
@@ -235,21 +235,28 @@ export default {
       this.show.splice(this.show.map((i) => i.id).indexOf(id), 1)
     },
     async saveImport() {
-      const index = this.show.findIndex((item) => item.order_quantity === null || item.order_quantity === "");
+      const index = this.show.findIndex(
+        (item) => item.order_quantity === null || item.order_quantity === ''
+      )
 
-if (index !== -1) {
-  return alert(`ສິນຄ້າລຳດັບ ${index + 1} ບໍ່ມີຈຳນວນ. ກະລຸນາປ້ອມຈຳນວນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`);
-  
-}
-const price = this.show.findIndex((item) => item.cost_price === null || item.cost_price === "");
+      if (index !== -1) {
+        return alert(
+          `ສິນຄ້າລຳດັບ ${
+            index + 1
+          } ບໍ່ມີຈຳນວນ. ກະລຸນາປ້ອມຈຳນວນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`
+        )
+      }
+      const price = this.show.findIndex(
+        (item) => item.cost_price === null || item.cost_price === ''
+      )
 
-if (price !== -1) {
-  return alert(`ສິນຄ້າລຳດັບ ${price + 1} ບໍ່ມີຈຳນວນເງິນ. ກະລຸນາປ້ອມຈຳນວນເງິນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`);
-  
-}
-
-
-
+      if (price !== -1) {
+        return alert(
+          `ສິນຄ້າລຳດັບ ${
+            price + 1
+          } ບໍ່ມີຈຳນວນເງິນ. ກະລຸນາປ້ອມຈຳນວນເງິນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`
+        )
+      }
 
       this.loading = true
       const currentDate = new Date()
@@ -259,8 +266,6 @@ if (price !== -1) {
       this.import_data.import_total = this.TotalQuantity
       // insert data to import table
       const res = await this.$axios.post('/import', this.import_data)
-      console.log('show import data :', this.import_data)
-      console.log('show done:', this.order_id)
       // update status order to complete
       await this.$axios.put(`/order/${this.order_id}/status`, {
         status: 'completed',

@@ -211,7 +211,7 @@ export default {
             {
               icon: 'mdi-cart-check',
               title: 'ລາຍການສັ່ງຊື້ສຳເລັດ',
-              to: '/order_online/success',
+              to: '/order_online/story',
             }
           ],
         },

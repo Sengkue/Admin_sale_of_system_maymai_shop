@@ -227,8 +227,7 @@ export default {
   
   created(){
   this.$axios.get(`/owner/${this.$route.params.id}`).then((res)=>{
-    console.log('show owner22222', res.data.result)
-      const data = res.data.result;
+   const data = res.data.result;
         this.a.firstName = data.firstName
         this.a.lastName = data.lastName
         this.a.shopName = data.shopName
@@ -284,7 +283,7 @@ export default {
           this.owner_id = response.data.result.id
         })
         .catch((error) => {
-          console.error('Error adding data', error)
+          this.$toast.error('Error adding data', error)
         })
         if(this.selectedFiles !== null){
           const formDatas = new FormData()

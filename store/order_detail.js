@@ -29,7 +29,6 @@ export const state = () => ({
     selectByorderId({commit},id){
       this.$axios.get(`/order_detail/order/${id}`).then((res)=>{
         commit('setOrderDetail', res.data.result)
-        console.log('setOrderDetail', res.data.result)
       })
   },
       selectorderId({commit},id){
@@ -40,7 +39,7 @@ export const state = () => ({
     Insert({commit},data){
         this.$axios.post(`/order`, data).then((res)=>{
             // commit('setOwnerOne', res.data.result)
-            console.log('setOwnerOne', res.data)
+          
         })
     },
   }

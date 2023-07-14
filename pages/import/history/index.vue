@@ -61,7 +61,6 @@
           </v-icon>
         </template>
       </v-data-table>
-      {{ getOrder }}
     </div>
   </template>
   <script>

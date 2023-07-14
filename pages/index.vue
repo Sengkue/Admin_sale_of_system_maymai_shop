@@ -326,7 +326,7 @@ export default {
   //       lng: parseFloat(val.lng),
 
   //     }
-  //     console.log(val)
+  //     (val)
   //   }
   // },
 

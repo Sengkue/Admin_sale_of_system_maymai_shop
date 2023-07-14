@@ -348,7 +348,6 @@ export default {
     AddItem(item) {
       item.icon = 'mdi-check'
       item.check = 'green'
-      console.log('show', item)
       if (this.orderList.length > 0) {
         for (const key in this.orderList) {
           const el = this.orderList[key]
@@ -372,7 +371,6 @@ export default {
         }
         this.orderList.push(mater)
       }
-      console.log('show color', this.orderList)
     },
     Add(item) {
       if (typeof item.quantity === 'string' && item.quantity === '') {

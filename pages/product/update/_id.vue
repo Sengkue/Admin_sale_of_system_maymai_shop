@@ -57,7 +57,11 @@
                     >
                     </v-file-input>
                   </v-col>
-                  <v-col v-if="selectedFiles !== null && selectedFiles !== ''" cols="12" class="mt-n5 d-flex flex-wrap">
+                  <v-col
+                    v-if="selectedFiles !== null && selectedFiles !== ''"
+                    cols="12"
+                    class="mt-n5 d-flex flex-wrap"
+                  >
                     <div
                       v-for="(item, index) in selectedFiles"
                       :key="index"
@@ -71,54 +75,57 @@
                       ></v-img>
                     </div>
                   </v-col>
-                  <v-col cols="12" style="border: 1px solid black"
-                    class="d-flex flex-wrap mb-1 pa-0" >
-                      <template v-for="(item, i) in getProductBanner">
-                        <v-col
-                          :key="i"
-                          cols="3"
-                          md="2"
-                        >
-                          <v-hover v-slot="{ hover }">
-                            <div
-                              :elevation="hover ? 12 : 2"
-                              :class="{ 'on-hover': hover }"
+                  <v-col
+                    cols="12"
+                    style="border: 1px solid black"
+                    class="d-flex flex-wrap mb-1 pa-0"
+                  >
+                    <template v-for="(item, i) in getProductBanner">
+                      <v-col :key="i" cols="3" md="2">
+                        <v-hover v-slot="{ hover }">
+                          <div
+                            :elevation="hover ? 12 : 2"
+                            :class="{ 'on-hover': hover }"
+                          >
+                            <v-img
+                              :src="item.url"
+                              width="70"
+                              height="80"
+                              contain
                             >
-                              <v-img :src="item.url"  width="70"
-                              height="80" contain>
-                                <v-card-title class="text-h6 white--text">
-                                  <v-row
-                                    class="fill-height flex-column"
-                                    justify="space-between"
-                                  >
-                                    <div class="align-self-center mt-5">
-                                      <v-btn 
-                                        :class="{ 'show-btns': hover }"
-                                        :color="transparent"
-                                        icon
-                                        :style="
+                              <v-card-title class="text-h6 white--text">
+                                <v-row
+                                  class="fill-height flex-column"
+                                  justify="space-between"
+                                >
+                                  <div class="align-self-center mt-5">
+                                    <v-btn
+                                      :class="{ 'show-btns': hover }"
+                                      :color="transparent"
+                                      icon
+                                      :style="
                                         hover
                                           ? 'border: 3px solid white; border-radius: 50%; box-shadow: 0 0 10px black;'
                                           : ''
                                       "
                                       @click="deleteBanner(item.id)"
+                                    >
+                                      <v-icon
+                                        :class="{ 'show-btns': hover }"
+                                        :color="transparent"
+                                        large
                                       >
-                                        <v-icon
-                                          :class="{ 'show-btns': hover }"
-                                          :color="transparent"
-                                          large
-                                        >
                                         mdi-delete-forever
-                                        </v-icon>
-                                      </v-btn>
-                                    </div>
-                                  </v-row>
-                                </v-card-title>
-                              </v-img>
-                            </div>
-                          </v-hover>
-                        </v-col>
-                      </template>
+                                      </v-icon>
+                                    </v-btn>
+                                  </div>
+                                </v-row>
+                              </v-card-title>
+                            </v-img>
+                          </div>
+                        </v-hover>
+                      </v-col>
+                    </template>
                   </v-col>
                 </v-row>
               </v-col>
@@ -321,14 +328,13 @@ export default {
         this.url = res.data.result.profile
       })
       .catch((err) => {
-        console.log(err)
+        this.$toast.error(err)
       })
   },
   methods: {
     async deleteBanner(id) {
       await this.$axios.delete(`/image/${id}`)
       await this.$store.dispatch('banner/selectById', this.$route.params.id)
-
     },
     onFileChange(e) {
       if (e) {

@@ -24,7 +24,6 @@ export const state = () => ({
     selectAll({commit}){
         this.$axios.get('/order').then((res)=>{
             commit('setorder', res.data.result)
-            console.log('setorder', res.data.result)
         })
     },
   selectOrderById({commit},id){

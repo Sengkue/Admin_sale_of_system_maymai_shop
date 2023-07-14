@@ -320,7 +320,7 @@ export default {
         })
 
       this.product_data.profile = this.urlImage;
-      console.log('show product data:', this.product_data)
+     
       this.productId = await this.$axios.post('product/', this.product_data).then((res) => {
         return res?.data?.result?.id
       })

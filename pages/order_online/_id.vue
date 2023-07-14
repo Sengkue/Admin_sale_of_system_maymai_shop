@@ -33,15 +33,15 @@
           v-if="getTypeAndStatus.payment"
           :src="getTypeAndStatus.payment"
           width="100px"
-          @click="openImageDialog = true"
           class="cursor-pointe"
+          @click="openImageDialog = true"
         ></v-img>
         <v-img
           v-else
           src="/images/logo.png"
           width="100px"
-          @click="openImageDialog = true"
           class="cursor-pointe"
+          @click="openImageDialog = true"
         ></v-img>
       </v-col>
       <v-col cols="4">
@@ -80,21 +80,20 @@
                 <div class="d-flex align-center justify-space-between">
                   <div v-if="getTypeAndStatus.customer">
                     <v-tooltip top>
-                      <template v-slot:activator="{ on }">
+                      <template #activator="{ on }">
                         <v-btn color="green">
                           <a
+                            v-if="getTypeAndStatus.customer.c_phone"
                             :class="custom - link"
                             style="text-decoration: none; color: white"
-                            v-if="getTypeAndStatus.customer.c_phone"
                             :href="
                               'https://wa.me/' +
                               '+856' +
                               getTypeAndStatus.customer.c_phone
                                 .replace(/\s+/g, '')
                                 .substr(0) +
-                              '?text=ສະບາຍດີເຈົ້າ ພວກເຮົາຕິດຕໍ່ຈາກ iPay...ເດີ້. ເຫັນທ່ານສັ່ງຊື້ເຄື່ອງໃນiPay...ສະນັ້ນ, ລົບກວນທ່ານສົ່ງທີ່ຢູ່ ຫຼື ທ່ານສະດວກຮັບເຄື່ອງຜ່ານບໍລິສັດຂົນສົ່ງ, ສາຂາໃດເຈົ້າ' +
-                              ' ແລະ ລົບກວນທ່ານຊ່ວຍຊຳລະຄ່າເຄື່ອງຜ່ານ QR ທີ່ອອກຊື່ເປັນ itcapital ລຸ່ມນີ້ດ້ວຍເຈົ້າ ' +
-                              `https://ibb.co/my5062w`
+                              '?text=ສະບາຍດີເຈົ້າ ພວກເຮົາຕິດຕໍ່ຈາກ ຮ້ານຂາຍເຄື່ອງແມ່ໄໝ...ເດີ້. ເຫັນທ່ານສັ່ງຊື້ເຄື່ອງໃນເວັບຂາຍອອນຂອງພວກເຮົາ...ສະນັ້ນ, ' +
+                              'ພວກເຮົາພວກເຮົາກຳລັງຈັດສົ່ງໃຫ້ທ່ານ, ລໍຖ້າຮັບເຄື່ອງຢູຸສາຂາໄປທາງເລີຍເຈົ້າ. '
                             "
                             target="_blank"
                             v-on="on"
@@ -111,13 +110,17 @@
                     </v-tooltip>
                   </div>
                   <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-btn class="primary white--text" v-on="on" @click="comfirm()">
+                    <template #activator="{ on }">
+                      <v-btn
+                        :loading="loading"
+                        class="primary white--text"
+                        v-on="on"
+                        @click="openConfirmationDialog"
+                      >
                         ຢືນຢັນການສັ່ງຊື່
                       </v-btn>
                     </template>
                     <span>ຢືນຢັນການສັ່ງຊື່</span>
-                    <!-- Replace with your tooltip content -->
                   </v-tooltip>
                 </div>
               </div>
@@ -148,6 +151,19 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- _____________________________dialog show confirm________________ -->
+    <v-dialog v-model="confirmationDialog" persistent max-width="500">
+      <v-card>
+        <v-card-title>ທ່ານແນ່ໃຈບໍ?ທີຈະການຢືນຢັນລາຍການສັ່ງຊີ້ນີ້</v-card-title>
+        <v-card-text>
+          <p>ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການດຳເນີນການຕໍ່?</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn :loading="loading" color="primary" @click="confirmAction">ການຢືນຢັນ</v-btn>
+          <v-btn color="error" @click="cancelAction">ຍົກເລີກ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -157,7 +173,9 @@ export default {
 
   data() {
     return {
+      confirmationDialog: false,
       openImageDialog: false,
+      loading: false,
       newdetailHeader: [
         { text: 'ລໍາດັບ', value: 'index' },
         {
@@ -193,9 +211,22 @@ export default {
 
   methods: {
     viewDetail(id) {},
-    comfirm(){
-      this.$store.dispatch('sale/updateStatus', this.$route.params.id)
-    }
+    openConfirmationDialog() {
+      this.confirmationDialog = true
+    },
+     async confirmAction() {
+      this.loading = true
+   await   this.$store.dispatch('sale/updateStatus', this.$route.params.id)
+    await  this.$store.dispatch('sale/selectByTypeAndStatus', {
+      type: 'online',
+      status: 'pending',
+    })
+      this.loading = false
+      this.confirmationDialog = false
+    },
+    cancelAction() {
+      this.confirmationDialog = false
+    },
   },
 }
 </script>
