@@ -268,75 +268,75 @@
                         <v-row style="width: 250px">
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(1)">1</v-btn>
+                            <v-btn block @click="AddNum(1)">1</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(2)">2</v-btn>
+                            <v-btn block @click="AddNum(2)">2</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(3)">3</v-btn>
+                            <v-btn block @click="AddNum(3)">3</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(4)">4</v-btn>
+                            <v-btn block @click="AddNum(4)">4</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(5)">5</v-btn>
+                            <v-btn block @click="AddNum(5)">5</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(6)">6</v-btn>
+                            <v-btn block @click="AddNum(6)">6</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(7)">7</v-btn>
+                            <v-btn block @click="AddNum(7)">7</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(8)">8</v-btn>
+                            <v-btn block @click="AddNum(8)">8</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum(9)">9</v-btn>
+                            <v-btn block @click="AddNum(9)">9</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum('00')">00</v-btn>
+                            <v-btn block @click="AddNum('00')">00</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum('0')">0</v-btn>
+                            <v-btn block @click="AddNum('0')">0</v-btn>
                           </v-col>
                           <v-col
                             cols="4"
-                            class="blue white--text text-center my-n1 mx-n1"
+                            class="blue white--text text-center my-n1"
                           >
-                            <v-btn @click="AddNum('-')"
+                            <v-btn color="error" block @click="AddNum('-')"
                               ><v-icon>mdi-arrow-left</v-icon></v-btn
                             >
                           </v-col>

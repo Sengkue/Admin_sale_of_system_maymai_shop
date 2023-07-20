@@ -7,6 +7,7 @@ export const state = () => ({
   image: null,
   uploadProgress: 0, // new state property
   ProductId:'',
+  AlmostOutStock:[]
 });
 
 export const mutations = {
@@ -34,8 +35,18 @@ export const mutations = {
   setUploadProgress(state, progress) {
     state.uploadProgress = progress;
   },
+setAlmostOutStock(state, data){
+  state.AlmostOutStock = data
+}
+
 };
 export const actions = {
+  // _____________select product almost out of stock 1-20______________
+  getAlmostOutStock({commit}){
+      this.$axios.get('product/almost-out-of-stock').then((res)=>{
+        commit('setAlmostOutStock', res.data.result)
+      })
+  },
   getBySupplier({commit},id){
     if( id!== "" ){
       this.$axios.get( `/product/supplier/${id}`).then((res)=>{

@@ -393,10 +393,10 @@ export default {
       }
     },
     Inputquantity(evt, item) {
-      // evt = evt ? evt : window.event;
+      evt = evt || window.event;
       const charCode = evt.which ? evt.which : evt.keyCode
       if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        // alert("Enter Only Number ? (0-9)");
+        alert("Enter Only Number ? (0-9)");
         evt.preventDefault()
       } else {
         if (

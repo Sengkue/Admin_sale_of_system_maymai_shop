@@ -1,11 +1,11 @@
 <template>
   <div>
+    <!-- :expanded.sync="newexpanded" -->
     <v-data-table
       :search="newsearch"
       :headers="newHeaders"
       :items="getTypeAndStatus"
       :single-expand="true"
-      :expanded.sync="newexpanded"
       item-key="idx"
       show-expand
       class="elevation-3"

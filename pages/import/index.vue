@@ -61,7 +61,7 @@
       </template>
 
       <!-- ____Body______ -->
-      <template #body="{headers ,items}">
+      <template #body="{ headers, items }">
         <tbody>
           <tr
             v-for="(item, idx) in items"
@@ -167,7 +167,8 @@ export default {
         { text: 'ຂະໜາດ', value: 'size_id' },
         { text: 'ຈໍານວນ', value: 'order_quantity' },
         // { text: 'ຫົວໜ່ວຍ', value: 'unit' },
-        { text: 'ລາຄາ', value: 'cost_price' },
+        { text: 'ລາຄາຕົ້ນທືນ', value: 'cost_price' },
+        { text: 'ລາຄາຂາຍ', value: 'sale_price' },
       ],
 
       order_id: null,
@@ -286,6 +287,13 @@ export default {
         this.import_detail_data.Imp_price = item.cost_price
         this.import_detail_data.Imp_quantity = item.order_quantity
         return this.$axios.post('/import_detail', this.import_detail_data)
+      })
+      // _________update sell_price and cost_price____________
+      await this.show.map((item) => {
+        return this.$axios.put(`product/${item.product_id}`, {
+          sale_price: item.sale_price,
+          cost_price: item.cost_price,
+        })
       })
       this.$toast.success('ນຳເຂົ້າສິນຄ້າສຳເລັດ')
       this.show = []

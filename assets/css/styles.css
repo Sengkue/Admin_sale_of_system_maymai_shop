@@ -1,4 +1,27 @@
+/* ____________________flashing light___________________ */
+.flashing-light {
+  transition: all 0.5s ease;
+}
 
+.animate {
+  animation: flashing 1s infinite;
+}
+
+@keyframes flashing {
+  0% {
+    color: rgb(255, 255, 255);
+    text-shadow: 0 0 10px rgb(255, 255, 255);
+  }
+  50% {
+    color: rgb(255, 44, 44);
+    text-shadow: 0 0 20px rgb(0, 0, 0);
+  }
+  100% {
+    color: rgb(255, 255, 255);
+    text-shadow: 0 0 10px rgb(255, 255, 255);
+  }
+}
+/* ______________________end flashing light_______________ */
 *{
   font-family: 'Noto Sans Lao Looped', sans-serif;
    font-family: 'Noto Serif Lao', serif;

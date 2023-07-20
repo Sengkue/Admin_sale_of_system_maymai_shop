@@ -63,6 +63,8 @@
         <v-divider></v-divider>
       </v-col>
       <v-col cols="12">
+        {{ getDetail }}
+
         <!-- _______________________________table show details_____________________________ -->
         <div v-if="getDetail">
           <v-data-table :headers="newdetailHeader" :items="getDetail">
@@ -159,7 +161,9 @@
           <p>ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການດຳເນີນການຕໍ່?</p>
         </v-card-text>
         <v-card-actions>
-          <v-btn :loading="loading" color="primary" @click="confirmAction">ການຢືນຢັນ</v-btn>
+          <v-btn :loading="loading" color="primary" @click="confirmAction"
+            >ການຢືນຢັນ</v-btn
+          >
           <v-btn color="error" @click="cancelAction">ຍົກເລີກ</v-btn>
         </v-card-actions>
       </v-card>
@@ -214,13 +218,18 @@ export default {
     openConfirmationDialog() {
       this.confirmationDialog = true
     },
-     async confirmAction() {
+    async confirmAction() {
       this.loading = true
-   await   this.$store.dispatch('sale/updateStatus', this.$route.params.id)
-    await  this.$store.dispatch('sale/selectByTypeAndStatus', {
-      type: 'online',
-      status: 'pending',
-    })
+      await this.$store.dispatch('sale/updateStatus', this.$route.params.id)
+      await this.$store.dispatch('sale/selectByTypeAndStatus', {
+        type: 'online',
+        status: 'pending',
+      })
+      this.getDetail.map((item) => {
+        return this.$axios.put(`/product/${item.product_id}/subtract-import-quantity`, {
+          quantity: item.quantity,
+        })
+      })
       this.loading = false
       this.confirmationDialog = false
     },
