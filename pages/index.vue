@@ -422,29 +422,9 @@ export default {
       })
   },
   methods: {
-    // +++++++++++++++++++++++++++++ card
+    // ___________________card show__________________
     Income() {
       this.cardImcome = !this.cardImcome
-      const currentDate = new Date()
-      this.selectedMonth = currentDate.getMonth() + 1
-      this.selectedYear = currentDate.getFullYear()
-      if (this.cardImcome) {
-        // ___month___
-        this.$axios
-          .get(
-            `/saleDetail/summary/month?month=${this.selectedMonth}&year=${this.selectedYear}&limit=10`
-          )
-          .then((res) => {
-            this.topSellforMonth = res.data.overallSum.totalSalePrice
-          })
-      } else {
-        //  __year__
-        this.$axios
-          .get(`/saleDetail/summary/year?year=${this.selectedYear}&limit=5`)
-          .then((res) => {
-            this.topSellforYear = res.data.overallSum.totalSalePrice
-          })
-      }
     },
     Expenses() {
       this.cardExpenses = !this.cardExpenses

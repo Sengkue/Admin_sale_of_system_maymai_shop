@@ -2,7 +2,7 @@
   <div>
     <v-row class="px-5">
       <v-col cols="12" class="d-flex justify-space-between align-center mt-2">
-        <h1 class="pl-5">ລາຍການສັ່ງຊື້</h1>
+        <h3 class="pl-5">ສັ່ງຊື້ອອນໄລ >> ລາຍລະອຽດ</h3>
         <div>
           <v-btn class="red white--text" small to="/order_online">
             <v-icon>mdi-arrow-left-circle</v-icon>
@@ -52,8 +52,8 @@
             ເມືອງ: {{ getTypeAndStatus.location.district }}
           </div>
           <div class="my-2">ບ້ານ: {{ getTypeAndStatus.location.village }}</div>
+          <div class="my-2">ບໍລິສັດຂົນສົ່ງ {{ getTypeAndStatus.location.address }}</div>
           <div class="my-2">ສາຂາ: {{ getTypeAndStatus.location.express }}</div>
-          <div class="my-2">ທີຢູ່ {{ getTypeAndStatus.location.address }}</div>
         </div>
         <div v-else>
           <p>Loading customer details...</p>
@@ -63,7 +63,6 @@
         <v-divider></v-divider>
       </v-col>
       <v-col cols="12">
-        {{ getDetail }}
 
         <!-- _______________________________table show details_____________________________ -->
         <div v-if="getDetail">

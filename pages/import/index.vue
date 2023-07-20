@@ -116,7 +116,6 @@
         </tbody>
       </template>
     </v-data-table>
-    {{ show }}
 
     <v-row class="mt-4 mr-3">
       <v-spacer></v-spacer>

@@ -1,10 +1,9 @@
 <template>
   <v-card class="elevation-1">
-    <v-row justify="center">
-      <h2 class="mt-7 mb-5">ຮັບການສັ່ງຊື້ສິນຄ້າຈາກລູກຄ້າ</h2>
+    <v-row >
+      <h3 class="mt-7 mb-5 ml-5">ສັ່ງຊື້ອອນໄລ >> ລາຍການສັ່ງຊື້ໃໝ່</h3>
     </v-row>
-    <v-divider></v-divider>
-    <v-row class="my-5 d-flex justify-center">
+    <v-row class="my-5 mt-n11 d-flex justify-center">
       <v-badge color="error" :content="getTypeAndStatus.length">
         <h2>ລາຍການສັ່ງຊື້ສິນຄ້າໃໝ່</h2>
       </v-badge>
@@ -93,7 +92,7 @@
                 mdi-check-decagram
               </v-icon> -->
               <v-tooltip bottom color="green">
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-icon
                     large
                     color="primary"
