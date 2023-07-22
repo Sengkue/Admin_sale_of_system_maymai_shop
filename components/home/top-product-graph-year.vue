@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-card elevation="1">
+  <div >
+    <v-card elevation="1" class="pa-5">
       <v-row align="center" justify="center">
         <v-col cols="6">
           <v-select
@@ -19,7 +19,7 @@
           />
         </v-col>
       </v-row>
-      <pie
+      <bar
         :chart-options="chartOptions"
         :chart-data="chartData"
         :chart-id="chartId"
@@ -39,7 +39,7 @@ export default {
   props: {
     chartId: {
       type: String,
-      default: 'pie-chart',
+      default: 'bar-chart', // Default chart ID for the bar chart
     },
     datasetIdKey: {
       type: String,
@@ -84,19 +84,20 @@ export default {
       selectedMonth: null,
       selectedYear: null,
       months: [
-        { text: 'January', value: 1 },
-        { text: 'February', value: 2 },
-        { text: 'March', value: 3 },
-        { text: 'April', value: 4 },
-        { text: 'May', value: 5 },
-        { text: 'June', value: 6 },
-        { text: 'July', value: 7 },
-        { text: 'August', value: 8 },
-        { text: 'September', value: 9 },
-        { text: 'October', value: 10 },
-        { text: 'November', value: 11 },
-        { text: 'December', value: 12 },
+        { text: 'ມັງກອນ', value: 1 },
+        { text: 'ກຸມພາ', value: 2 },
+        { text: 'ມີນາ', value: 3 },
+        { text: 'ເມສາ', value: 4 },
+        { text: 'ພຶດສະພາ', value: 5 },
+        { text: 'ມິຖຸນາ', value: 6 },
+        { text: 'ກໍລະກົດ', value: 7 },
+        { text: 'ສິງຫາ', value: 8 },
+        { text: 'ກັນຍາ', value: 9 },
+        { text: 'ຕຸລາ', value: 10 },
+        { text: 'ພະຈິກ', value: 11 },
+        { text: 'ທັນວາ', value: 12 },
       ],
+
       years: [],
     }
   },
@@ -123,7 +124,7 @@ export default {
         const data = response.data
         this.updateChartData(data)
       } catch (error) {
-        this.$toast.success('Error fetching data:', error)
+        this.$toast.error('Error fetching data:', error)
       }
     },
     updateChartData(data) {
@@ -134,6 +135,9 @@ export default {
       this.chartData.datasets[0].data = data.result.map(
         (item) => item.totalSalePrice
       )
+
+      // Change chart type to "bar" from "pie"
+      this.chartData.datasets[0].type = 'bar'
     },
     getRandomColor() {
       const letters = '0123456789ABCDEF'

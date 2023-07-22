@@ -3,6 +3,7 @@
     <v-row no-gutters class="justify-center">
       <h1>ລາຍງານຂໍ້ມູນພະນັກງານ</h1>
     </v-row>
+
     <v-row no-gutters class="ml-7">
       <v-col cols="mx-2" md="3">
         <v-card class="mx-2" height="180" elevation="2">
@@ -12,7 +13,7 @@
               <div class="pa-2">
                 <h3>
                   ທັງໜົດ
-                  <span>{{ getCustomer.length }} ຄົນ</span>
+                  <span>{{ getEmployee.length }} ຄົນ</span>
                 </h3>
               </div>
             </div>
@@ -22,8 +23,8 @@
     </v-row>
     <v-row no-gutters class="justify-center">
       <v-card class="ma-2 ml-9" width="100%">
-        <v-data-table :headers="headers" :items="getCustomer" :search="search">
-          <template #[`item.c_profile`]="{ value }">
+        <v-data-table :headers="headers" :items="getEmployee" :search="search">
+          <template #[`item.profile`]="{ value }">
             <v-img :src="value" width="60"></v-img>
           </template>
 
@@ -59,9 +60,6 @@
               </v-menu>
             </v-toolbar>
           </template>
-          <template #[`item.createdAt`]="{ item }">
-            {{ formatDateLo(item.createdAt) }}
-          </template>
         </v-data-table>
       </v-card>
     </v-row>
@@ -74,48 +72,84 @@ export default {
     return {
       search: null,
       headers: [
-        { text: 'ລຳດັບ', value: 'index' },
-        { text: 'ຮູບ', value: 'c_profile' },
-        { text: 'ຊື່', value: 'c_fname' },
-        { text: 'ນາມສະກຸນ', value: 'c_lname' },
-        // { text: "email", value: "email" },
-        { text: 'ເບີ', value: 'c_phone' },
-        { text: 'Create', value: 'createdAt' }
+        {
+          text: 'ລຳດັບ',
+          value: 'index',
+        },
+        {
+          text: 'ຮູບພາບ',
+          value: 'profile',
+        },
+        {
+          text: 'ຊື່',
+          value: 'firstName',
+        },
+        {
+          text: 'ນາມສະກຸນ',
+          value: 'lastName',
+        },
+        {
+          text: 'ເພດ',
+          value: 'gender',
+        },
+        {
+          text: 'ເບີ',
+          value: 'phone',
+        },
+        {
+          text: 'ເເຂວງ',
+          value: 'province',
+        },
+        {
+          text: 'ເມືອງ',
+          value: 'district',
+        },
+        {
+          text: 'ບ້ານ',
+          value: 'village',
+        },
       ],
     }
   },
   computed: {
-    getCustomer() {
-      return this.$store.state.customer.StateSelectAll.map((item, index) => {
-        return {
-          index: index + 1,
-          ...item,
-        }
-      })
+    getEmployee() {
+      const allEmployee = this.$store.state.employee.AllEmployee
+      if (allEmployee) {
+        return allEmployee.map((item, index) => {
+          return {
+            index: index + 1,
+            ...item,
+          }
+        })
+      }
+      return []
     },
   },
   mounted() {
-    this.$store.dispatch('customer/selectAll')
+    this.$store.dispatch('employee/selectEmployee')
   },
   methods: {
     exportToExcel() {
-      // Get the data to export
-      const data = this.$store.state.customer.StateSelectAll
+      const data = this.$store.state.employee.AllEmployee
+
       const modifiedData = data.map((item, index) => {
         return {
           index: index + 1,
-          ຊື່: item.c_fname.toUpperCase(), // modify the name value to uppercase
-          ນາມສະກຸນ: item.c_lname ? item.c_lname.toLowerCase() : '---', // modify the surname value to lowercase
-          ເພດ: item.c_gender,
-          ເບີ: `+${item.c_phone}`,
-          ວັນທີສ້າງ: `${this.formatDateBill(item.createdAt)}`,
+          ຊື່: item.firstName.toUpperCase(),
+          ນາມສະກຸນ: item.lastName ? item.lastName.toLowerCase() : '---',
+          ເພດ: item.gender,
+          ເບີ: `+${item.phone}`,
+          ເເຂວງ: item.province,
+          ເມືອງ: item.district,
+          ບ້ານ: item.village,
         }
       })
+
       const ws = XLSX.utils.json_to_sheet(modifiedData)
 
       const wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
-
+      
       const date = new Date().toISOString().slice(0, 10)
       const filename = `data_${date}.xlsx`
       XLSX.writeFile(wb, filename)

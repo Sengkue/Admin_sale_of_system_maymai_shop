@@ -139,12 +139,11 @@
                 class="mt-5"
                 style="font-size: 18px; font-weight: bold; color: white"
                 color="green"
-                rounded
                 @click="steps2"
               >
                 ໄປໜ້າກະຕ່າສິນຄ້າ
                 <v-icon large right
-                  >mdi-arrow-right-bold-hexagon-outline</v-icon
+                  >mdi-arrow-right-bold-outline</v-icon
                 >
               </v-btn>
             </v-card-actions>
@@ -238,22 +237,19 @@
                   <v-btn
                     style="font-size: 16px; font-weight: bold; color: white"
                     color="red accent-2"
-                    rounded
                     class="mt-2 mr-7 mb-5"
                     @click="cancelSelect()"
-                  >
-                    <v-icon left>mdi-close-circle</v-icon>ຍົກເລິກ
+                  >ຍົກເລິກ
                   </v-btn>
 
                   <v-btn
                     style="font-size: 16px; font-weight: bold; color: white"
                     color="primary accent-4"
-                    rounded
                     class="mt-2 mr-5 mb-5"
                     :loading="loading"
                     @click="saveOrder"
                   >
-                    <v-icon left>mdi-check-circle</v-icon>ຢຶນຢັນສັ່ງຊື້ສິນຄ້າ
+                   ຢຶນຢັນສັ່ງຊື້ສິນຄ້າ
                   </v-btn>
                 </v-row>
               </template>
@@ -365,7 +361,7 @@ export default {
           category: item.category,
           color: item.color,
           size_id: item.size_size,
-          quantity: item.quantity,
+          quantity: item.quantity?item.quantity:1,
           profile: item.profile,
           checkColor: item.check
         }
@@ -373,7 +369,7 @@ export default {
       }
     },
     Add(item) {
-      if (typeof item.quantity === 'string' && item.quantity === '') {
+      if (typeof item.quantity === 'string' || item.quantity === '') {
         item.quantity = 1
         return
       }

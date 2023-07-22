@@ -56,10 +56,10 @@
                 class="elevation-1"
                 :loading="loading"
               >
-                <template #[`item.c_profile`]="{ item }">
+                <template #[`item.c_profile`]="{ value }">
                   <div>
                     <v-img
-                      :src="`${item.c_profile}`"
+                      :src=value
                       width="60"
                     ></v-img>
                   </div>
@@ -155,6 +155,7 @@ export default {
         { text: "Create", value: "createdAt" },
         { text: "updatedAt", value: "updatedAt" },
         { text: "Actions", value: "actions" },
+        
       ],
     };
   },

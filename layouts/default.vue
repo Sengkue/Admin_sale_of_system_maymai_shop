@@ -212,7 +212,7 @@ export default {
               icon: 'mdi-cart-check',
               title: 'ລາຍການສັ່ງຊື້ສຳເລັດ',
               to: '/order_online/story',
-            }
+            },
           ],
         },
         //  ລາຍງານ
@@ -254,6 +254,30 @@ export default {
         },
       ],
     }
+  },
+  mounted() {
+    let removes = []
+
+    if (this.$cookies.get('status') === 'user') {
+      removes = ['/', '/order', '/user', '/import', '/report/product']
+    }
+    if (this.$cookies.get('status') === 'admin') {
+      removes = []
+    }
+    this.items = this.items.filter((el) => {
+      if (el.children) {
+        el.children = el.children.filter((sub) => {
+          if (!removes.includes(sub.to)) {
+            return true
+          }
+          return false
+        })
+      }
+      if (!removes.includes(el.to)) {
+        return true
+      }
+      return false
+    })
   },
   methods: {
     logout() {

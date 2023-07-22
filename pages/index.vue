@@ -134,7 +134,7 @@
               <h3 style="color: #e0f7fa">ລູກຄ້າທັງໝົດ</h3>
               <span v-if="getCustomer.length > 0"
                 >{{ getCustomer.length }} ຄົນ</span
-              >
+              ><span v-else>0</span>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-account-group</v-icon>
@@ -158,8 +158,11 @@
             <div
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
-              <h3 style="color: #e0f7fa">ໃບບິນຍົກເລີກ</h3>
-              <span>59 </span>
+              <h3 style="color: #e0f7fa">ພະນັກງານທັງໝົດ</h3>
+              <span v-if="getEmployeeNum"> 
+                {{ getEmployeeNum.length }}
+               </span>
+               <span v-else>0</span>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-account-group</v-icon>
@@ -167,7 +170,7 @@
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
           <div class="d-flex">
-            <v-icon color="white">mdi-arrow-up-circle-outline</v-icon>
+            <v-icon color="white">mdi-package-variant-plus</v-icon>
             <div>ຕັ້ງແຕ່ຕົ້ນ</div>
           </div>
         </v-card>
@@ -391,35 +394,41 @@ export default {
     getTypeAndStatus() {
       return this.$store.state.sale.TypeAndStatus
     },
+    getEmployeeNum() {
+      return this.$store.state.employee.AllEmployee
+    },
+
   },
-  mounted() {
+  async mounted() {
     setTimeout(() => {
       this.animateClass = 'animate'
     }, 1000)
-    this.$store.dispatch('product/getAlmostOutStock')
-    this.$store.dispatch('sale/selectByTypeAndStatus', {
+   await this.$store.dispatch('product/getAlmostOutStock')
+   await this.$store.dispatch('sale/selectByTypeAndStatus', {
       type: 'online',
       status: 'pending',
     })
-    this.$store.dispatch('customer/selectAll')
-    this.$store.dispatch('product/selectAll')
+   await this.$store.dispatch('customer/selectAll')
+   await this.$store.dispatch('product/selectAll')
     // _______________________select sell month_______________________
     const currentDate = new Date()
     this.selectedMonth = currentDate.getMonth() + 1
     this.selectedYear = currentDate.getFullYear()
-    this.$axios
+   await this.$axios
       .get(
-        `/saleDetail/summary/month?month=${this.selectedMonth}&year=${this.selectedYear}&limit=10`
+        `/saleDetail/summary/month?month=${this.selectedMonth}&year=${this.selectedYear}&limit=10000`
       )
       .then((res) => {
         this.topSellforMonth = res.data.overallSum.totalSalePrice
       })
     //  __________________________year___________________________
-    this.$axios
-      .get(`/saleDetail/summary/year?year=${this.selectedYear}&limit=5`)
+  await  this.$axios
+      .get(`/saleDetail/summary/year?year=${this.selectedYear}&limit=100000`)
       .then((res) => {
         this.topSellforYear = res.data.overallSum.totalSalePrice
       })
+   await this.$store.dispatch('employee/selectEmployee')
+
   },
   methods: {
     // ___________________card show__________________

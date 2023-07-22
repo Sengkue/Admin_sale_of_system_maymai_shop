@@ -39,8 +39,26 @@
                   prepend-inner-icon="mdi-barcode-scan"
                 ></v-text-field
               ></v-col>
-              <v-col cols="4">
+              <v-col cols="4" class="d-flex align-center justify-space-between">
                 <h2>ສິນຄ້າທັງໝົດໃນສະຕ໊ອກມີ >>( {{ getRow.length }} )</h2>
+                <v-menu offset-y>
+                  <template #activator="{ on, attrs }">
+                    <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                      Exports
+                    </v-btn>
+                  </template>
+                  <v-list class="py-0">
+                    <v-btn block text color="success"
+                      ><v-icon left>mdi-microsoft-excel</v-icon> excel</v-btn
+                    >
+                    <v-btn block text color="error"
+                      ><v-icon left>mdi-file-pdf-box</v-icon> pdf</v-btn
+                    >
+                    <v-btn block text color="primary"
+                      ><v-icon>mdi-printer</v-icon> print</v-btn
+                    >
+                  </v-list>
+                </v-menu>
               </v-col>
             </v-row>
             <div></div>

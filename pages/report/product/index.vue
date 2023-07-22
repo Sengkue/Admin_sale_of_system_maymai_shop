@@ -17,18 +17,10 @@
         </v-card>
       </v-tab-item>
 
-      <v-tab-item key="ສິນຄ້າຂາຍດີ">
-        <v-card flat>
-          <v-card-text>
-              <home-top-product-graph-year />
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-
       <v-tab-item key="ສິນຄ້າໃກ້ໝົດສະຕ໊ອກ">
         <v-card flat>
           <v-card-text>
-            <Employee />
+            <Report-product-almost-out-stock />
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -42,7 +34,6 @@ export default {
       tab: null,
       items: [
         { tab: 'ສິນຄ້າທັງໝົດໃຈສະຕ໊ອກ', content: 'Product Tab' },
-        { tab: 'ສິນຄ້າຂາຍດີ', content: 'Customer Tab' },
         { tab: 'ສິນຄ້າໃກ້ໝົດສະຕ໊ອກ', content: 'Employee Tab' },
       ],
     }
