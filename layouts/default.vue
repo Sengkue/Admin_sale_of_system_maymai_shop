@@ -144,32 +144,32 @@ export default {
             {
               icon: 'mdi-tshirt-crew',
               title: 'ຈັດການຂໍ້ມູນສິນຄ້າ',
-              to: { name: 'product' },
+              to:'/product'
             },
             {
               icon: 'mdi-shape',
               title: 'ຈັດການຂໍ້ມູນປະເພດສິນຄ້າ',
-              to: { name: 'category' },
+              to:'/category'
             },
             {
               icon: 'mdi-account-tie',
               title: 'ຈັດການຂໍ້ມູນພະນັກງານ',
-              to: { name: 'employee' },
+              to: '/employee'
             },
             {
               icon: 'mdi-account-cowboy-hat',
               title: 'ຈັດການຂໍ້ມູນຜູ້ສະໜອງ',
-              to: { name: 'supplier' },
+              to: '/supplier'
             },
             {
               icon: 'mdi-account',
               title: 'ຈັດການຂໍ້ມູນລູກຄ້າ',
-              to: { name: 'customer' },
+              to:'/customer' ,
             },
             {
               icon: 'mdi-store',
               title: 'ຈັດການຂໍ້ມູນເຈົ້າຂອງຮ້ານ',
-              to: { name: 'owner' },
+              to:'/owner' ,
             },
             {
               icon: 'mdi-account-group',
@@ -179,7 +179,7 @@ export default {
             {
               icon: 'mdi-folder-file',
               title: 'ຈັດການໂປຼໂມຊັນ',
-              to: { name: 'promotion' },
+              to: '/promotion',
             },
           ],
         },

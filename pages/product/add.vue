@@ -82,6 +82,7 @@
                   filled
                   dense
                   label="ຊື່*"
+                  :rules="[requiredRule]"
                   required
                 ></v-text-field>
               </v-col>
@@ -94,6 +95,7 @@
                   filled
                   dense
                   label="BarCode*"
+                  :rules="[requiredRule, numericRule, barcodeRule]"
                   required
                 ></v-text-field>
               </v-col>
@@ -106,6 +108,7 @@
                   item-value="id"
                   item-text="category"
                   label="ປະເພດສິນຄ້າ"
+                  :rules="[categoryRequiredRule]"
                   required
                   prepend-inner-icon="mdi-tshirt-crew"
                   clearable
@@ -121,6 +124,7 @@
                   item-value="id"
                   item-text="name"
                   label="ຜູ້ສະໜອງ"
+                  :rules="[supplierRequiredRule]"
                   required
                   prepend-inner-icon="mdi-store-outline"
                   clearable
@@ -287,6 +291,32 @@ export default {
     this.$store.dispatch('category/selectCategory')
   },
   methods: {
+ // Function to check if a value is required
+  requiredRule(value) {
+    return !!value || 'This field is required';
+  },
+
+  // Function to check if a value is a valid number
+  numericRule(value) {
+    return !isNaN(value) || 'Please enter a valid number';
+  },
+
+  // Add other validation functions for each specific field as needed
+
+  // For example, to validate the 'BarCode' field as a numeric value:
+  barcodeRule(value) {
+    return !isNaN(value) || 'BarCode must be a valid number';
+  },
+
+  // For 'category_id' field (v-select):
+  categoryRequiredRule(value) {
+    return !!value || 'Please select a category';
+  },
+
+  // For 'supplier_id' field (v-select):
+  supplierRequiredRule(value) {
+    return !!value || 'Please select a supplier';
+  },
     onFileChange(e) {
       if (e) {
         this.url = URL.createObjectURL(e)

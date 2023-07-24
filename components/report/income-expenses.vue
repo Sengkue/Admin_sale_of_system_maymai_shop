@@ -2,7 +2,7 @@
     <div>
       <v-card elevation="1" class="pa-5">
         <v-row align="center" justify="center">
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="12" sm="4" md="4">
             <v-dialog
               ref="startDateDialog"
               v-model="startDateModal"
@@ -44,7 +44,7 @@
             </v-dialog>
           </v-col>
 
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="12" sm="4" md="4">
             <v-dialog
               ref="endDateDialog"
               v-model="endDateModal"
@@ -85,6 +85,26 @@
               </v-date-picker>
             </v-dialog>
           </v-col>
+          <v-col cols="12" sm="4" md="4" class="d-flex justify-end">
+          <v-menu offset-y>
+            <template #activator="{ on, attrs }">
+              <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                Exports
+              </v-btn>
+            </template>
+            <v-list class="py-0">
+              <v-btn block text color="success" @click="exportToExcel"
+                ><v-icon left>mdi-microsoft-excel</v-icon> excel</v-btn
+              >
+              <v-btn block text color="error"
+                ><v-icon left>mdi-file-pdf-box</v-icon> pdf</v-btn
+              >
+              <v-btn block text color="primary"
+                ><v-icon>mdi-printer</v-icon> print</v-btn
+              >
+            </v-list>
+          </v-menu>
+        </v-col>
         </v-row>
         <bar
           :chart-options="chartOptions"
@@ -101,24 +121,24 @@
           <v-col cols="6" sm="4">
             <v-card elevation="1" class="pa-3" color="primary">
               <div class="white--text">
-                <div>Total Income:</div>
-                <div>{{ totalIncome }}</div>
+                <div>ລາຍຮັບທັງໝົດ:</div>
+                <div>{{ formatPrice(totalIncome) }} ກີບ</div>
               </div>
             </v-card>
           </v-col>
           <v-col cols="6" sm="4">
             <v-card elevation="1" class="pa-3" color="error">
               <div class="white--text">
-                <div>Total Expenses:</div>
-                <div>{{ totalExpenses }}</div>
+                <div>ລາຍຈ່າຍທັງໝົດ:</div>
+                <div>{{ formatPrice(totalExpenses) }} ກີບ</div>
               </div>
             </v-card>
           </v-col>
           <v-col cols="6" sm="4">
             <v-card elevation="1" class="pa-3" color="success">
               <div class="white--text">
-                <div>Profit:</div>
-                <div>{{ formatProfit(profit) }}</div>
+                <div>ກຳໄລ:</div>
+                <div>{{ formatProfit(formatPrice(profit)) }} ກີບ</div>
               </div>
             </v-card>
           </v-col>
@@ -128,6 +148,7 @@
   </template>
   
   <script>
+import * as XLSX from 'xlsx'
   export default {
     props: {
       chartId: {
@@ -165,17 +186,17 @@
           labels: [],
           datasets: [
             {
-              label: 'Income',
+              label: 'ລາຍຮັບ',
               backgroundColor: 'rgba(75, 192, 192, 0.6)',
               data: [],
             },
             {
-              label: 'Expenses',
+              label: 'ລາຍຈ່າຍ',
               backgroundColor: 'rgba(255, 99, 132, 0.6)',
               data: [],
             },
             {
-              label: 'Profit',
+              label: 'ກຳໄລ',
               backgroundColor: 'rgba(54, 162, 235, 0.6)',
               data: [],
             },
@@ -192,6 +213,7 @@
         totalIncome: 0,
         totalExpenses: 0,
         profit: 0,
+        report_data:[]
       };
     },
     mounted() {
@@ -206,6 +228,7 @@
           const url = `/import_detail/income-expenses-date-range?startDate=${this.startDate}&endDate=${this.endDate}`;
           const response = await this.$axios.get(url);
           const data = response.data;
+          this.report_data = data
           this.totalIncome = data.totalIncome;
           this.totalExpenses = parseInt(data.totalExpenses, 10);
           this.profit = data.totalProfit;
@@ -236,6 +259,44 @@
         const formattedProfit = profit >= 0 ? `+${profit}` : `${profit}`;
         return formattedProfit;
       },
+      exportToExcel() {
+      const data = this.report_data.summaryData;
+      const totalIncome = this.report_data.totalIncome;
+      const totalExpenses = this.report_data.totalExpenses;
+      const totalProfit = this.report_data.totalProfit;
+
+      const modifiedData = data.map((item, index) => {
+        return {
+          index: index + 1,
+          ເດືອນ: item.month,
+          ປີ: item.year,
+          ລາຍຮັບ: item.totalIncome,
+          ລາຍຈ່າຍ: item.totalExpenses,
+          ກຳໄລ: item.profit,
+          // ວັນທີນຳເຂົ້າ: `${this.formatDateBill(item.createdAt)}`
+        };
+      });
+
+      const totalRow = {
+        index: "Total",
+        ເດືອນ: "",
+        ປີ: "",
+        ລາຍຮັບ: totalIncome,
+        ລາຍຈ່າຍ: totalExpenses,
+        ກຳໄລ: totalProfit,
+      };
+
+      modifiedData.push(totalRow);
+
+      const ws = XLSX.utils.json_to_sheet(modifiedData);
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+      const date = new Date().toISOString().slice(0, 10);
+      const filename = `data_${date}.xlsx`;
+      XLSX.writeFile(wb, filename);
+    },
     },
   };
   </script>

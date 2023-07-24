@@ -2,12 +2,12 @@
   <div>
     <v-row>
       <v-col cols="12" class="text-center mt-2 bg1">
-        <h1 class="ml-5 pl-5">Welcome to Maymai shop</h1>
+        <h1 class="ml-5 pl-5">ຍິນດີຕອນຮັບເຂົ້າສູ່ລະບົບ</h1>
       </v-col>
       <v-col cols="12" md="8" sm="8">
         <v-card class="bg">
           <v-container>
-            <v-img src="/icon.png" contain></v-img>
+            <v-img src="/icon.jpeg" contain></v-img>
           </v-container>
         </v-card>
       </v-col>

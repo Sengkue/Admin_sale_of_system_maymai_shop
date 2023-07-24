@@ -4,7 +4,8 @@ export const state = () => ({
   SaleType: [],
   TypeAndStatus: [],
   saleOnline: [],
-  saleStory:[]
+  saleStory:[],
+  statusTypeDate:[]
 })
 
 export const mutations = {
@@ -25,6 +26,9 @@ export const mutations = {
   },
   setSellOnlineStory(state, data){
     state.saleStory = data
+  },
+  setStatusTypeDate(state, data){
+    state.statusTypeDate = data
   }
 }
 export const actions = {
@@ -98,5 +102,13 @@ async  selectStorySellOnline({commit}, data){
     await this.$axios.get(`/sale/${Type}/${Status}`).then((res) => {
       commit('setSellOnlineStory', res.data.result)
     })
+  },
+  // ___________________________________select by status , type, and start to end date
+  async  selectStatusTypeDate({commit}){
+    await this.$axios.get(`/sale/sales/status-type-date?sale_status=pending&sale_type=online&startDate=2023-07-01&endDate=2023-07-30`).then((res) => {
+      commit('setStatusTypeDate', res.data.result)
+    })
   }
 }
+
+

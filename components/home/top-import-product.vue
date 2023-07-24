@@ -2,23 +2,74 @@
   <div>
     <v-card elevation="1" class="pa-5">
       <v-row align="center" justify="center">
-        <v-col cols="3">
-          <v-select
-            v-model="selectedMonth"
-            :items="months"
-            label="Select Month"
-            @change="fetchData"
-          />
+        <v-col cols="12" sm="6" md="4">
+          <v-dialog
+            ref="startDateDialog"
+            v-model="startDateModal"
+            :return-value.sync="startDate"
+            persistent
+            width="290px"
+          >
+            <template #activator="{ on, attrs }">
+              <v-text-field
+                v-model="startDate"
+                label="Select Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="startDate" scrollable @input="fetchData">
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="startDateModal = false">
+                Cancel
+              </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.startDateDialog.save(startDate)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-dialog>
         </v-col>
-        <v-col cols="3">
-          <v-select
-            v-model="selectedYear"
-            :items="years"
-            label="Select Year"
-            @change="fetchData"
-          />
+
+        <v-col cols="12" sm="4" md="4">
+          <v-dialog
+            ref="endDateDialog"
+            v-model="endDateModal"
+            :return-value.sync="endDate"
+            persistent
+            width="290px"
+          >
+            <template #activator="{ on, attrs }">
+              <v-text-field
+                v-model="endDate"
+                label="Select End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="endDate" scrollable @input="fetchData">
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="endDateModal = false">
+                Cancel
+              </v-btn>
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.endDateDialog.save(endDate)"
+              >
+                OK
+              </v-btn>
+            </v-date-picker>
+          </v-dialog>
         </v-col>
-        <v-col cols="6" class="d-flex justify-end">
+        <v-col cols="12" sm="4" md="4" class="d-flex justify-end">
           <v-menu offset-y>
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark v-bind="attrs" v-on="on">
@@ -89,6 +140,7 @@ export default {
   },
   data() {
     return {
+      import_data:[],
       chartData: {
         labels: [],
         datasets: [
@@ -102,47 +154,26 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
       },
-      selectedMonth: null,
-      selectedYear: null,
-      months: [
-        { text: 'ມັງກອນ', value: 1 },
-        { text: 'ກຸມພາ', value: 2 },
-        { text: 'ມີນາ', value: 3 },
-        { text: 'ເມສາ', value: 4 },
-        { text: 'ພຶດສະພາ', value: 5 },
-        { text: 'ມິຖຸນາ', value: 6 },
-        { text: 'ກໍລະກົດ', value: 7 },
-        { text: 'ສິງຫາ', value: 8 },
-        { text: 'ກັນຍາ', value: 9 },
-        { text: 'ຕຸລາ', value: 10 },
-        { text: 'ພະຈິກ', value: 11 },
-        { text: 'ທັນວາ', value: 12 },
-      ],
-
-      years: [],
-      import_data:[]
+      startDateModal: false,
+      endDateModal: false,
+      startDate: null,
+      endDate: null,
     }
   },
   mounted() {
     const currentDate = new Date()
-    this.selectedMonth = currentDate.getMonth() + 1
-    this.selectedYear = currentDate.getFullYear()
-    this.generateYearOptions()
+    const yesterday = new Date(currentDate)
+    yesterday.setDate(currentDate.getDate() - 1)
+
+    this.startDate = this.formatDate(yesterday)
+    this.endDate = this.formatDate(currentDate)
     this.fetchData()
   },
   methods: {
-    generateYearOptions() {
-      const currentYear = new Date().getFullYear()
-      const startYear = 2020 // Change as per your requirement
-      this.years = []
-      for (let year = startYear; year <= currentYear; year++) {
-        this.years.push(year)
-      }
-    },
     async fetchData() {
       try {
-        const url = `/saleDetail/summary/month?month=${this.selectedMonth}&year=${this.selectedYear}&limit=10`
-        const response = await this.$axios.get(url)
+        const url = `/import_detail/most-imported-product?startDate=${this.startDate}&endDate=${this.endDate}`
+        const response = await this.$axios.get(url) // Use axios to make API request
         const data = response.data
         this.import_data = data
         this.updateChartData(data)
@@ -151,13 +182,11 @@ export default {
       }
     },
     updateChartData(data) {
-      this.chartData.labels = data.result.map((item) => item.productName)
-      this.chartData.datasets[0].backgroundColor = data.result.map(() =>
+      this.chartData.labels = data.map((item) => item.name)
+      this.chartData.datasets[0].backgroundColor = data.map(() =>
         this.getRandomColor()
       )
-      this.chartData.datasets[0].data = data.result.map(
-        (item) => item.totalSalePrice
-      )
+      this.chartData.datasets[0].data = data.map((item) => item.totalPrice)
 
       // Change chart type to "bar" from "pie"
       this.chartData.datasets[0].type = 'bar'
@@ -170,17 +199,23 @@ export default {
       }
       return color
     },
+    formatDate(date) {
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    },
+
     exportToExcel() {
-      const data = this.import_data.result
+      const data = this.import_data
 
       const modifiedData = data.map((item, index) => {
         return {
           index: index + 1,
-          product_id: item.product_id,
-          ຊື່: item.productName,
+          ຊື່: item.name,
           ຈຳນວນ: item.totalQuantity,
-          ຈຳນວນເງິນ: item.totalSalePrice,
-          // ວັນທີນຳເຂົ້າ: `${this.formatDateBill(item.createdAt)}`
+          ຈຳນວນເງິນ: item.totalPrice,
+          ວັນທີນຳເຂົ້າ: `${this.formatDateBill(item.createdAt)}`
         }
       })
 

@@ -48,7 +48,7 @@
                     </v-btn>
                   </template>
                   <v-list class="py-0">
-                    <v-btn block text color="success"
+                    <v-btn block text color="success" @click="exportToExcel"
                       ><v-icon left>mdi-microsoft-excel</v-icon> excel</v-btn
                     >
                     <v-btn block text color="error"
@@ -94,9 +94,11 @@
 </template>
 
 <script>
+import * as XLSX from 'xlsx'
 export default {
   data() {
     return {
+      product_data: [],
       isLoading: false,
       loading: false,
       viewLoading: false,
@@ -134,6 +136,37 @@ export default {
     } catch (error) {
       this.$toast.success('error!')
     }
+  },
+  methods: {
+    exportToExcel() {
+      const data = this.$store.state.product.StateSelectAll
+
+      const modifiedData = data.map((item, index) => {
+        return {
+          index: index + 1,
+          ຊື່: item.name,
+          ປະເພດ: item.category,
+          ເບີ: item.size_id,
+          ສີ: item.color,
+          ຈຳນວນ: item.quantity,
+          ລາຄາຂາຍ: item.sale_price,
+          ລາຄາຊື້: item.cost_price,
+          Barcode: item.Barcode,
+          ຜູ້ສະໜອງ: item.supplier_name,
+          ຄຳອະທີບາຍ: item.description,
+          ວັນທີເປີດສິນຄ້າ: `${this.formatDateBill(item.createdAt)}`,
+        }
+      })
+
+      const ws = XLSX.utils.json_to_sheet(modifiedData)
+
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
+
+      const date = new Date().toISOString().slice(0, 10)
+      const filename = `data_${date}.xlsx`
+      XLSX.writeFile(wb, filename)
+    },
   },
 }
 </script>

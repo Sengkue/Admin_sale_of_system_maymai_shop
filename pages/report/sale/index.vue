@@ -23,10 +23,24 @@
           </v-row>
         </v-card>
       </v-tab-item>
+      <v-tab-item key="ຂາຍໜ້າຮ້ານ">
+        <v-card flat>
+          <v-card-text>
+            <Report-sale-pos />
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item key="ຂາຍອອນໄລນ໌">
+        <v-card flat>
+          <v-card-text>
+            <Report-sale-online />
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
       <v-tab-item key="ລາຍໄດ້ລາຍຮັບ">
         <v-card flat>
           <v-card-text>
-            <home-top-import-product-month />
+            <Report-income-expenses />
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -39,7 +53,9 @@ export default {
     return {
       tab: null,
       items: [
-        { tab: 'ສິນຄ້າຂາຍດີ', content: 'Customer Tab' },
+        { tab: 'ສິນຄ້າຂາຍດີ', content: 'ສິນຄ້າຂາຍດີ' },
+        { tab: 'ຂາຍໜ້າຮ້ານ', content: 'ຂາຍໜ້າຮ້ານ' },
+        { tab: 'ຂາຍອອນໄລນ໌', content: 'ຂາຍອອນໄລນ໌' },
         { tab: 'ລາຍໄດ້ລາຍຮັບ', content: 'ລາຍໄດ້ລາຍຮັບ' },
       ],
     }

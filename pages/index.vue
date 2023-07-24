@@ -16,7 +16,13 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ລາຍຮັບທັງໝົດ</h3>
-              <span>{{ cardImcome ? formatPrice(topSellforYear): formatPrice(topSellforMonth) }}ກີບ</span>
+              <span
+                >{{
+                  cardImcome
+                    ? formatPrice(SummaryYear.totalIncome)
+                    : formatPrice(SummaryMonth.totalIncome)
+                }}ກີບ</span
+              >
             </div>
             <div>
               <v-icon color="white" size="50">mdi-wallet-giftcard</v-icon>
@@ -43,9 +49,13 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ລາຍຈ່າຍທັງໝົດ</h3>
-              <span>{{
-                cardExpenses ? '120,000,000 ກິບ' : '50,000,000 ກິບ'
-              }}</span>
+              <span
+                >{{
+                  cardExpenses
+                    ? formatPrice(SummaryYear.totalExpenses)
+                    : formatPrice(SummaryMonth.totalExpenses)
+                }}ກີບ
+              </span>
             </div>
             <div>
               <v-icon color="white" size="50"
@@ -74,9 +84,13 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ກຳໄລທັງໝົດ</h3>
-              <span>{{
-                cardProfit ? '120,000,000 ກິບ' : '50,000,000 ກິບ'
-              }}</span>
+              <span
+                >{{
+                  cardProfit
+                    ? formatPrice(SummaryYear.profit)
+                    : formatPrice(SummaryMonth.profit)
+                }}ກີບ
+              </span>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-chart-bar</v-icon>
@@ -159,10 +173,10 @@
               class="py-2 text-caption text-sm-body-2 text-md-body-1 text-lg-h6"
             >
               <h3 style="color: #e0f7fa">ພະນັກງານທັງໝົດ</h3>
-              <span v-if="getEmployeeNum"> 
+              <span v-if="getEmployeeNum">
                 {{ getEmployeeNum.length }}
-               </span>
-               <span v-else>0</span>
+              </span>
+              <span v-else>0</span>
             </div>
             <div>
               <v-icon color="white" size="50">mdi-account-group</v-icon>
@@ -236,14 +250,16 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <home-top-product-graph-year />
+      <v-col cols="12" sm="6" md="6" class="ma-0 pa-0">
+        <v-card height="50">
+          <home-top-product-graph-year />
+        </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <home-top-product-graph />
       </v-col>
     </v-row>
-    <v-row no-gutters justify="center">
+    <!-- <v-row no-gutters justify="center">
       <v-row no-gutters>
         <v-col cols="12" md="4" class="px-2 py-1">
           <v-card elevation="1">
@@ -308,7 +324,7 @@
           </v-card>
         </v-col>
       </v-row>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
@@ -316,63 +332,64 @@
 export default {
   name: 'PieChart',
   components: {},
-  props: {
-    chartId: {
-      type: String,
-      default: 'pie-chart',
-    },
-    datasetIdKey: {
-      type: String,
-      default: 'label',
-    },
-    width: {
-      type: Number,
-      default: 400,
-    },
-    height: {
-      type: Number,
-      default: 400,
-    },
-    cssClasses: {
-      default: '',
-      type: String,
-    },
+  // props: {
+  //   chartId: {
+  //     type: String,
+  //     default: 'pie-chart',
+  //   },
+  //   datasetIdKey: {
+  //     type: String,
+  //     default: 'label',
+  //   },
+  //   width: {
+  //     type: Number,
+  //     default: 400,
+  //   },
+  //   height: {
+  //     type: Number,
+  //     default: 400,
+  //   },
+  //   cssClasses: {
+  //     default: '',
+  //     type: String,
+  //   },
 
-    styles: {
-      type: Object,
-      default: () => {},
-    },
-    plugins: {
-      type: Array,
-      default: () => [],
-    },
-  },
+  //   styles: {
+  //     type: Object,
+  //     default: () => {},
+  //   },
+  //   plugins: {
+  //     type: Array,
+  //     default: () => [],
+  //   },
+  // },
   data() {
     return {
+      SummaryMonth: {},
       topSellforYear: null,
       topSellforMonth: null,
       selectedYear: null,
       selectedMonth: null,
       animateClass: null,
-      chartData: {
-        labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs', 'nodejs'],
-        datasets: [
-          {
-            backgroundColor: [
-              '#41B883',
-              '#E46651',
-              '#00D8FF',
-              '#DD1B16',
-              '#00D855',
-            ],
-            data: [40, 20, 80, 10, 5],
-          },
-        ],
-      },
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
+      // chartData: {
+      //   labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs', 'nodejs'],
+      //   datasets: [
+      //     {
+      //       backgroundColor: [
+      //         '#41B883',
+      //         '#E46651',
+      //         '#00D8FF',
+      //         '#DD1B16',
+      //         '#00D855',
+      //       ],
+      //       data: [40, 20, 80, 10, 5],
+      //     },
+      //   ],
+      // },
+      // chartOptions: {
+      //   responsive: true,
+      //   maintainAspectRatio: false,
+      // },
       center: { lat: 17.974855, lng: 102.630867 },
       markers: [],
       currentPlace: null,
@@ -397,38 +414,36 @@ export default {
     getEmployeeNum() {
       return this.$store.state.employee.AllEmployee
     },
-
   },
   async mounted() {
     setTimeout(() => {
       this.animateClass = 'animate'
     }, 1000)
-   await this.$store.dispatch('product/getAlmostOutStock')
-   await this.$store.dispatch('sale/selectByTypeAndStatus', {
+    await this.$store.dispatch('product/getAlmostOutStock')
+    await this.$store.dispatch('sale/selectByTypeAndStatus', {
       type: 'online',
       status: 'pending',
     })
-   await this.$store.dispatch('customer/selectAll')
-   await this.$store.dispatch('product/selectAll')
+    await this.$store.dispatch('customer/selectAll')
+    await this.$store.dispatch('product/selectAll')
     // _______________________select sell month_______________________
     const currentDate = new Date()
     this.selectedMonth = currentDate.getMonth() + 1
     this.selectedYear = currentDate.getFullYear()
-   await this.$axios
+    await this.$axios
       .get(
-        `/saleDetail/summary/month?month=${this.selectedMonth}&year=${this.selectedYear}&limit=10000`
+        `/import_detail/income-expenses?month=${this.selectedMonth}&year=${this.selectedYear}&limit=10000`
       )
       .then((res) => {
-        this.topSellforMonth = res.data.overallSum.totalSalePrice
+        this.SummaryMonth = res.data
       })
     //  __________________________year___________________________
-  await  this.$axios
-      .get(`/saleDetail/summary/year?year=${this.selectedYear}&limit=100000`)
+    await this.$axios
+      .get(`/import_detail/year-income-expenses?year=${this.selectedYear}`)
       .then((res) => {
-        this.topSellforYear = res.data.overallSum.totalSalePrice
+        this.SummaryYear = res.data
       })
-   await this.$store.dispatch('employee/selectEmployee')
-
+    await this.$store.dispatch('employee/selectEmployee')
   },
   methods: {
     // ___________________card show__________________

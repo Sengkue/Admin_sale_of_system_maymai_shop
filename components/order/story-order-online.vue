@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- :expanded.sync="newexpanded" -->
     <v-data-table
       :search="newsearch"
       :headers="newHeaders"
