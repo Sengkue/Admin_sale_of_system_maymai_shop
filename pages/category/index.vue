@@ -237,6 +237,8 @@ export default {
       await this.$store.dispatch('category/selectCategory')
       this.dialog = false
       this.category = ''
+      this.loading = false
+
     },
     openDialog() {
       this.dialog = true

@@ -2,7 +2,7 @@
   <div>
     <v-card elevation="1" class="pa-5">
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="6" md="4">
+        <v-col cols="4" sm="6" md="4">
           <v-dialog
             ref="startDateDialog"
             v-model="startDateModal"
@@ -36,7 +36,7 @@
           </v-dialog>
         </v-col>
 
-        <v-col cols="12" sm="4" md="4">
+        <v-col cols="4" sm="4" md="4">
           <v-dialog
             ref="endDateDialog"
             v-model="endDateModal"
@@ -69,7 +69,7 @@
             </v-date-picker>
           </v-dialog>
         </v-col>
-        <v-col cols="12" sm="4" md="4" class="d-flex justify-end">
+        <v-col cols="4" class="d-flex justify-end">
           <v-menu offset-y>
             <template #activator="{ on, attrs }">
               <v-btn color="primary" dark v-bind="attrs" v-on="on">
@@ -178,7 +178,7 @@ export default {
         this.import_data = data
         this.updateChartData(data)
       } catch (error) {
-        this.$toast.error('Error fetching data:', error)
+        this.$toast.error('ບໍ່ມີຂໍ້ມູນລາຍງານ', error)
       }
     },
     updateChartData(data) {

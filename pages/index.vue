@@ -250,12 +250,12 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="6" md="6" class="ma-0 pa-0">
+      <v-col cols="12" sm="8" md="8" class="ma-0 pa-0">
         <v-card height="50">
           <home-top-product-graph-year />
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="6">
+      <v-col cols="12" sm="4" md="4">
         <home-top-product-graph />
       </v-col>
     </v-row>

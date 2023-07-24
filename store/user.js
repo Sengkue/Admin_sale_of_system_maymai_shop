@@ -62,7 +62,8 @@ export const actions = {
         this.$cookies.set('id', res.data.employee_id);
       }else{
          // Set the ID cookie
-         this.$cookies.set('id', res.data.owner_id);
+        //  this.$cookies.set('id', res.data.owner_id);
+         this.$cookies.set('id', null);
       }
   
       // Set other cookies

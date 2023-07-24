@@ -63,19 +63,25 @@
         </v-dialog>
       </v-col>
       <v-col cols="9" class="d-flex justify-end">
-        <v-card class="mb-2 teal white--text" >
+        <v-card class="mb-2 teal white--text">
           <div class="pa-10">
-            <div class="d-flex"><h3 class="mr-1"> ລວມເງິນທັງໝົດ: </h3><span> {{ formatPrice(totalSaleTotal) }} ກີບ</span></div>
-            <div class="d-flex"><h3 class="mr-1"> ລວມຈຳນວນທັງໝົດ: </h3><span> {{ formatPrice(totalSaleQuantity) }}</span></div>
-
+            <div class="d-flex">
+              <h3 class="mr-1">ລວມເງິນທັງໝົດ:</h3>
+              <span> {{ formatPrice(totalSaleTotal) }} ກີບ</span>
+            </div>
+            <div class="d-flex">
+              <h3 class="mr-1">ລວມຈຳນວນທັງໝົດ:</h3>
+              <span> {{ formatPrice(totalSaleQuantity) }}</span>
+            </div>
           </div>
         </v-card>
       </v-col>
     </v-row>
 
+    <!-- :items="filteredSalesData" -->
     <v-data-table
       :headers="newHeaders"
-      :items="filteredSalesData"
+      :items="salesData"
       :search="newSearch"
       class="elevation-3"
       item-key="id"
@@ -197,32 +203,35 @@ export default {
       }
     },
     totalSaleTotal() {
-      return this.filteredSalesData.reduce((total, item) => {
+      return this.salesData.reduce((total, item) => {
         return total + item.sale_total
       }, 0)
     },
     totalSaleQuantity() {
-      return this.filteredSalesData.reduce((total, item) => {
+      return this.salesData.reduce((total, item) => {
         return total + item.sale_quantity
       }, 0)
     },
-  },
-  created() {
-    // Set default start date to yesterday
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - 1); // Subtract 1 day
-    this.startDate = currentDate.toISOString().slice(0, 10);
-
-    // Set default end date to today
-    this.endDate = new Date().toISOString().slice(0, 10);
-
-    // Fetch initial sales data using the default start and end dates
-    this.fetchFilteredSalesData();
   },
   watch: {
     startDate: 'fetchFilteredSalesData',
     endDate: 'fetchFilteredSalesData',
   },
+  created() {
+    // Set default start date to yesterday
+    // const currentDate = new Date();
+    // currentDate.setDate(currentDate.getDate() - 1);
+    // Subtract 1 day
+    // this.startDatessssss = currentDate.toISOString().slice(0, 10);
+
+    // Set default end date to today
+    this.startDate = new Date().toISOString().slice(0, 10)
+    this.endDate = new Date().toISOString().slice(0, 10)
+
+    // Fetch initial sales data using the default start and end dates
+    this.fetchFilteredSalesData()
+  },
+
   mounted() {
     this.fetchSalesData()
   },
@@ -244,7 +253,7 @@ export default {
     fetchSalesData() {
       // Fetch the data from the API
       fetch(
-        'http://localhost:8080/sale/sales/status-type-date?sale_status=completed&sale_type=pos&startDate=2023-07-01&endDate=2023-07-30'
+        `http://localhost:8080/sale/sales/status-type-date?sale_status=completed&sale_type=pos&startDate=${this.startDate}&endDate=${this.endDate}`
       )
         .then((response) => response.json())
         .then((data) => {

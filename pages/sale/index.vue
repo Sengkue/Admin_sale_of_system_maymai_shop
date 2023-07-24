@@ -92,7 +92,7 @@
                           </div>
 
                           <v-chip
-                            v-if="item.quantity === 0"
+                            v-if="item.quantity === 0 || item.quantity === null "
                             small
                             color="error"
                             class="rounded-br-xl ma-n2"

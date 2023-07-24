@@ -10,6 +10,12 @@
       :expanded.sync="expanded"
       class="elevation-1"
     >
+    <template #[`item.employeeName`]="{item}">
+      <div v-if="item.employeeName === null">
+        <div class="primary--text">ເຈົ້າຂອງຮ້ານ</div>
+      </div>
+      <div v-else>{{ item.employeeName }}</div>
+    </template>
       <template #top>
         <v-row justify="center">
           <h2 class="mt-5 mb-7">ປະຫວັດນໍາເຂົ້າສິນຄ້າ</h2>

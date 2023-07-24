@@ -12,11 +12,11 @@
       <v-tab-item key="ສິນຄ້າຂາຍດີ">
         <v-card flat>
           <v-row>
-            <v-col cols="12">
+            <!-- <v-col cols="12">
               <v-card elevation="0">
                 <v-card-text> ສິນຄ້າຂາຍດີ </v-card-text>
               </v-card>
-            </v-col>
+            </v-col> -->
             <v-col cols="12">
               <home-top-product-graph-year />
             </v-col>
