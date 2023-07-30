@@ -26,6 +26,7 @@
   font-family: 'Noto Sans Lao Looped', sans-serif;
    font-family: 'Noto Serif Lao', serif;
 }
+
 .cursor{
   cursor: pointer;
 }
@@ -74,3 +75,7 @@ right: 20px;
 }
 }
 
+/* global.css */
+.v-data-table-header th {
+  font-size: 18px !important;
+}

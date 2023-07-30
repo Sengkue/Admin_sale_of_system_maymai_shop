@@ -174,7 +174,7 @@
             >
               <h3 style="color: #e0f7fa">ພະນັກງານທັງໝົດ</h3>
               <span v-if="getEmployeeNum">
-                {{ getEmployeeNum.length }}
+                {{ getEmployeeNum.length }} ຄົນ
               </span>
               <span v-else>0</span>
             </div>

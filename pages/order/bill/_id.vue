@@ -32,7 +32,7 @@
     </v-data-table>
     <!-- <p class="total-price">ລວມເງິນທັງໝົດ: {{ formatPrice(500000) }}ກິບ</p> -->
     <v-btn class="print-button primary" @click="generateAndPrintBill"
-      >Print Bill</v-btn
+      >ພິມໃບບິນສັ່ງຊື້</v-btn
     >
   </div>
 </template>
@@ -56,15 +56,23 @@ export default {
           value: 'profile',
         },
         {
-          text: 'Name',
+          text: 'ຊື່ສິນຄ້າ',
           value: 'productName',
         },
         {
-          text: 'Category',
+          text: 'ປະເພດສິນຄ້າ',
           value: 'categoryName',
         },
         {
-          text: 'Quantity',
+          text: 'ສິ',
+          value: 'color',
+        },
+        {
+          text: 'ຂະໜາດ',
+          value: 'size',
+        },
+        {
+          text: 'ຈຳນວນ',
           value: 'order_quantity',
         },
         //   {

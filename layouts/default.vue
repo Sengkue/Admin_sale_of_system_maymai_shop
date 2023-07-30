@@ -140,36 +140,37 @@ export default {
         {
           icon: 'mdi-group',
           title: 'ຈັດການຂໍ້ມູນພື້ນຖານ',
+          to: '/manage',
           children: [
             {
               icon: 'mdi-tshirt-crew',
               title: 'ຈັດການຂໍ້ມູນສິນຄ້າ',
-              to:'/product'
+              to: '/product',
             },
             {
               icon: 'mdi-shape',
               title: 'ຈັດການຂໍ້ມູນປະເພດສິນຄ້າ',
-              to:'/category'
+              to: '/category',
             },
             {
               icon: 'mdi-account-tie',
               title: 'ຈັດການຂໍ້ມູນພະນັກງານ',
-              to: '/employee'
+              to: '/employee',
             },
             {
               icon: 'mdi-account-cowboy-hat',
               title: 'ຈັດການຂໍ້ມູນຜູ້ສະໜອງ',
-              to: '/supplier'
+              to: '/supplier',
             },
             {
               icon: 'mdi-account',
               title: 'ຈັດການຂໍ້ມູນລູກຄ້າ',
-              to:'/customer' ,
+              to: '/customer',
             },
             {
               icon: 'mdi-store',
               title: 'ຈັດການຂໍ້ມູນເຈົ້າຂອງຮ້ານ',
-              to:'/owner' ,
+              to: '/owner',
             },
             {
               icon: 'mdi-account-group',
@@ -202,6 +203,7 @@ export default {
         {
           icon: 'mdi-cart-variant',
           title: 'ສັ່ງຊື້ອອນໄລ',
+          to: 'order',
           children: [
             {
               icon: 'mdi-cart-arrow-down',
@@ -219,6 +221,7 @@ export default {
         {
           icon: 'mdi-chart-areaspline',
           title: 'ລາຍງານ',
+          to: 'report',
           children: [
             {
               icon: 'mdi-tshirt-crew',
@@ -259,7 +262,7 @@ export default {
     let removes = []
 
     if (this.$cookies.get('status') === 'user') {
-      removes = ['/', '/order', '/user', '/import', '/report/product']
+      removes = ['/user', '/manage', 'report', "order",]
     }
     if (this.$cookies.get('status') === 'admin') {
       removes = []

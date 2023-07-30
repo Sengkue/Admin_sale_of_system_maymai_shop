@@ -1,7 +1,7 @@
 <template>
   <div id="chart">
     <v-row no-gutters class="justify-center">
-      <h1>ລາຍງານຂໍ້ມູນພະນັກງານ</h1>
+      <h1>ລາຍງານຂໍ້ມູນລູກຄ້າ</h1>
     </v-row>
     <v-row no-gutters class="ml-7">
       <v-col cols="mx-2" md="3">

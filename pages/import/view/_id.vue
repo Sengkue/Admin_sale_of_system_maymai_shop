@@ -21,10 +21,14 @@
         <template #[`item.productProfile`]="{ item }">
           <v-img :src="item.productProfile" width="60px"></v-img>
         </template>
+        <template #[`item.Imp_price`]="{ item } ">
+         {{  formatPrice(item.Imp_price) }} ກີບ
+        </template>
+        
       </v-data-table>
       <!-- <p class="total-price">ລວມເງິນທັງໝົດ: {{ formatPrice(500000) }}ກິບ</p> -->
       <v-btn class="print-button primary" @click="generateAndPrintBill"
-        >Print Bill</v-btn
+        >ພິມໃບບິນ</v-btn
       >
     </div>
   </template>
@@ -48,19 +52,19 @@
             value: 'productProfile',
           },
           {
-            text: 'Name',
+            text: 'ຊື່ສິນຄ້າ',
             value: 'productName',
           },
           {
-            text: 'Category',
+            text: 'ປະເພດສິນຄ້າ',
             value: 'category',
           },
           {
-            text: 'Quantity',
+            text: 'ຈຳນວນ',
             value: 'Imp_quantity',
           },
           {
-            text: 'price',
+            text: 'ລາຄາ',
             value: 'Imp_price',
           },
         //   {
@@ -102,14 +106,13 @@
   printWindow.document.write('<html><head><title>ໃບບິນສັ່ງຊື້ຂອງຮ້ານເມໄໝ</title>')
   printWindow.document.write(`
     <style>
-      @font-face {
-        font-family: 'Noto Sans Lao Looped';
-        src: url('assets/fonts/NotoSerifLao.ttf') format('truetype');
-      }
+    *{
+      font-family: 'phetsarath ot', serif;
+    }
       table {
+        font-family: 'phetsarath ot', serif;
         border-collapse: collapse;
         margin: 0 auto;
-        font-family: 'Noto Sans Lao Looped', serif;
         width: 100%;
       }
       td, th {

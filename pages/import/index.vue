@@ -1,5 +1,6 @@
 <template>
   <v-card class="elevation-0">
+    {{ show }}
     <!-- ____data-table___ -->
     <v-data-table
       :headers="headers"
@@ -38,7 +39,7 @@
               item-text="id"
               dense
               deletable-chips
-              prepend-icon="mdi-file-find"
+              prepend-inner-icon="mdi-ballot-outline"
               label="ປ້ອນເລກໃບສັ່ງຊື້ສິນຄ້າ"
               single-line
               hide-details
@@ -122,23 +123,19 @@
       <v-btn
         style="font-size: 18px; font-weight: bold; color: white"
         color="red accent-3"
-        rounded
         class="mt-2 mr-7 mb-5"
         @click=";(order_id = null), (show = [])"
-      >
-        <v-icon left>mdi-close-circle</v-icon>ຍົກເລິກ
+        >ຍົກເລິກ
       </v-btn>
 
       <v-btn
         :loading="loading"
         style="font-size: 18px; font-weight: bold; color: white"
         color="primary"
-        rounded
         class="mt-2 mr-5 mb-5"
         :disabled="show == ''"
         @click="saveImport"
-      >
-        <v-icon left>mdi-check-circle</v-icon>ຢຶນຢັນນໍາເຂົ້າສິນຄ້າ
+        >ຢຶນຢັນນໍາເຂົ້າສິນຄ້າ
       </v-btn>
     </v-row>
   </v-card>
@@ -163,7 +160,7 @@ export default {
         { text: 'ຊື່ສິນຄ້າ', value: 'productName' },
         { text: 'ປະເພດສິນຄ້າ', value: 'categoryName' },
         { text: 'ສີ', value: 'color' },
-        { text: 'ຂະໜາດ', value: 'size_id' },
+        { text: 'ຂະໜາດ', value: 'size' },
         { text: 'ຈໍານວນ', value: 'order_quantity' },
         // { text: 'ຫົວໜ່ວຍ', value: 'unit' },
         { text: 'ລາຄາຕົ້ນທືນ', value: 'cost_price' },
@@ -183,7 +180,8 @@ export default {
         qty: null,
       },
       import_data: {
-        import_total: null,
+        total_price: null,
+        total_quantity: null,
         receive_date: null,
         employee_id: null,
       },
@@ -193,14 +191,27 @@ export default {
         Imp_price: null,
         Imp_quantity: null,
       },
+      color_size: {
+        product_id: null,
+        color: null,
+        size: null,
+        quantity: null,
+      },
     }
   },
   computed: {
     getByStatus() {
       return this.$store.state.order.ByStatus
     },
+    TotalPrice() {
+      return this.show.reduce(
+        (num, item) => num + item.cost_price * item.order_quantity,
+        0
+      )
+    },
     TotalQuantity() {
-      return this.show.reduce((num, item) => num + item.cost_price, 0)
+      console.log(this.show)
+      return this.show.reduce((num, item) => num + item.order_quantity, 0)
     },
   },
   mounted() {
@@ -240,7 +251,7 @@ export default {
       )
 
       if (index !== -1) {
-        return alert(
+        return this.$toast.error(
           `ສິນຄ້າລຳດັບ ${
             index + 1
           } ບໍ່ມີຈຳນວນ. ກະລຸນາປ້ອມຈຳນວນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`
@@ -251,7 +262,7 @@ export default {
       )
 
       if (price !== -1) {
-        return alert(
+        return this.$toast.error(
           `ສິນຄ້າລຳດັບ ${
             price + 1
           } ບໍ່ມີຈຳນວນເງິນ. ກະລຸນາປ້ອມຈຳນວນເງິນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`
@@ -263,7 +274,8 @@ export default {
       const formattedDate = currentDate.toISOString() // Convert date to ISO 8601 format
       this.import_data.receive_date = formattedDate
       this.import_data.employee_id = this.$cookies.get('id')
-      this.import_data.import_total = this.TotalQuantity
+      this.import_data.total_quantity = this.TotalQuantity
+      this.import_data.total_price = this.TotalPrice
       // insert data to import table
       const res = await this.$axios.post('/import', this.import_data)
       // update status order to complete
@@ -288,11 +300,18 @@ export default {
         return this.$axios.post('/import_detail', this.import_detail_data)
       })
       // _________update sell_price and cost_price____________
-      await this.show.map((item) => {
-        return this.$axios.put(`product/${item.product_id}`, {
+      await this.show.map(async (item) => {
+        return await this.$axios.put(`product/${item.product_id}`, {
           sale_price: item.sale_price,
           cost_price: item.cost_price,
         })
+      })
+      await this.show.map(async (item) => {
+        this.color_size.quantity = item.order_quantity
+        this.color_size.color = item.color
+        this.color_size.product_id = item.product_id
+        this.color_size.size = item.size
+        return await this.$axios.post('/color_size', this.color_size)
       })
       this.$toast.success('ນຳເຂົ້າສິນຄ້າສຳເລັດ')
       this.show = []

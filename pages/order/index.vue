@@ -113,18 +113,22 @@
                     </td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.category }}</td>
-                    <td>{{ item.color }}</td>
-                    <td>{{ item.size_id }}</td>
+                    <!-- <td>{{ item.color }}</td> -->
+                    <!-- <td>{{ item.size_id }}</td> -->
                     <td>
                       <v-row>
                         <v-btn
                           class="mx-2"
-                           rounded
-                          style="font-size: 14px; font-weight: bold; "
+                          rounded
+                          style="font-size: 14px; font-weight: bold"
                           :color="item.check"
                           @click="AddItem(item)"
                         >
-                          <v-icon large :color="item.check? 'white':'black'">{{item.check ? 'mdi-check':'mdi-plus'}}</v-icon>
+                          <v-icon
+                            large
+                            :color="item.check ? 'white' : 'black'"
+                            >{{ item.check ? 'mdi-check' : 'mdi-plus' }}</v-icon
+                          >
                         </v-btn>
                       </v-row>
                     </td>
@@ -142,9 +146,7 @@
                 @click="steps2"
               >
                 ໄປໜ້າກະຕ່າສິນຄ້າ
-                <v-icon large right
-                  >mdi-arrow-right-bold-outline</v-icon
-                >
+                <v-icon large right>mdi-arrow-right-bold-outline</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -182,13 +184,96 @@
                   </td>
                   <td>{{ item.name }}</td>
                   <td>{{ item.category }}</td>
-                  <td>{{ item.color }}</td>
-                  <td>{{ item.size_id }}</td>
+                  <!-- <td>{{ item.color }}</td> -->
+                  <!-- <td>{{ item.size_id }}</td> -->
+                  <td>
+                    <div>
+                      <input
+                        v-model="item.color"
+                        list="colorOptions"
+                        placeholder="ເລືອກສີ ຫຼື ປ້ອນສີ"
+                        class="custom-input"
+                        autocomplete="off"
+                      />
+                      <datalist id="colorOptions" class="custom-datalist">
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີດຳ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີຂາວ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີແດງ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີຂຽວ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີຟ້າ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີເຫຼືອງ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີຟ້າຂຽວ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີສົ້ມ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີມ່ວງ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີບົວ"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="ສີເທົາ"
+                        ></option>
+                      </datalist>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <input
+                        v-model="item.size"
+                        list="sizeOptions"
+                        placeholder="ເລືອກ ຫຼື ປ້ອນຂະໜາດ"
+                        class="custom-input"
+                        autocomplete="off"
+                      />
+                      <datalist id="sizeOptions" class="custom-datalist">
+                        <option
+                          class="custom-datalist-option"
+                          value="S"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="M"
+                        ></option>
+                        <option
+                          class="custom-datalist-option"
+                          value="L"
+                        ></option>
+                      </datalist>
+                    </div>
+                  </td>
+
                   <td>
                     <v-text-field
                       v-model="item.quantity"
                       v-ripple="{ class: `white--text` }"
-                      class="mt-5 tcenter"
+                      class="mt-5 text-center"
                       filled
                       dense
                       rounded
@@ -239,7 +324,7 @@
                     color="red accent-2"
                     class="mt-2 mr-7 mb-5"
                     @click="cancelSelect()"
-                  >ຍົກເລິກ
+                    >ຍົກເລິກ
                   </v-btn>
 
                   <v-btn
@@ -249,7 +334,7 @@
                     :loading="loading"
                     @click="saveOrder"
                   >
-                   ຢຶນຢັນສັ່ງຊື້ສິນຄ້າ
+                    ຢຶນຢັນສັ່ງຊື້ສິນຄ້າ
                   </v-btn>
                 </v-row>
               </template>
@@ -264,7 +349,7 @@
 export default {
   data() {
     return {
-      loading:false,
+      loading: false,
       supplier_id: '',
       searchA: '',
       e1: 1,
@@ -282,8 +367,8 @@ export default {
         },
         { text: 'ສິນຄ້າ', value: 'name' },
         { text: 'ປະເພດ', value: 'category' },
-        { text: 'ສີ', value: 'color' },
-        { text: 'ຂະໜາດ/ເບີ້', value: 'size' },
+        // { text: 'ສີ', value: 'color' },
+        // { text: 'ຂະໜາດ/ເບີ້', value: 'size' },
         { text: 'ເລຶອກ', value: 'actions', sortable: false },
       ],
       headers: [
@@ -353,17 +438,17 @@ export default {
         }
       }
       const checkList = this.orderList.find((i) => i.product_id === item.id)
-      if(checkList === undefined){
+      if (checkList === undefined) {
         const mater = {
           index: item.index,
           product_id: item.id,
           name: item.name,
           category: item.category,
-          color: item.color,
-          size_id: item.size_size,
-          quantity: item.quantity?item.quantity:1,
+          // color: item.color,
+          // size_id: item.size_size,
+          quantity: item.quantity ? item.quantity : 1,
           profile: item.profile,
-          checkColor: item.check
+          checkColor: item.check,
         }
         this.orderList.push(mater)
       }
@@ -389,10 +474,10 @@ export default {
       }
     },
     Inputquantity(evt, item) {
-      evt = evt || window.event;
+      evt = evt || window.event
       const charCode = evt.which ? evt.which : evt.keyCode
       if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        alert("Enter Only Number ? (0-9)");
+        alert('Enter Only Number ? (0-9)')
         evt.preventDefault()
       } else {
         if (
@@ -408,7 +493,6 @@ export default {
     },
     deleteItem(id) {
       this.orderList.splice(this.orderList.map((i) => i.id).indexOf(id), 1)
-      
     },
 
     close() {
@@ -445,26 +529,51 @@ export default {
       const data = {
         employee_id: this.$cookies.get('id'),
         order_date: formattedDate,
-        status: "pending",
+        status: 'pending',
       }
       await this.$store.dispatch('order/Insert', data)
       await this.orderList.map((item) => {
         const productId = item.product_id
         const orderQuantify = item.quantity
+        const color = item.color
+        const size = item.size
         return this.$axios.post('/order_detail', {
           product_id: productId,
           order_quantity: orderQuantify,
-          order_id: this.$store.state.order.order_id ,
+          order_id: this.$store.state.order.order_id,
+          color,
+          size
         })
       })
       this.loading = false
       this.$router.push('/order/bill/' + this.$store.state.order.order_id)
       this.clear()
     },
-    cancelSelect(){
-    this.$store.dispatch('product/selectAll')
-    this.orderList = []
-    }
+    cancelSelect() {
+      this.$store.dispatch('product/selectAll')
+      this.orderList = []
+    },
   },
 }
 </script>
+<style lang="scss" scoped>
+/* Custom styles for the input field */
+.custom-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+/* Custom styles for the datalist */
+.custom-datalist {
+  display: none; /* Hide the default arrow on Chrome */
+}
+
+.custom-datalist-option {
+  font-size: 14px;
+  padding: 4px 8px;
+}
+</style>

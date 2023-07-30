@@ -21,7 +21,7 @@
                       "
                     >
                       <v-img v-if="url" :src="url"></v-img>
-                      <v-img v-else src="logo.png"></v-img>
+                      <v-img v-else src="/images/logo.png"></v-img>
                     </v-avatar>
                   </div>
                   <v-file-input
@@ -271,23 +271,23 @@ export default {
     url1: null,
     imageRules: [(v) => !!v || 'Image is required'],
     loading: false,
-    modal: '',
-    name: '',
-    category: '',
-    description: '',
-    quantity: '',
-    sale_price: '',
-    cost_price: '',
-    Barcode: '',
-    supplier_id: '',
-    urlImage: '',
-    selectedFiles: '',
-    productId: '',
+    modal: null,
+    name: null,
+    category: null,
+    description: null,
+    quantity: null,
+    sale_price: null,
+    cost_price: null,
+    Barcode: null,
+    supplier_id: null,
+    urlImage: null,
+    selectedFiles: null,
+    productId: null,
     getPercentage: 0,
   }),
   computed: {
     getProductBanner() {
-      return this.$store.state.banner.banner
+      return this.$store.state.banner.banner || [];
     },
     getSupplier() {
       return this.$store.state.supplier.StateSelectAll
@@ -352,83 +352,84 @@ export default {
       this.$router.push('/product')
     },
     async update() {
-      this.uploadImage = true
-      const file = this.file
-      const formData = new FormData()
-      formData.append('file', file)
-      this.$refs.form.validate()
-      // if (!this.valid) return
-      this.loading = true
-      if (this.file !== null) {
-        this.urlImage = await this.$axios
-          .post('upload/single', formData)
-          .then((response) => {
-            return response?.data?.url
-          })
-          .catch((error) => {
-            this.$toast.success('File upload failed', error)
-          })
-      }
-      const data = {
-        name: this.name,
-        category: this.category,
-        description: this.description,
-        quantity: this.quantity,
-        sale_price: this.sale_price,
-        cost_price: this.cost_price,
-        Barcode: this.Barcode,
-        supplier_id: this.supplier_id,
-        profile: this.urlImage,
-      }
-      await this.$axios.put(`product/${this.$route.params.id}`, data)
-      const formDatas = new FormData()
+    this.uploadImage = true;
+    const file = this.file;
+    const formData = new FormData();
+    formData.append('file', file);
+    this.$refs.form.validate();
+    this.loading = true;
+    if (this.file !== null) {
+      this.urlImage = await this.$axios
+        .post('upload/single', formData)
+        .then((response) => {
+          return response?.data?.url;
+        })
+        .catch((error) => {
+          this.$toast.success('File upload failed', error);
+        });
+    }
+    const data = {
+      name: this.name,
+      category: this.category,
+      description: this.description,
+      quantity: this.quantity,
+      sale_price: this.sale_price,
+      cost_price: this.cost_price,
+      Barcode: this.Barcode,
+      supplier_id: this.supplier_id,
+      profile: this.urlImage,
+    };
+    await this.$axios.put(`product/${this.$route.params.id}`, data);
+
+    if (this.selectedFiles !== null && this.selectedFiles.length > 0) {
+      const formDatas = new FormData();
       for (const file of this.selectedFiles) {
-        formDatas.append('files', file)
+        formDatas.append('files', file);
       }
       const config = {
         onUploadProgress: function (progressEvent) {
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / progressEvent.total
-          )
-          this.getPercentage = percentCompleted
-        },
-      }
-      if (this.productId !== null && this.selectedFiles !== null) {
-        const res = await this.$axios.post(
-          '/upload/multiple',
-          formDatas,
-          config
-        )
-        await res.data.files.map((image) => {
-          const imageUrl = image.url
-          // const name = image.originalName
-          const name = '555'
-          return this.$axios.post(`/image`, {
+          );
+          this.getPercentage = percentCompleted;
+        }.bind(this),
+      };
+
+      const res = await this.$axios.post('/upload/multiple', formDatas, config);
+      await Promise.all(
+        res.data.files.map(async (image) => {
+          const imageUrl = image.url;
+          // const name = '555';
+          const name = image.originalName
+          return await this.$axios.post(`/image`, {
             productId: this.productId,
             url: imageUrl,
             altText: name,
-          })
+          });
         })
-      }
-      await this.$store.dispatch('product/selectAll')
-      this.$toast.success('Updated successfully')
-      this.loading = false
-      this.uploadImage = false
-      this.reset()
-      this.$router.push('/product')
-    },
+      );
+    }
+
+    await this.$store.dispatch('product/selectAll');
+    this.$toast.success('Updated successfully');
+    this.loading = false;
+    this.uploadImage = false;
+    this.reset();
+    this.$router.push('/product');
+  },
     reset() {
-      this.name = ''
-      this.category = ''
-      this.description = ''
-      this.quantity = ''
-      this.sale_price = ''
-      this.cost_price = ''
-      this.Barcode = ''
-      this.supplier_id = ''
-      this.urlImage = ''
-      this.url = ''
-      this.selectedFiles = ''
+      this.name = null
+      this.category = null
+      this.description = null
+      this.quantity = null
+      this.sale_price = null
+      this.cost_price = null
+      this.Barcode = null
+      this.supplier_id = null
+      this.urlImage = null
+      this.url = null
+      this.selectedFiles = null
+      this.file = null
     },
   },
 }

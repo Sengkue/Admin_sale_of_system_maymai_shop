@@ -17,19 +17,22 @@
     <p class="bill-date"> ວັນທີຂາຍ: {{ formatDateLo(getSale.sale_date) }}</p>
     <p class="bill-date"> ພະນັກງານຂາຍ: {{ getSale.employeeName }}</p>
     <v-data-table :items="getDetail" :headers="headers" class="product-table">
+      <template #[`item.sale_price`]="{ item }">
+        <td>{{ formatPrice(item.sale_price ) }} ກີບ</td>
+      </template>
       <template #[`item.total`]="{ item }">
-        <td>{{ formatPrice(item.sale_price * item.quantity) }}</td>
+        <td>{{ formatPrice(item.sale_price * item.quantity) }} ກີບ</td>
       </template>
     </v-data-table>
-    <p class="total-price">ລວມເງິນທັງໝົດ: {{ formatPrice(totalPrice) }}ກິບ</p>
+    <p class="total-price">ລວມເງິນທັງໝົດ: {{ formatPrice(totalPrice) }} ກິບ</p>
     <div v-if="getSale.promotionDiscount > 0" class="total-price">
       <p>ຮັບສ່ວນຫຼຸດ: {{ getSale.promotionDiscount }}%</p>
       <p class="total-price green--text">
-        ຍັງເຫຼຶອພຽງ: {{ formatPrice(calculatePromotion) }}ກິບ
+        ຍັງເຫຼຶອພຽງ: {{ formatPrice(calculatePromotion) }} ກິບ
       </p>
     </div>
     <v-btn class="print-button primary" @click="generateAndPrintBill"
-      >Print Bill</v-btn
+      >ພິມໃບບິນ</v-btn
     >
   </div>
 </template>
@@ -45,23 +48,23 @@ export default {
     return {
       headers: [
         {
-          text: 'Name',
+          text: 'ຊື່ສິນຄ້າ',
           value: 'productName',
         },
         {
-          text: 'Category',
+          text: 'ປະເພດສິນຄ້າ',
           value: 'categoryName',
         },
         {
-          text: 'Price',
+          text: 'ລາຄາ',
           value: 'sale_price',
         },
         {
-          text: 'Quantity',
+          text: 'ຈຳນວນ',
           value: 'quantity',
         },
         {
-          text: 'Total',
+          text: 'ລວມທັງໜົດ',
           value: 'total',
         },
       ],
