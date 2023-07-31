@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pa-5">
     <div>
       <v-btn tile fixed right color="error" class="mb-10" to="/sale"
         ><v-icon>mdi-close</v-icon> ປິດ</v-btn
@@ -9,16 +9,16 @@
       <img src="/images/logo.png" alt="Shop Logo" class="logo" />
 
       <div class="shop-details">
-        <h2>Maymai Shop</h2>
-        <p>123 Main Street, City</p>
-        <p>Phone: (020) 7878-1525</p>
+        <h2>ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ</h2>
+        <p>ຕັ້ງຢູ່ທີ່ ບ້ານດົງໂດກ, ເມືອງໄຊທານີ, ນະຄອນຫຼວງວຽງຈັນ</p>
+        <p>ເບີຕິດຕໍ່: 020 5475 6861</p>
       </div>
     </div>
-    <p class="bill-date"> ວັນທີຂາຍ: {{ formatDateLo(getSale.sale_date) }}</p>
-    <p class="bill-date"> ພະນັກງານຂາຍ: {{ getSale.employeeName }}</p>
+    <p class="bill-date">ວັນທີຂາຍ: {{ formatDateLo(getSale.sale_date) }}</p>
+    <p class="bill-date">ພະນັກງານຂາຍ: {{ getSale.employeeName }}</p>
     <v-data-table :items="getDetail" :headers="headers" class="product-table">
       <template #[`item.sale_price`]="{ item }">
-        <td>{{ formatPrice(item.sale_price ) }} ກີບ</td>
+        <td>{{ formatPrice(item.sale_price) }} ກີບ</td>
       </template>
       <template #[`item.total`]="{ item }">
         <td>{{ formatPrice(item.sale_price * item.quantity) }} ກີບ</td>
@@ -48,6 +48,10 @@ export default {
     return {
       headers: [
         {
+          text: 'ລຳດັບ',
+          value: 'index', width:'35'
+        },
+        {
           text: 'ຊື່ສິນຄ້າ',
           value: 'productName',
         },
@@ -72,7 +76,12 @@ export default {
   },
   computed: {
     getDetail() {
-      return this.$store.state.saleDetail.StateSelectOne
+      return this.$store.state.saleDetail.StateSelectOne.map((item, index)=>{
+        return { 
+          index: index + 1,
+          ...item
+        }
+      })
     },
     getSale() {
       return this.$store.state.sale.StateSelectOne
@@ -111,16 +120,24 @@ export default {
       printWindow.document.write('<html><head><title>ບິນຂາຍຮ້ານເມໄໝ</title>')
       printWindow.document.write(`
     <style>
-      @font-face {
-        font-family: 'Noto Sans Lao Looped';
-        src: url('assets/fonts/NotoSerifLao.ttf') format('truetype');
-      }
+        *{
+          font-family: phetsarath ot
+        }
       table {
         border-collapse: collapse;
         margin: 0 auto;
         font-family: 'Noto Sans Lao Looped', serif;
         width: 100%;
       }
+      // .watermark {
+      //   position: fixed;
+      //   top: 50%;
+      //   left: 50%;
+      //   transform: translate(-50%, -50%) rotate(-45deg);
+      //   font-size: 5rem;
+      //   color: rgba(0, 0, 0, 0.2);
+      //   pointer-events: none;
+      // }
       td, th {
         border: 1px solid black;
         padding: 0.5rem;
@@ -148,15 +165,18 @@ export default {
     </style>
   `)
       printWindow.document.write('</head><body >')
-
+  // Watermark
+  // printWindow.document.write(`
+  //   <div class="watermark">*ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ*</div>
+  // `)
       // Add shop information
       printWindow.document.write(`
     <div class="shop-info">
       <img src="/images/logo.png" alt="Shop Logo" class="logo" />
       <div class="shop-details">
-        <h2>Maymai Shop</h2>
-        <p>123 Main Street, City</p>
-        <p>Phone: (020) 7878-1525</p>
+        <h2>ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ</h2>
+        <p>ຕັ້ງຢູ່ທີ່ ບ້ານດົງໂດກ, ເມືອງໄຊທານີ, ນະຄອນຫຼວງວຽງຈັນ</p>
+        <p>ເບີຕິດຕໍ່: 020 5475-6861</p>
       </div>
     </div>
   `)
@@ -168,8 +188,7 @@ export default {
         )}</p>`
       )
       printWindow.document.write(
-        `<p class="bill-date">ພະນັກງານຂາຍ: ${
-          this.getSale.employeeName}</p>`
+        `<p class="bill-date">ພະນັກງານຂາຍ: ${this.getSale.employeeName}</p>`
       )
 
       // Add table
@@ -177,7 +196,7 @@ export default {
 
       // Add total price
       printWindow.document.write(
-        `<p class="total-price">Total Price: ${this.formatPrice(
+        `<p class="total-price">ລວມເງິນທັງໝົດ: ${this.formatPrice(
           this.totalPrice
         )}ກີບ</p>`
       )
@@ -193,6 +212,11 @@ export default {
       </div>
     `)
       }
+      printWindow.document.write(`<h4 style="display: flex; justify-content: space-between">
+  <div>ລາຍເຊັນຜູ້ຂາຍ</div>
+  <div>ລາຍເຊັນລູກຄ້າ</div>
+</h4>`)
+      printWindow.document.write(`<h2 style="text-align:center;">ຂອບໃຈ</2>`)
 
       printWindow.document.write('</body></html>')
       printWindow.document.close()

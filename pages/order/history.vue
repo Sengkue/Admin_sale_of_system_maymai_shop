@@ -10,12 +10,12 @@
       :expanded.sync="expanded"
       class="elevation-1"
     >
-    <template #[`item.employeeName`]="{item}">
-      <div v-if="item.employeeName === null">
-        <div class="primary--text">ເຈົ້າຂອງຮ້ານ</div>
-      </div>
-      <div v-else>{{ item.employeeName }}</div>
-    </template>
+      <template #[`item.employeeName`]="{ item }">
+        <div v-if="item.employeeName === null">
+          <div class="primary--text">ເຈົ້າຂອງຮ້ານ</div>
+        </div>
+        <div v-else>{{ item.employeeName }}</div>
+      </template>
       <template #top>
         <v-row justify="center">
           <h2 class="mt-5 mb-7">ປະຫວັດນໍາເຂົ້າສິນຄ້າ</h2>
@@ -57,7 +57,7 @@
           {{ formatDateLo(item.order_date) }}
         </div>
       </template>
-      <template #[`item.status`]="{item}">
+      <template #[`item.status`]="{ item }">
         <div v-if="item.status == 'pending'" class="red--text">
           {{ item.status }}...
         </div>
@@ -67,7 +67,14 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <v-icon class="mr-2" color="blue" @click="$store.commit('order_detail/setOrderId', item.id), $router.push('/import')">
+        <v-icon
+          class="mr-2"
+          color="blue"
+          @click="
+            $store.commit('order_detail/setOrderId', item.id),
+              $router.push('/import')
+          "
+        >
           mdi-cart-check
         </v-icon>
         <v-icon
@@ -77,6 +84,7 @@
         >
           mdi-eye
         </v-icon>
+        <v-icon color="error" :loading="loading" @click="deleteItem(item.id)">mdi-close</v-icon>
       </template>
     </v-data-table>
   </div>
@@ -85,6 +93,7 @@
 export default {
   data() {
     return {
+      loading:false,
       search: '',
       expanded: [],
       Headers: [
@@ -118,6 +127,38 @@ export default {
   },
   mounted() {
     this.$store.dispatch('order/selectAll')
+  },
+  methods: {
+  deleteItem(id) {
+       this.$swal
+        .fire({
+          title: 'ທ່ານແນ່ໃຈບໍ?',
+          text: `ທີ່ຈະຍົກເລີກຂໍ້ມູນລາຍການນີ້!`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'ຢືນຢັນລືບ!',
+          cancelButtonText: 'ຍົກເລີກ',
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.loading = true
+            await this.$axios.delete(`/order/${id}`)
+             this.$store.dispatch('order/selectAll')
+            this.loading = false
+            this.$swal.fire({
+              title: 'ລືບສຳເລັດ!',
+              text: 'ຂໍ້ມູນໄດ້ຖືກລືບສຳເລັດ.',
+              icon: 'success',
+              confirmButtonText: 'OKAY',
+              customClass: {
+                container: 'my-swal-container',
+              },
+            })
+          }
+        })
+    },
   },
 }
 </script>

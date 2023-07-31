@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col
+      <!-- <v-col
         cols="12"
         class="white--text ma-0 pa-0"
         style="background: linear-gradient(to right, #6c1e1e, #fa1212)"
@@ -35,14 +35,14 @@
             </div>
           </div>
         </v-container>
-      </v-col>
-      <v-col cols="12">
+      </v-col> -->
+      <v-col cols="12" class="mt-5">
         <v-row>
           <v-col cols="7">
             <v-row>
               <v-col cols="12">
                 <v-row>
-                  <v-col cols="12">
+                  <v-col cols="6">
                     <v-text-field
                       v-model="search"
                       label="Search"
@@ -51,6 +51,18 @@
                       dense
                       prepend-inner-icon="mdi-barcode-scan"
                     ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      v-model="category_id"
+                      :items="category_data"
+                      outlined
+                      dense
+                      clearable
+                      item-text="category"
+                      item-value="id"
+                      label="ເລືອກປະເພດສິນຄ້າ"
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-col>
@@ -67,8 +79,9 @@
                       max-width="180px"
                       elevation="10"
                       class="cursor"
-                      @click="AddToOrder(item.id)"
+                      @click="showDetail(item)"
                     >
+                      <!-- @click="AddToOrder(item.id)" -->
                       <div class="">
                         <v-img
                           :src="item.profile"
@@ -92,7 +105,7 @@
                           </div>
 
                           <v-chip
-                            v-if="item.quantity === 0 || item.quantity === null "
+                            v-if="item.quantity === 0 || item.quantity === null"
                             small
                             color="error"
                             class="rounded-br-xl ma-n2"
@@ -135,10 +148,10 @@
                 <v-col cols="12">
                   <table>
                     <tr>
-                      <th>item name</th>
-                      <th>price</th>
-                      <th class="px-5">Quantity</th>
-                      <th>subtotal</th>
+                      <th>ສິນຄ້າ</th>
+                      <th>ລາຄາ</th>
+                      <th class="px-5">ຈຳນວນ</th>
+                      <th>ລວມ</th>
                       <th class="px-n5">X</th>
                     </tr>
                     <tr v-for="(list, index) in ListOrder" :key="index">
@@ -391,6 +404,122 @@
           </v-col>
         </v-row>
       </v-col>
+      <!-- ____________________________________________dialog show sale detail_______________________________________ -->
+      <v-dialog v-model="openDetail" persistent max-width="800">
+        <v-card class="pa-5 ma-0">
+          <v-row>
+            <v-col cols="4">
+              <v-img :src="displayDetail.profile" width="250"></v-img>
+            </v-col>
+            <v-col cols="8">
+              <!-- Product Name -->
+              <v-card-title> {{ displayDetail.name }}</v-card-title>
+
+              <!-- Product Description -->
+              <v-card-text>ປະເພດ: {{ displayDetail.category }}</v-card-text>
+              <v-card-text>
+                <v-autocomplete
+                  v-model="color_size_data.id"
+                  auto-select-first
+                  chips
+                  clearable
+                  outlined
+                  :items="color_size_data"
+                  item-value="id"
+                  item-text="id"
+                  dense
+                  deletable-chips
+                  prepend-inner-icon="mdi-ballot-outline"
+                  label="ເລືອກສີ ແລະ ຂະໜາດທີ່ຕ້ອງການ"
+                  single-line
+                  hide-details
+                  @change="Selected"
+                  @click:clear="clearbox"
+                >
+                  <template #item="{ item }">
+                    <div class="select-item d-flex align-center justify-center">
+                      <span>ສີ- {{ item.color }}</span>
+                      <span> || </span>
+                      <span>ຂະໜາດ- ( {{ item.size }} )</span>
+                      <span> || </span>
+                      <span>ຈຳນວນ- ( {{ item.quantity }} )</span>
+                    </div>
+                  </template>
+                </v-autocomplete>
+              </v-card-text>
+              <v-card-text
+                v-if="selected_color_size.id ? selected_color_size.id : false"
+                class="text-start"
+              >
+                <div
+                  v-if="
+                    selected_color_size.color
+                      ? selected_color_size.color
+                      : false
+                  "
+                >
+                  <h3 class="mr-2">
+                    ສີ: <span>{{ selected_color_size.color }}</span>
+                  </h3>
+                </div>
+                <div
+                  v-if="
+                    selected_color_size.size ? selected_color_size.size : false
+                  "
+                >
+                  <h3 class="mr-2">
+                    ຂະໜາດ: <span>{{ selected_color_size.size }}</span>
+                  </h3>
+                </div>
+                <div
+                  v-if="
+                    selected_color_size.quantity
+                      ? selected_color_size.quantity
+                      : false
+                  "
+                >
+                  <h3 class="mr-2">
+                    ຈຳນວນທີສາມາດສັ່ງຊື້:
+                    <span>{{ selected_color_size.quantity }}</span>
+                  </h3>
+                </div>
+                <div
+                  v-if="
+                    selected_color_size.sale_price
+                      ? selected_color_size.sale_price
+                      : false
+                  "
+                >
+                  <h3 class="mr-2">
+                    ລາຄາຂາຍ:
+                    <span
+                      >{{
+                        formatPrice(selected_color_size.sale_price)
+                      }}
+                      ກີບ</span
+                    >
+                  </h3>
+                </div>
+              </v-card-text>
+            </v-col>
+          </v-row>
+
+          <!-- Add to Cart Button -->
+          <v-card-actions>
+            <v-btn
+              class="primary"
+              :disabled="!selected_color_size.id"
+              @click="AddToOrder(selected_color_size.id)"
+              ><v-icon>mdi-plus</v-icon> ສັ່ງເພີ່ມ</v-btn
+            >
+            <v-btn
+              class="error"
+              @click=";(openDetail = false), (selected_color_size = {})"
+              ><v-icon>mdi-close</v-icon> ປິດ</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
   </div>
 </template>
@@ -401,6 +530,12 @@ export default {
 
   data() {
     return {
+      category_id:null,
+      category_data: [],
+      color_size_data: [],
+      selected_color_size: {},
+      displayDetail: {},
+      openDetail: false,
       loading: false,
       CashBack: '',
       CashAmount: '',
@@ -429,6 +564,7 @@ export default {
         product_id: null,
         sale_price: null,
         quantity: null,
+        color_size_id: null,
       },
     }
   },
@@ -494,27 +630,51 @@ export default {
       })
     },
     filteredRow() {
-      const searchTerm = this.search.toLowerCase().trim()
-      return this.$store.state.product.StateSelectAll.map((item, index) => {
-        return {
-          index: index + 1,
-          ...item,
-        }
-      }).filter((item) => {
-        // Modify the condition to search by name or barcode
-        const nameMatch = item.name?.toLowerCase().includes(searchTerm)
-        const barcodeMatch = item.Barcode?.toLowerCase().includes(searchTerm)
-        const categoryMatch = item.category?.toLowerCase().includes(searchTerm)
-        return nameMatch || barcodeMatch || categoryMatch
-      })
-    },
+    const searchTerm = this.search.toLowerCase().trim();
+    const selectedCategoryId = this.category_id;
+
+    return this.$store.state.product.StateSelectAll.map((item, index) => {
+      return {
+        index: index + 1,
+        ...item,
+      };
+    }).filter((item) => {
+      // Apply the regular search filter
+      const nameMatch = item.name?.toLowerCase().includes(searchTerm);
+      const barcodeMatch = item.Barcode?.toLowerCase().includes(searchTerm);
+      const categoryMatch = item.category?.toLowerCase().includes(searchTerm);
+      // Apply the category filter
+      const categoryFilter = !selectedCategoryId || item.category_id === selectedCategoryId;
+      // Combine the regular search filter and category filter using '&&' (logical AND) operator
+      return (nameMatch || barcodeMatch || categoryMatch) && categoryFilter;
+    });
+  },
   },
   mounted() {
     this.$store.dispatch('product/selectAll')
     this.$store.dispatch('promotion/selectAll')
+    this.$axios.get('/category').then((res) => {
+      this.category_data = res.data.result.rows
+    })
   },
 
   methods: {
+    clearbox() {
+      const i = 52222
+      console.log('hsoidfjasjdfalsd', i)
+    },
+    Selected() {
+      this.selected_color_size = this.color_size_data.find(
+        (i) => i.id === this.color_size_data.id
+      )
+    },
+    showDetail(item) {
+      this.openDetail = true
+      this.displayDetail = item
+      this.$axios.get(`/color_size/byProductId/${item.id}`).then((res) => {
+        this.color_size_data = res.data.result
+      })
+    },
     onPromotionSelect() {
       const item = this.getPromotion.find((i) => i.id === this.promotion_id)
       this.promotion = item.discount || null
@@ -528,7 +688,9 @@ export default {
       this.sale_data.promotion_id = this.promotion_id
       this.sale_data.employee_id = this.$cookies.get('id')
       this.sale_data.sale_date = formattedDate
-      this.sale_data.sale_total = this.TotalAmount
+      this.sale_data.sale_total = this.promotionSum
+        ? this.promotionSum
+        : this.TotalAmount
       this.sale_data.sale_quantity = this.TotalQuantity
       this.sale_data.sale_type = 'pos'
       this.sale_data.sale_status = 'completed'
@@ -541,23 +703,30 @@ export default {
           // send data to sale_detail---------------------------
           this.ListOrder.map((item) => {
             this.sale_detail_data.sale_id = this.sale_id
-            this.sale_detail_data.product_id = item.id
+            this.sale_detail_data.product_id = item.product_id
+            this.sale_detail_data.color_size_id = item.id
             this.sale_detail_data.sale_price = item.sale_price
             this.sale_detail_data.quantity = item.order_amount
             return this.$axios.post('/saleDetail', this.sale_detail_data)
           })
           // send subtract quantity----------------------------
           this.ListOrder.map((item) => {
-            const id = item.id
+            const id = item.product_id
             const Qt = item.order_amount
             return this.$axios.put(`/product/${id}/subtract-quantity`, {
               quantity: Qt,
             })
           })
+          this.ListOrder.map((item) => {
+            return this.$axios.put(
+              `/color_size/subtractByColorSizeAndProductId/${item.id}/${item.product_id}`,
+              { quantity: item.order_amount }
+            )
+          })
           this.loading = false
           this.dialog = false
           this.$router.push('/sale/' + this.sale_id)
-          this.$toast.success('sale completed')
+          this.$toast.success('ສຳເລັດການຂາຍ')
           this.$store.dispatch('product/selectAll')
           this.ListOrder = []
           this.CashAmount = 0
@@ -578,7 +747,9 @@ export default {
       this.dialog = true
     },
     AddToOrder(id) {
-      const item = this.getRow.find((i) => i.id === id)
+      console.log('show:', id)
+      const item = this.color_size_data.find((i) => i.id === id)
+      console.log('show:', item)
       const listOrder = this.ListOrder.find((i) => i.id === id)
 
       if (listOrder) {
@@ -590,17 +761,20 @@ export default {
           } else {
             this.ListOrder.push({
               id: item.id,
-              name: item.name,
+              product_id: item.product_id,
+              name: this.displayDetail.name,
+              category: this.displayDetail.category,
               sale_price: item.sale_price,
-              category: item.category,
+              color: item.color,
+              size: item.size,
               order_amount: 1,
             })
           }
         } else {
-          alert('ສີນຄ້າໝົດ')
+          this.$toast.error('<h3>ສີນຄ້າໝົດ!</h3>')
         }
       } else {
-        const chnum = this.getRow.find((i) => i.id === id)
+        const chnum = this.color_size_data.find((i) => i.id === id)
         if (chnum) {
           if (chnum.quantity > 0) {
             const existingOrder = this.ListOrder.find((i) => i.id === id)
@@ -609,9 +783,12 @@ export default {
             } else {
               this.ListOrder.push({
                 id: item.id,
-                name: item.name,
-                category: item.category,
+                product_id: item.product_id,
+                name: this.displayDetail.name,
+                category: this.displayDetail.category,
                 sale_price: item.sale_price,
+                color: item.color,
+                size: item.size,
                 order_amount: 1,
               })
             }
@@ -638,7 +815,7 @@ export default {
       }
     },
     AddOne(id) {
-      const item = this.getRow.find((i) => i.id === id)
+      const item = this.color_size_data.find((i) => i.id === id)
       const listOrder = this.ListOrder.find((i) => i.id === id)
 
       if (listOrder) {
@@ -646,8 +823,7 @@ export default {
         if (item.quantity - oldOrderAmount > 0) {
           listOrder.order_amount = oldOrderAmount + 1
         } else {
-          // alert('ສີນຄ້າໝົດ')
-          this.$toast.error('ສີນຄ້າໝົດ!')
+          this.$toast.error('<h3 class="pa-2">ສີນຄ້າໝົດ!</h3>')
         }
       }
     },

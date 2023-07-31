@@ -431,6 +431,10 @@ export default {
       if (this.supplier_id === null) {
         this.$store.dispatch('product/selectAll')
       } else {
+        this.$cookies.remove('supplierData')
+        const item = this.getSupplier.find((i) => i.id === this.supplier_id)
+        this.$cookies.set('supplierData', item)
+        this.$store.commit('supplier/setData', item)
         this.$store.dispatch('product/getBySupplier', this.supplier_id)
       }
     },

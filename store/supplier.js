@@ -6,9 +6,13 @@ export const state = () => ({
   insert: false,
   image: null,
   uploadProgress: 0, // new state property
+  item:{}
 });
 
 export const mutations = {
+  setData(state, data){
+  state.item = data
+  },
   setImage(state, data) {
     state.image = data;
   },

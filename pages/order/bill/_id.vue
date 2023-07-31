@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="pa-5">
     <div>
-      <v-btn tile fixed right color="error" class="mb-10" to="/order"
+      <v-btn tile fixed right color="error" class="mb-10" @click="goBack"
         ><v-icon>mdi-close</v-icon> ປິດ</v-btn
       >
     </div>
@@ -9,22 +9,29 @@
       <img src="/images/logo.png" alt="Shop Logo" class="logo" />
 
       <div class="shop-details">
-        <h2>Maymai Shop</h2>
-        <p>123 Main Street, City</p>
-        <p>Phone: (020) 7878-1525</p>
+        <h2>ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ</h2>
+        <p>ຕັ້ງຢູ່ທີ່ ບ້ານດົງໂດກ, ເມືອງໄຊທານີ, ນະຄອນຫຼວງວຽງຈັນ</p>
+        <p>ເບີຕິດຕໍ່: 020 5475 6861</p>
       </div>
     </div>
-
-    <h4 class="bill-date">
-      ໃບບິນສັ່ງຊື້: {{ getSale.id ? getSale.id : 'ບໍ່ມີ' }}
-    </h4>
-    <h4 class="bill-date">
-      ວັນທີສັ່ງຊື້: {{ formatDateLo(getSale.order_date) }}
-    </h4>
-    <h4 class="bill-date">
-      ພະນັກງານຂາຍ:
-      {{ getSale.employeeName ? getSale.employeeName : 'ເຈົ້າຂອງຮ້ານ' }}
-    </h4>
+    <div class="d-flex justify-space-between">
+      <h4 class="bill-date">
+        ໃບບິນສັ່ງຊື້: {{ getSale.id ? getSale.id : 'ບໍ່ມີ' }}
+      </h4>
+      <h4 class="bill-date">
+        ວັນທີສັ່ງຊື້: {{ formatDateLo(getSale.order_date) }}
+      </h4>
+    </div>
+    <div class="d-flex justify-space-between">
+      <h4 class="bill-date">
+        ພະນັກງານ:
+        {{ getSale.employeeName ? getSale.employeeName : 'ເຈົ້າຂອງຮ້ານ' }}
+      </h4>
+      <div v-if="getSupplier">
+        <h4>ຜູ້ສະໜອງ: {{ getSupplier.name }}</h4>
+        <h4>ເບີຕິດຕໍ່: {{ getSupplier.phone }}</h4>
+      </div>
+    </div>
     <v-data-table :items="getDetail" :headers="headers" class="product-table">
       <template #[`item.profile`]="{ item }">
         <v-img :src="item.profile" width="60px"></v-img>
@@ -50,6 +57,7 @@ export default {
         {
           text: 'ລຳດັບ',
           value: 'index',
+          width: '35',
         },
         {
           text: 'ຮູບ',
@@ -91,6 +99,9 @@ export default {
         }
       })
     },
+    getSupplier() {
+      return this.$cookies.get('supplierData')
+    },
     getSale() {
       return this.$store.state.order.orderId
     },
@@ -105,24 +116,24 @@ export default {
     this.$store.dispatch('order_detail/selectByorderId', this.$route.params.id)
   },
   methods: {
+    goBack() {
+      this.$cookies.remove('supplierData')
+      this.$router.push('/order')
+    },
     generateAndPrintBill(callback) {
-      const table = document.querySelector('.product-table')
-      const clonedTable = table.cloneNode(true)
-      const printWindow = window.open('', '', 'height=500,width=800')
+  const table = document.querySelector('.product-table')
+  const clonedTable = table.cloneNode(true)
+  const printWindow = window.open('', '', 'height=500,width=800')
 
-      printWindow.document.write(
-        '<html><head><title>ໃບບິນສັ່ງຊື້ຂອງຮ້ານເມໄໝ</title>'
-      )
-      printWindow.document.write(`
+  printWindow.document.write('<html><head><title>ໃບບິນສັ່ງຊື້ຂອງຮ້ານເມໄໝ</title>')
+  printWindow.document.write(`
     <style>
-      @font-face {
-        font-family: 'Noto Sans Lao Looped';
-        src: url('assets/fonts/NotoSerifLao.ttf') format('truetype');
+      * {
+        font-family: phetsarath ot;
       }
       table {
         border-collapse: collapse;
         margin: 0 auto;
-        font-family: 'Noto Sans Lao Looped', serif;
         width: 100%;
       }
       td, th {
@@ -149,6 +160,15 @@ export default {
         font-weight: bold;
         margin-bottom: 10px;
       }
+      // .watermark {
+      //   position: fixed;
+      //   top: 50%;
+      //   left: 50%;
+      //   transform: translate(-50%, -50%) rotate(-45deg);
+      //   font-size: 3rem;
+      //   color: rgba(0, 0, 0, 0.2);
+      //   pointer-events: none;
+      // }
       @media print {
         table tbody tr {
           border: none;
@@ -162,64 +182,99 @@ export default {
       }
     </style>
   `)
-      printWindow.document.write('</head><body >')
+  printWindow.document.write('</head><body >')
 
-      // Add shop information
-      printWindow.document.write(`
+  // Watermark
+  // printWindow.document.write(`
+  //   <div class="watermark">*ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ*</div>
+  // `)
+
+  // Add shop information
+  printWindow.document.write(`
     <div class="shop-info">
       <img src="/images/logo.png" alt="Shop Logo" class="logo" />
       <div class="shop-details">
-        <h2>Maymai Shop</h2>
-        <p>123 Main Street, City</p>
-        <p>Phone: (020) 7878-1525</p>
+        <h2>ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ</h2>
+        <p>ຕັ້ງຢູ່ທີ່ ບ້ານດົງໂດກ, ເມືອງໄຊທານີ, ນະຄອນຫຼວງວຽງຈັນ</p>
+        <p>ເບີຕິດຕໍ່: 020 5475-6861</p>
       </div>
     </div>
   `)
 
-      // Add bill date
-      printWindow.document.write(
-        `<h4 class="bill-date">ໃບບິນສັ່ງຊື້: 
-        ${this.getSale.id}
-        </h4>`
-      )
-      printWindow.document.write(
-        `<h4 class="bill-date">Date: ${this.formatDateLo(
-          this.getSale.order_date
-        )}</h4>`
-      )
-      printWindow.document.write(
-        `<h4 class="bill-date">ພະນັກງານຂາຍ: ${
-          this.getSale.employeeName ? this.getSale.employeeName : 'ເຈົ້າຂອງຮ້ານ'
-        }</h4>`
-      )
+  printWindow.document.write(
+    `         
+    <div style="display: flex; justify-content: space-between">
+      <h4 class="bill-date">ໃບບິນສັ່ງຊື້: 
+    ${this.getSale.id}
+    </h4>
+      <h4 class="bill-date">ວັນທີສັ່ງຊື້: ${this.formatDateLo(
+      this.getSale.order_date
+    )}</h4>
+    </div>
+    
+    `
+  )
 
-      // Remove the profile column from the cloned table
-      const headers = clonedTable.querySelectorAll('thead th')
-      const profileIndex = Array.from(headers).findIndex(
-        (header) => header.textContent.trim() === 'ຮູບ'
-      )
-      if (profileIndex !== -1) {
-        headers[profileIndex].remove()
-        const rows = clonedTable.querySelectorAll('tbody tr')
-        rows.forEach((row) => row.children[profileIndex].remove())
-      }
+  if(this.getSupplier){
+    printWindow.document.write(
+      `         
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="bill-date">ພະນັກງານຂາຍ: ${
+          this.getSale.employeeName
+            ? this.getSale.employeeName
+            : 'ເຈົ້າຂອງຮ້ານ'
+        }</h4>
+        <div>
+          <h4 class="bill-date">ຜູ້ສະໜອງ: ${this.getSupplier.name}</h4>
+          <h4 class="bill-date">ເບີຕິດຕໍ່: ${this.getSupplier.phone}</h4>
+        </div>
+      </div>
+      
+      `
+    )
+  }else{
+    printWindow.document.write(
+      `         
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="bill-date">ພະນັກງານຂາຍ: ${
+          this.getSale.employeeName
+            ? this.getSale.employeeName
+            : 'ເຈົ້າຂອງຮ້ານ'
+        }</h4>
+      </div>
+      
+      `
+    )
+  }
 
-      // Add table
-      printWindow.document.write(clonedTable.outerHTML)
+  // Remove the profile column from the cloned table
+  const headers = clonedTable.querySelectorAll('thead th')
+  const profileIndex = Array.from(headers).findIndex(
+    (header) => header.textContent.trim() === 'ຮູບ'
+  )
+  if (profileIndex !== -1) {
+    headers[profileIndex].remove()
+    const rows = clonedTable.querySelectorAll('tbody tr')
+    rows.forEach((row) => row.children[profileIndex].remove())
+  }
 
-      printWindow.document.write('</body></html>')
-      printWindow.document.close()
-      printWindow.print()
+  // Add table
+  printWindow.document.write(clonedTable.outerHTML)
 
-      // Clear the value after printing is complete
-      setTimeout(() => {
-        this.value = ''
-      }, 1000) // Wait for 1 second before clearing the value
+  printWindow.document.write('</body></html>')
+  printWindow.document.close()
+  printWindow.print()
 
-      if (typeof callback === 'function') {
-        callback()
-      }
-    },
+  // Clear the value after printing is complete
+  setTimeout(() => {
+    this.value = ''
+  }, 1000) // Wait for 1 second before clearing the value
+
+  if (typeof callback === 'function') {
+    callback()
+  }
+},
+
   },
 }
 </script>
