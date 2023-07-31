@@ -126,8 +126,11 @@
                 </div>
               </div>
             </template>
+            <template #[`item.sale_price`]="{value}">
+              {{ formatPrice(value) }} ກີບ
+            </template>
             <template #[`item.total`]="{ item }">
-              {{ item.sale_price * item.quantity }}
+              {{ formatPrice(item.sale_price * item.quantity) }} ກີບ
             </template>
           </v-data-table>
         </div>
@@ -190,10 +193,10 @@ export default {
         { text: 'ຊື່ສິນຄ້າ', value: 'productName' },
         { text: 'ປະເພດ', value: 'productName' },
         { text: 'ສີ', value: 'color' },
-        { text: 'ຂະໜາດ', value: 'size_id' },
+        { text: 'ຂະໜາດ', value: 'size' },
         { text: 'ຈໍານວນ', value: 'quantity' },
-        { text: 'ລາຄາ(ກິບ)', value: 'sale_price' },
-        { text: 'ລາຄາລວມ(ກິບ)', value: 'total' },
+        { text: 'ລາຄາ', value: 'sale_price' },
+        { text: 'ລາຄາລວມ', value: 'total' },
       ],
     }
   },
@@ -225,9 +228,12 @@ export default {
         status: 'pending',
       })
       this.getDetail.map((item) => {
-        return this.$axios.put(`/product/${item.product_id}/subtract-import-quantity`, {
+        return this.$axios.put(`/product/${item.product_id}/subtract-quantity`, {
           quantity: item.quantity,
         })
+      })
+      this.getDetail.map((item)=>{
+        return this.$axios.put(`/color_size/subtractByColorSizeAndProductId/${item.color_size_id}/${item.product_id}`,{quantity: item.quantity})
       })
       this.loading = false
       this.confirmationDialog = false

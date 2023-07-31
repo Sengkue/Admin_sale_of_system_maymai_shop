@@ -144,7 +144,7 @@ export default {
       headers: [
         { text: 'ລຳດັບ', value: 'index' },
         { text: 'ຮູບ', value: 'profile' },
-        { text: 'Barcode', value: 'Barcode' },
+        { text: 'ລະຫັດສິນຄ້າ', value: 'Barcode' },
         { text: 'ຊື່', value: 'name' },
         { text: 'ປະເພດ', value: 'category' },
         { text: 'ຈຳນວນ', value: 'quantity' },

@@ -94,7 +94,7 @@
                   clear-icon="mdi-close-circle-outline"
                   filled
                   dense
-                  label="BarCode*"
+                  label="ລະຫັດສິນຄ້າ*"
                   :rules="[requiredRule, numericRule, barcodeRule]"
                   required
                 ></v-text-field>

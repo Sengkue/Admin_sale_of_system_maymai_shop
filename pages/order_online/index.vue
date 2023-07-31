@@ -1,21 +1,26 @@
 <template>
   <v-card class="elevation-1">
-    <v-row >
+    <v-row>
       <h3 class="mt-7 mb-5 ml-5">ສັ່ງຊື້ອອນໄລ >> ລາຍການສັ່ງຊື້ໃໝ່</h3>
     </v-row>
     <v-row class="my-5 mt-n11 d-flex justify-center">
-      <v-badge color="error" :content="getTypeAndStatus.length">
+      <v-badge
+        v-if="getTypeAndStatus.length > 0"
+        color="error"
+        :content="getTypeAndStatus.length"
+      >
         <h2>ລາຍການສັ່ງຊື້ສິນຄ້າໃໝ່</h2>
       </v-badge>
+      <h2 v-else>ລາຍການສັ່ງຊື້ສິນຄ້າໃໝ່</h2>
     </v-row>
     <v-divider></v-divider>
     <v-tabs-items v-model="tabs">
       <!-- ______________________________________1________________________________ -->
+      <!-- :items="getStory" -->
       <v-tab-item>
         <v-data-table
           :search="newsearch"
           :headers="newHeaders"
-          :items="getStory"
           :single-expand="true"
           :expanded.sync="newexpanded"
           item-key="idx"
@@ -44,12 +49,14 @@
               <v-spacer></v-spacer>
             </v-toolbar>
           </template>
-          <!-- <template #[`item.actions`]="{ item }">
-        <v-icon large color="#C51162" @click="editeItem(item)">
-          mdi-check-decagram
-        </v-icon>
-        <v-icon large color="primary" @click="viewItem(item)"> mdi-cart-check </v-icon>
-      </template> -->
+          <template #[`item.actions`]="{ item }">
+            <v-icon large color="#C51162" @click="editeItem(item)">
+              mdi-check-decagram
+            </v-icon>
+            <v-icon large color="primary" @click="viewItem(item)">
+              mdi-cart-check
+            </v-icon>
+          </template>
         </v-data-table>
       </v-tab-item>
       <!-- _______________________________________________________________-2-___________________________________ -->

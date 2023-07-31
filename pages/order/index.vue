@@ -113,7 +113,7 @@
                     </td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.category }}</td>
-                    <!-- <td>{{ item.color }}</td> -->
+                    <td>{{ item.quantity }}</td>
                     <!-- <td>{{ item.size_id }}</td> -->
                     <td>
                       <v-row>
@@ -198,47 +198,47 @@
                       <datalist id="colorOptions" class="custom-datalist">
                         <option
                           class="custom-datalist-option"
-                          value="ສີດຳ"
+                          value="ດຳ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີຂາວ"
+                          value="ຂາວ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີແດງ"
+                          value="ແດງ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີຂຽວ"
+                          value="ຂຽວ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີຟ້າ"
+                          value="ຟ້າ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີເຫຼືອງ"
+                          value="ເຫຼືອງ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີຟ້າຂຽວ"
+                          value="ຟ້າຂຽວ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີສົ້ມ"
+                          value="ສົ້ມ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີມ່ວງ"
+                          value="ມ່ວງ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີບົວ"
+                          value="ບົວ"
                         ></option>
                         <option
                           class="custom-datalist-option"
-                          value="ສີເທົາ"
+                          value="ເທົາ"
                         ></option>
                       </datalist>
                     </div>
@@ -367,7 +367,7 @@ export default {
         },
         { text: 'ສິນຄ້າ', value: 'name' },
         { text: 'ປະເພດ', value: 'category' },
-        // { text: 'ສີ', value: 'color' },
+        { text: 'ຈຳນວນ', value: 'quantity' },
         // { text: 'ຂະໜາດ/ເບີ້', value: 'size' },
         { text: 'ເລຶອກ', value: 'actions', sortable: false },
       ],
@@ -400,13 +400,21 @@ export default {
   },
   computed: {
     products() {
-      return this.$store.state.product.StateSelectAll.map((item, index) => {
-        return {
-          index: index + 1,
-          ...item,
-        }
-      })
-    },
+  // Get the products array from the store
+  const productsArray = this.$store.state.product.StateSelectAll;
+
+  // Sort the products array by quantity in ascending order (from less to more)
+  const sortedProducts = productsArray.slice().sort((a, b) => a.quantity - b.quantity);
+
+  // Add an 'index' property to each product
+  return sortedProducts.map((item, index) => {
+    return {
+      index: index + 1,
+      ...item,
+    };
+  });
+},
+
     getSupplier() {
       return this.$store.state.supplier.StateSelectAll
     },

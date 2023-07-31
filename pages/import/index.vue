@@ -57,7 +57,6 @@
             </v-autocomplete>
           </v-toolbar>
           <v-divider class=""></v-divider>
-          <v-divider class=""></v-divider>
         </div>
       </template>
 
@@ -109,7 +108,7 @@
               </v-edit-dialog>
             </td>
             <td>
-              <v-icon color="red" @click="deconsteItem(idx)">
+              <v-icon color="red" @click="deconsteItem(item.id)">
                 mdi-close
               </v-icon>
             </td>
@@ -196,6 +195,8 @@ export default {
         color: null,
         size: null,
         quantity: null,
+        cost_price: null,
+        sale_price: null,
       },
     }
   },
@@ -244,6 +245,7 @@ export default {
     },
     deconsteItem(id) {
       this.show.splice(this.show.map((i) => i.id).indexOf(id), 1)
+
     },
     async saveImport() {
       const index = this.show.findIndex(
@@ -311,6 +313,8 @@ export default {
         this.color_size.color = item.color
         this.color_size.product_id = item.product_id
         this.color_size.size = item.size
+        this.color_size.cost_price = item.cost_price
+        this.color_size.sale_price = item.sale_price
         return await this.$axios.post('/color_size', this.color_size)
       })
       this.$toast.success('ນຳເຂົ້າສິນຄ້າສຳເລັດ')

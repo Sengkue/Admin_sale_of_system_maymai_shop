@@ -151,7 +151,7 @@
                   clear-icon="mdi-close-circle-outline"
                   filled
                   dense
-                  label="BarCode*"
+                  label="ລະຫັດສິນຄ້າ*"
                   required
                 ></v-text-field>
               </v-col>

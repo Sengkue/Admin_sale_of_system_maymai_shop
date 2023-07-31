@@ -108,7 +108,7 @@ export default {
       headers: [
         { text: 'ລຳດັບ', value: 'index' },
         { text: 'ຮູບ', value: 'profile' },
-        { text: 'Barcode', value: 'Barcode' },
+        { text: 'ລະຫັດສິນຄ້າ', value: 'Barcode' },
         { text: 'ຊື່', value: 'name' },
         { text: 'ປະເພດ', value: 'category' },
         { text: 'ຈຳນວນ', value: 'quantity' },
@@ -160,7 +160,7 @@ export default {
           ຈຳນວນ: item.quantity,
           ລາຄາຂາຍ: item.sale_price,
           ລາຄາຊື້: item.cost_price,
-          Barcode: item.Barcode,
+          ລະຫັດສິນຄ້າ: item.Barcode,
           ຜູ້ສະໜອງ: item.supplier_name,
           ຄຳອະທີບາຍ: item.description,
           ວັນທີເປີດສິນຄ້າ: `${this.formatDateBill(item.createdAt)}`,

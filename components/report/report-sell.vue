@@ -105,14 +105,14 @@
         headers: [
           { text: 'ລຳດັບ', value: 'index' },
           { text: 'ຮູບ', value: 'profile' },
-          { text: 'Barcode', value: 'Barcode' },
+          { text: 'ລະຫັດສິນຄ້າ', value: 'Barcode' },
           { text: 'ຊື່', value: 'name' },
           { text: 'ປະເພດ', value: 'category' },
           { text: 'ຈຳນວນ', value: 'quantity' },
           { text: 'ລາຄາຊື້', value: 'cost_price' },
           { text: 'ລາຄາຂາຍ', value: 'sale_price' },
-          { text: 'Create', value: 'createdAt' },
-          { text: 'updatedAt', value: 'updatedAt' },
+          { text: 'ວັນທີສ້າງ', value: 'createdAt' },
+          { text: 'ອັບເດດເມື່ອ', value: 'updatedAt' },
         ],
       }
     },

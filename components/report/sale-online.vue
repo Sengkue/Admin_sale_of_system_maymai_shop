@@ -165,7 +165,7 @@ export default {
         { text: 'ຈຳນວນ', value: 'sale_quantity' },
         { text: 'ຈຳນວນເງິນ', value: 'sale_total' },
         { text: 'ວັນທີຊື້', value: 'sale_date' },
-        { text: 'review', value: 'actions' },
+        { text: 'ລາຍລະອຽດ', value: 'actions' },
       ],
       newdetailHeader: [
         { text: 'ລໍາດັບ', value: 'index' },

@@ -144,7 +144,7 @@
         headers: [
           { text: 'ລຳດັບ', value: 'index' },
           { text: 'ຮູບ', value: 'profile' },
-          { text: 'Barcode', value: 'Barcode' },
+          { text: 'ລະຫັດສິນຄ້າ', value: 'Barcode' },
           { text: 'ຊື່', value: 'name' },
           { text: 'ປະເພດ', value: 'category' },
           { text: 'ຈຳນວນ', value: 'quantity' },
@@ -152,9 +152,9 @@
           { text: 'ລາຄາຂາຍ', value: 'sale_price' },
           // { text: "ຜູ້ສະໜອງ", value: "supplier_name" },
           // { text: "ຄຳອະທິບາຍ", value: "description" },
-          { text: 'Create', value: 'createdAt' },
-          { text: 'updatedAt', value: 'updatedAt' },
-          { text: 'Actions', value: 'actions' },
+          { text: 'ວັນທີສ້າງ', value: 'createdAt' },
+          // { text: '', value: 'updatedAt' },
+          { text: 'ຈັດການ', value: 'actions' },
         ],
       }
     },
