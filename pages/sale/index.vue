@@ -124,6 +124,7 @@
                     </v-card>
                   </v-col>
                 </v-row>
+                {{ ListOrder }}
               </v-col>
             </v-row>
             <!-- card image 1 -->
@@ -150,7 +151,7 @@
                     <tr>
                       <th>ສິນຄ້າ</th>
                       <th>ລາຄາ</th>
-                      <th class="px-5">ຈຳນວນ</th>
+                      <th class="px-8">ຈຳນວນ</th>
                       <th>ລວມ</th>
                       <th class="px-n5">X</th>
                     </tr>
@@ -417,7 +418,34 @@
 
               <!-- Product Description -->
               <v-card-text>ປະເພດ: {{ displayDetail.category }}</v-card-text>
-              <v-card-text>
+              <v-card v-if="color_size_data.length === 0">
+                <h3 class="py-5 px-2">ສິນຄ້າໝົດສະຕ໋ອກ</h3>
+              </v-card>
+              <v-card v-else>
+                <v-card-text>
+                  <v-radio-group
+                    v-model="color_size_data.id"
+                    row
+                    mandatory
+                    class="mt-n2"
+                    hide-details
+                    @change="Selected"
+                  >
+                    <template v-for="item in color_size_data">
+                      <div :key="item.id">
+                        <v-radio
+                          :label="`ສີ - ${item.color} || ຂະໜາດ - (${item.size}) || ຈຳນວນ - (${item.quantity})`"
+                          :value="item.id"
+                          dense
+                          prepend-inner-icon="mdi-ballot-outline"
+                        ></v-radio>
+                      </div>
+                    </template>
+                  </v-radio-group>
+                </v-card-text>
+              </v-card>
+
+              <!-- <v-card-text>
                 <v-autocomplete
                   v-model="color_size_data.id"
                   auto-select-first
@@ -446,9 +474,9 @@
                     </div>
                   </template>
                 </v-autocomplete>
-              </v-card-text>
+              </v-card-text> -->
               <v-card-text
-                v-if="selected_color_size.id ? selected_color_size.id : false"
+                v-if="selected_color_size ? selected_color_size : false"
                 class="text-start"
               >
                 <div
@@ -479,7 +507,7 @@
                   "
                 >
                   <h3 class="mr-2">
-                    ຈຳນວນທີສາມາດສັ່ງຊື້:
+                    ຈຳນວນທີສາມາດຂາຍ:
                     <span>{{ selected_color_size.quantity }}</span>
                   </h3>
                 </div>
@@ -512,9 +540,7 @@
               @click="AddToOrder(selected_color_size.id)"
               ><v-icon>mdi-plus</v-icon> ສັ່ງເພີ່ມ</v-btn
             >
-            <v-btn
-              class="error"
-              @click=";(openDetail = false), (selected_color_size = {})"
+            <v-btn class="error" @click="closeDetail()"
               ><v-icon>mdi-close</v-icon> ປິດ</v-btn
             >
           </v-card-actions>
@@ -530,7 +556,8 @@ export default {
 
   data() {
     return {
-      category_id:null,
+      ListSale: [],
+      category_id: null,
       category_data: [],
       color_size_data: [],
       selected_color_size: {},
@@ -630,25 +657,26 @@ export default {
       })
     },
     filteredRow() {
-    const searchTerm = this.search.toLowerCase().trim();
-    const selectedCategoryId = this.category_id;
+      const searchTerm = this.search.toLowerCase().trim()
+      const selectedCategoryId = this.category_id
 
-    return this.$store.state.product.StateSelectAll.map((item, index) => {
-      return {
-        index: index + 1,
-        ...item,
-      };
-    }).filter((item) => {
-      // Apply the regular search filter
-      const nameMatch = item.name?.toLowerCase().includes(searchTerm);
-      const barcodeMatch = item.Barcode?.toLowerCase().includes(searchTerm);
-      const categoryMatch = item.category?.toLowerCase().includes(searchTerm);
-      // Apply the category filter
-      const categoryFilter = !selectedCategoryId || item.category_id === selectedCategoryId;
-      // Combine the regular search filter and category filter using '&&' (logical AND) operator
-      return (nameMatch || barcodeMatch || categoryMatch) && categoryFilter;
-    });
-  },
+      return this.$store.state.product.StateSelectAll.map((item, index) => {
+        return {
+          index: index + 1,
+          ...item,
+        }
+      }).filter((item) => {
+        // Apply the regular search filter
+        const nameMatch = item.name?.toLowerCase().includes(searchTerm)
+        const barcodeMatch = item.Barcode?.toLowerCase().includes(searchTerm)
+        const categoryMatch = item.category?.toLowerCase().includes(searchTerm)
+        // Apply the category filter
+        const categoryFilter =
+          !selectedCategoryId || item.category_id === selectedCategoryId
+        // Combine the regular search filter and category filter using '&&' (logical AND) operator
+        return (nameMatch || barcodeMatch || categoryMatch) && categoryFilter
+      })
+    },
   },
   mounted() {
     this.$store.dispatch('product/selectAll')
@@ -659,6 +687,10 @@ export default {
   },
 
   methods: {
+    closeDetail() {
+      this.openDetail = false
+      this.selected_color_size = {}
+    },
     clearbox() {
       const i = 52222
       console.log('hsoidfjasjdfalsd', i)
@@ -669,11 +701,37 @@ export default {
       )
     },
     showDetail(item) {
+      console.log('show', item)
       this.openDetail = true
       this.displayDetail = item
-      this.$axios.get(`/color_size/byProductId/${item.id}`).then((res) => {
-        this.color_size_data = res.data.result
-      })
+      this.$axios
+        .get(`/color_size/byProductId/${item.id}`)
+        .then((res) => {
+          this.color_size_data = res.data.result
+          const colorSizeOptions = res.data.result
+          for (const colorSizeOption of colorSizeOptions) {
+            // Check if an item with the same 'id' already exists in 'ListSale'
+            const existingItem = this.ListSale.find(
+              (saleItem) => saleItem.id === colorSizeOption.id
+            )
+            if (!existingItem) {
+              this.ListSale.push({
+                id: colorSizeOption.id,
+                product_id: colorSizeOption.product_id,
+                name: this.displayDetail.name,
+                category: this.displayDetail.category,
+                sale_price: colorSizeOption.sale_price,
+                color: colorSizeOption.color,
+                size: colorSizeOption.size,
+                quantity: colorSizeOption.quantity,
+              })
+            }
+          }
+        })
+        .catch((error) => {
+          this.color_size_data = []
+          console.error('Error fetching color_size_data:', error)
+        })
     },
     onPromotionSelect() {
       const item = this.getPromotion.find((i) => i.id === this.promotion_id)
@@ -689,7 +747,7 @@ export default {
       this.sale_data.employee_id = this.$cookies.get('id')
       this.sale_data.sale_date = formattedDate
       this.sale_data.sale_total = this.promotionSum
-        ? this.promotionSum
+        ? this.TotalAmount - this.promotionSum
         : this.TotalAmount
       this.sale_data.sale_quantity = this.TotalQuantity
       this.sale_data.sale_type = 'pos'
@@ -701,24 +759,56 @@ export default {
           this.sale_id = response.data.result.id
 
           // send data to sale_detail---------------------------
-          this.ListOrder.map((item) => {
+          this.ListOrder.map(async (item) => {
             this.sale_detail_data.sale_id = this.sale_id
             this.sale_detail_data.product_id = item.product_id
             this.sale_detail_data.color_size_id = item.id
             this.sale_detail_data.sale_price = item.sale_price
             this.sale_detail_data.quantity = item.order_amount
-            return this.$axios.post('/saleDetail', this.sale_detail_data)
+            return await this.$axios.post('/saleDetail', this.sale_detail_data)
           })
           // send subtract quantity----------------------------
-          this.ListOrder.map((item) => {
-            const id = item.product_id
-            const Qt = item.order_amount
-            return this.$axios.put(`/product/${id}/subtract-quantity`, {
-              quantity: Qt,
-            })
-          })
-          this.ListOrder.map((item) => {
-            return this.$axios.put(
+
+          try {
+            // Group items by product_id and calculate total order quantity for each product
+            const groupedItems = this.ListOrder.reduce((accumulator, item) => {
+              const productId = item.product_id
+              if (accumulator[productId]) {
+                accumulator[productId].order_amount += item.order_amount
+              } else {
+                accumulator[productId] = { ...item }
+              }
+              return accumulator
+            }, {})
+
+            // Send requests to update quantity for each product
+            const updatePromises = Object.values(groupedItems).map(
+              async (item) => {
+                try {
+                  const response = await this.$axios.put(
+                    `/product/${item.product_id}/subtract-quantity`,
+                    {
+                      quantity: item.order_amount,
+                    }
+                  )
+                  console.log(response.data) // Logging the response for each product (optional)
+                  return response.data
+                } catch (error) {
+                  console.error(error) // Handle errors (optional)
+                  throw error
+                }
+              }
+            )
+
+            // Wait for all requests to finish
+            const results = Promise.all(updatePromises)
+            console.log(results) // Logging the results of all requests (optional)
+          } catch (error) {
+            console.error('Error updating quantities:', error)
+          }
+
+          this.ListOrder.map(async (item) => {
+            return await this.$axios.put(
               `/color_size/subtractByColorSizeAndProductId/${item.id}/${item.product_id}`,
               { quantity: item.order_amount }
             )
@@ -747,7 +837,6 @@ export default {
       this.dialog = true
     },
     AddToOrder(id) {
-      console.log('show:', id)
       const item = this.color_size_data.find((i) => i.id === id)
       console.log('show:', item)
       const listOrder = this.ListOrder.find((i) => i.id === id)
@@ -815,7 +904,7 @@ export default {
       }
     },
     AddOne(id) {
-      const item = this.color_size_data.find((i) => i.id === id)
+      const item = this.ListSale.find((i) => i.id === id)
       const listOrder = this.ListOrder.find((i) => i.id === id)
 
       if (listOrder) {

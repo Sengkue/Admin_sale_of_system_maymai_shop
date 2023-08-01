@@ -79,9 +79,7 @@ export default {
   modules: ['@nuxtjs/axios', 'cookie-universal-nuxt','@nuxtjs/toast',],
   toast: {
     position: 'top-right',
-    duration: 3000,
-    className: ['my-toast'],
-    containerClass: ['my-toast-container'],
+    duration: 5000
   },
   
   

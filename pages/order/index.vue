@@ -129,6 +129,7 @@
                             :color="item.check ? 'white' : 'black'"
                             >{{ item.check ? 'mdi-check' : 'mdi-plus' }}</v-icon
                           >
+                          <!-- <h3 class="white--text">{{ item.click_order }}</h3> -->
                         </v-btn>
                       </v-row>
                     </td>
@@ -154,10 +155,10 @@
           <!-- _________________222_____________________ -->
 
           <v-card v-if="n == 2" class="elevation-0 ma-0">
+            <!-- hide-default-footer -->
             <v-data-table
               :headers="headers"
               :items="orderList"
-              hide-default-footer
               item-key="name"
               sort-by="calories"
               class="elevation-2"
@@ -308,7 +309,7 @@
                   </td>
                   <td>
                     <v-row>
-                      <v-icon color="red" large @click="deleteItem(item.id)"
+                      <v-icon color="red" large @click="deleteItem(item)"
                         >mdi-delete</v-icon
                       >
                     </v-row>
@@ -349,6 +350,8 @@
 export default {
   data() {
     return {
+      res_order_id:null,
+      click_order: null,
       loading: false,
       supplier_id: '',
       searchA: '',
@@ -400,20 +403,22 @@ export default {
   },
   computed: {
     products() {
-  // Get the products array from the store
-  const productsArray = this.$store.state.product.StateSelectAll;
+      // Get the products array from the store
+      const productsArray = this.$store.state.product.StateSelectAll
 
-  // Sort the products array by quantity in ascending order (from less to more)
-  const sortedProducts = productsArray.slice().sort((a, b) => a.quantity - b.quantity);
+      // Sort the products array by quantity in ascending order (from less to more)
+      const sortedProducts = productsArray
+        .slice()
+        .sort((a, b) => a.quantity - b.quantity)
 
-  // Add an 'index' property to each product
-  return sortedProducts.map((item, index) => {
-    return {
-      index: index + 1,
-      ...item,
-    };
-  });
-},
+      // Add an 'index' property to each product
+      return sortedProducts.map((item, index) => {
+        return {
+          index: index + 1,
+          ...item,
+        }
+      })
+    },
 
     getSupplier() {
       return this.$store.state.supplier.StateSelectAll
@@ -441,6 +446,7 @@ export default {
     AddItem(item) {
       item.icon = 'mdi-check'
       item.check = 'green'
+      // item.click_order = Number.isNaN(parseInt(item.click_order)) ? 1 : parseInt(item.click_order) + 1;
       if (this.orderList.length > 0) {
         for (const key in this.orderList) {
           const el = this.orderList[key]
@@ -456,14 +462,36 @@ export default {
           product_id: item.id,
           name: item.name,
           category: item.category,
-          // color: item.color,
-          // size_id: item.size_size,
+          color: null,
+          size: null,
           quantity: item.quantity ? item.quantity : 1,
           profile: item.profile,
           checkColor: item.check,
         }
         this.orderList.push(mater)
+        const occurrences = this.orderList.filter(
+          (i) => i.product_id === item.id
+        )
+        item.click_order = occurrences.length
       }
+      //  else {
+      //   const mater = {
+      //     index: item.index,
+      //     product_id: item.id,
+      //     name: item.name,
+      //     category: item.category,
+      //     // color: item.color,
+      //     // size_id: item.size_size,
+      //     quantity: item.quantity ? item.quantity : 1,
+      //     profile: item.profile,
+      //     checkColor: item.check,
+      //   }
+      //   this.orderList.push(mater)
+      //   const occurrences = this.orderList.filter(
+      //     (i) => i.product_id === item.id
+      //   )
+      //   item.click_order = occurrences.length
+      // }
     },
     Add(item) {
       if (typeof item.quantity === 'string' || item.quantity === '') {
@@ -503,8 +531,9 @@ export default {
         return true
       }
     },
-    deleteItem(id) {
-      this.orderList.splice(this.orderList.map((i) => i.id).indexOf(id), 1)
+    deleteItem(item) {
+      const id = item.index
+      this.orderList.splice(this.orderList.map((i) => i.index).indexOf(id), 1)
     },
 
     close() {
@@ -533,8 +562,31 @@ export default {
         element.check = '#0288D1'
       }
       this.e1 = 1
+      this.click_order = null
     },
     async saveOrder() {
+      const index = this.orderList.findIndex(
+        (item) => item.color === null || item.color === ''
+      )
+
+      if (index !== -1) {
+        return this.$toast.error(
+          `<h3>ສິນຄ້າລຳດັບ ${
+            index + 1
+          } ບໍ່ມີສີ. ກະລຸນາປ້ອມສີກ່ອນສັ່ງຊື້!!!.</h3>`
+        )
+      }
+      const size = this.orderList.findIndex(
+        (item) => item.size === null || item.size === ''
+      )
+
+      if (size !== -1) {
+        return this.$toast.error(
+          `<h3>ສິນຄ້າລຳດັບ ${
+            size + 1
+          } ບໍ່ມີຂະໜາດ. ກະລຸນາປ້ອມຂະໜາດກ່ອນສັ່ງຊື້!!!.</h3>`
+        )
+      }
       const currentDate = new Date()
       const formattedDate = currentDate.toISOString() // Convert date to ISO 8601 format
       this.loading = true
@@ -543,22 +595,25 @@ export default {
         order_date: formattedDate,
         status: 'pending',
       }
-      await this.$store.dispatch('order/Insert', data)
-      await this.orderList.map((item) => {
+      await this.$axios.post('order', data).then((res)=>{
+        this.res_order_id = res.data.result.id
+      })
+
+      this.orderList.map(async (item) => {
         const productId = item.product_id
         const orderQuantify = item.quantity
         const color = item.color
         const size = item.size
-        return this.$axios.post('/order_detail', {
+        return await this.$axios.post('/order_detail', {
           product_id: productId,
           order_quantity: orderQuantify,
-          order_id: this.$store.state.order.order_id,
+          order_id: this.res_order_id,
           color,
-          size
+          size,
         })
       })
       this.loading = false
-      this.$router.push('/order/bill/' + this.$store.state.order.order_id)
+      this.$router.push('/order/bill/' + this.res_order_id)
       this.clear()
     },
     cancelSelect() {

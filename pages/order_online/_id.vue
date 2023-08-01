@@ -52,7 +52,9 @@
             ເມືອງ: {{ getTypeAndStatus.location.district }}
           </div>
           <div class="my-2">ບ້ານ: {{ getTypeAndStatus.location.village }}</div>
-          <div class="my-2">ບໍລິສັດຂົນສົ່ງ {{ getTypeAndStatus.location.address }}</div>
+          <div class="my-2">
+            ບໍລິສັດຂົນສົ່ງ {{ getTypeAndStatus.location.address }}
+          </div>
           <div class="my-2">ສາຂາ: {{ getTypeAndStatus.location.express }}</div>
         </div>
         <div v-else>
@@ -63,7 +65,6 @@
         <v-divider></v-divider>
       </v-col>
       <v-col cols="12">
-
         <!-- _______________________________table show details_____________________________ -->
         <div v-if="getDetail">
           <v-data-table :headers="newdetailHeader" :items="getDetail">
@@ -126,7 +127,7 @@
                 </div>
               </div>
             </template>
-            <template #[`item.sale_price`]="{value}">
+            <template #[`item.sale_price`]="{ value }">
               {{ formatPrice(value) }} ກີບ
             </template>
             <template #[`item.total`]="{ item }">
@@ -227,13 +228,48 @@ export default {
         type: 'online',
         status: 'pending',
       })
-      this.getDetail.map((item) => {
-        return this.$axios.put(`/product/${item.product_id}/subtract-quantity`, {
-          quantity: item.quantity,
+
+      try {
+        // Group items by product_id and calculate total order quantity for each product
+        const groupedItems = this.ListOrder.reduce((accumulator, item) => {
+          const productId = item.product_id
+          if (accumulator[productId]) {
+            accumulator[productId].order_amount += item.order_amount
+          } else {
+            accumulator[productId] = { ...item }
+          }
+          return accumulator
+        }, {})
+
+        // Send requests to update quantity for each product
+        const updatePromises = Object.values(groupedItems).map(async (item) => {
+          try {
+            const response = await this.$axios.put(
+              `/product/${item.product_id}/subtract-quantity`,
+              {
+                quantity: item.order_amount,
+              }
+            )
+            console.log(response.data) // Logging the response for each product (optional)
+            return response.data
+          } catch (error) {
+            console.error(error) // Handle errors (optional)
+            throw error
+          }
         })
-      })
-      this.getDetail.map((item)=>{
-        return this.$axios.put(`/color_size/subtractByColorSizeAndProductId/${item.color_size_id}/${item.product_id}`,{quantity: item.quantity})
+
+        // Wait for all requests to finish
+        const results = await Promise.all(updatePromises)
+        console.log(results) // Logging the results of all requests (optional)
+      } catch (error) {
+        console.error('Error updating quantities:', error)
+      }
+
+      this.getDetail.map((item) => {
+        return this.$axios.put(
+          `/color_size/subtractByColorSizeAndProductId/${item.color_size_id}/${item.product_id}`,
+          { quantity: item.quantity }
+        )
       })
       this.loading = false
       this.confirmationDialog = false

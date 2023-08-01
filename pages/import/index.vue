@@ -1,6 +1,5 @@
 <template>
   <v-card class="elevation-0">
-    {{ show }}
     <!-- ____data-table___ -->
     <v-data-table
       :headers="headers"
@@ -254,9 +253,9 @@ export default {
 
       if (index !== -1) {
         return this.$toast.error(
-          `ສິນຄ້າລຳດັບ ${
+          `<h3>ສິນຄ້າລຳດັບ ${
             index + 1
-          } ບໍ່ມີຈຳນວນ. ກະລຸນາປ້ອມຈຳນວນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`
+          } ບໍ່ມີຈຳນວນ. ກະລຸນາປ້ອມຈຳນວນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.</h3>`
         )
       }
       const price = this.show.findIndex(
@@ -265,9 +264,9 @@ export default {
 
       if (price !== -1) {
         return this.$toast.error(
-          `ສິນຄ້າລຳດັບ ${
+          `<h3>ສິນຄ້າລຳດັບ ${
             price + 1
-          } ບໍ່ມີຈຳນວນເງິນ. ກະລຸນາປ້ອມຈຳນວນເງິນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.`
+          } ບໍ່ມີຈຳນວນເງິນ. ກະລຸນາປ້ອມຈຳນວນເງິນກ່ອນຢືນຢັນນຳເຂົ້າ!!!.</h3>`
         )
       }
 
@@ -286,29 +285,29 @@ export default {
       })
       this.$store.dispatch('order/selectOrderByStatus')
       // subtract add quantity to product
-      await this.show.map((item) => {
+      this.show.map(async(item) => {
         const qty = parseInt(item.order_quantity)
-        return this.$axios.put(
+        return await this.$axios.put(
           `/product/${item.product_id}/subtract-import-quantity`,
           { quantity: qty }
         )
       })
       // insert to import_detail
-      await this.show.map((item) => {
+      this.show.map(async(item) => {
         this.import_detail_data.import_id = res.data.result.id
         this.import_detail_data.product_id = item.product_id
         this.import_detail_data.Imp_price = item.cost_price
         this.import_detail_data.Imp_quantity = item.order_quantity
-        return this.$axios.post('/import_detail', this.import_detail_data)
+        return await this.$axios.post('/import_detail', this.import_detail_data)
       })
       // _________update sell_price and cost_price____________
-      await this.show.map(async (item) => {
+      this.show.map(async (item) => {
         return await this.$axios.put(`product/${item.product_id}`, {
           sale_price: item.sale_price,
           cost_price: item.cost_price,
         })
       })
-      await this.show.map(async (item) => {
+      this.show.map(async (item) => {
         this.color_size.quantity = item.order_quantity
         this.color_size.color = item.color
         this.color_size.product_id = item.product_id
