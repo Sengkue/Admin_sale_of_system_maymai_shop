@@ -49,12 +49,12 @@
                   <v-btn block text color="success" @click="exportToExcel"
                     ><v-icon left>mdi-microsoft-excel</v-icon> excel</v-btn
                   >
-                  <v-btn block text color="error"
+                  <!-- <v-btn block text color="error"
                     ><v-icon left>mdi-file-pdf-box</v-icon> pdf</v-btn
                   >
                   <v-btn block text color="primary"
                     ><v-icon>mdi-printer</v-icon> print</v-btn
-                  >
+                  > -->
                 </v-list>
               </v-menu>
             </v-toolbar>

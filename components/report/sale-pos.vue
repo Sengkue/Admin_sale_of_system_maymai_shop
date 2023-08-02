@@ -76,6 +76,11 @@
           </div>
         </v-card>
       </v-col>
+      <v-col cols="12" class="d-flex justify-end"
+        ><v-btn class="print-button primary" @click="generateAndPrintBill"
+          >ພິມລາຍງານ</v-btn
+        ></v-col
+      >
     </v-row>
 
     <!-- :items="filteredSalesData" -->
@@ -150,6 +155,9 @@
 </template>
 
 <script>
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from 'pdfmake/build/vfs_fonts'
+pdfMake.vfs = pdfFonts.pdfMake.vfs
 export default {
   data() {
     return {
@@ -277,6 +285,105 @@ export default {
           .catch((error) => {
             console.error('Error fetching data:', error)
           })
+      }
+    },
+    generateAndPrintBill(callback) {
+      const table = document.querySelector('.v-data-table__wrapper table')
+      const clonedTable = table.cloneNode(true)
+      const headers = clonedTable.querySelectorAll('thead th')
+      const actionsIndex = Array.from(headers).findIndex(
+        (header) => header.textContent.trim() === 'Actions'
+      )
+      if (actionsIndex !== -1) {
+        headers[actionsIndex].remove()
+        const rows = clonedTable.querySelectorAll('tbody tr')
+        rows.forEach((row) => row.children[actionsIndex].remove())
+      }
+
+      const printWindow = window.open('', '', 'height=500,width=800')
+      printWindow.document.write('<html><head><title>ລາຍງານການຂາຍໜ້າຮ້ານ</title>')
+      printWindow.document.write(`
+    <style>
+        *{
+          font-family: phetsarath ot;
+        }
+      table {
+        border-collapse: collapse;
+        margin: 0 auto;
+        width: 100%;
+      }
+      td, th {
+        border: 1px solid black;
+        padding: 0.5rem;
+      }
+      .logo {
+        width: 80px;
+        height: auto;
+        margin-right: 10px;
+      }
+      .shop-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .shop-details {
+        margin-top: 10px;
+      }
+      .bill-date {
+        margin-bottom: 10px;
+      }
+      .total-price {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+    </style>
+  `)
+      printWindow.document.write('</head><body >')
+
+      // Add bill date
+      printWindow.document.write(
+        `<h2 style='text-align:center'>ລາຍງານການຂາຍໜ້າຮ້ານ</h2>`
+      )
+      printWindow.document.write(
+        `<h3 class="bill-date">ພະນັກງານ: ${this.$cookies.get('name')}</h3>`
+      )
+      printWindow.document.write(
+        `<div style='display: flex; justify-content:space-between'">
+
+
+          <div>
+            <h3> ລາຍງານວັນທີຂາຍ: ${this.formatDate(this.startDate)}</h3>
+            <h3> ລາຍງານວັນທີຂາຍ: ${this.formatDate(this.endDate)}</h3>
+          </div>
+          <div style='border:1px solid black; padding:8px; margin:5px'>
+           <p class="bill-date">ລວມເງິນທັງໝົດ: ${this.formatPrice(
+             this.totalSaleTotal
+           )} ກີບ</p>
+           <p class="bill-date">ຈຳນວນທັງໝົດ: ${this.formatPrice(
+             this.totalSaleQuantity
+           )}</p>
+
+                </div>
+                  </div>
+                  
+        
+        `
+      )
+
+      // Add table
+      printWindow.document.write(clonedTable.outerHTML)
+
+      printWindow.document.write('</body></html>')
+      printWindow.document.close()
+      printWindow.print()
+
+      // Clear the value after printing is complete
+      setTimeout(() => {
+        this.value = ''
+      }, 1000) // Wait for 1 second before clearing the value
+
+      if (typeof callback === 'function') {
+        callback()
       }
     },
   },

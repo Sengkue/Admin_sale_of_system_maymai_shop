@@ -8,6 +8,7 @@
             <v-icon>mdi-arrow-left-circle</v-icon>
             ກັບຄືນ
           </v-btn>
+          {{ getDetail }}
         </div>
       </v-col>
       <v-col cols="4" class="pl-8">
@@ -231,10 +232,10 @@ export default {
 
       try {
         // Group items by product_id and calculate total order quantity for each product
-        const groupedItems = this.ListOrder.reduce((accumulator, item) => {
+        const groupedItems = this.getDetail.reduce((accumulator, item) => {
           const productId = item.product_id
           if (accumulator[productId]) {
-            accumulator[productId].order_amount += item.order_amount
+            accumulator[productId].quantity += item.quantity
           } else {
             accumulator[productId] = { ...item }
           }
@@ -247,7 +248,7 @@ export default {
             const response = await this.$axios.put(
               `/product/${item.product_id}/subtract-quantity`,
               {
-                quantity: item.order_amount,
+                quantity: item.quantity,
               }
             )
             console.log(response.data) // Logging the response for each product (optional)
