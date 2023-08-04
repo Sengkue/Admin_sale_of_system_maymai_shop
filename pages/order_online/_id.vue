@@ -8,7 +8,6 @@
             <v-icon>mdi-arrow-left-circle</v-icon>
             ກັບຄືນ
           </v-btn>
-          {{ getDetail }}
         </div>
       </v-col>
       <v-col cols="4" class="pl-8">

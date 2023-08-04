@@ -4,13 +4,13 @@
       <v-card>
         <v-card class="pa-3 mb-10 teal white--text rounded-0">
           <div class="d-flex justify-center">
-            <div class="text-h5">Update Users</div>
+            <div class="text-h5">ແກ້ໄຂຜູ້ໃຊ້ລະບົບ</div>
           </div>
         </v-card>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="6" class="my-0 py-0">
+              <!-- <v-col cols="6" class="my-0 py-0">
                 <v-select
                   v-model="owner_id"
                   :items="getOwner"
@@ -25,8 +25,8 @@
                   :disabled="employee_id !== ''"
                   required
                 ></v-select>
-              </v-col>
-              <v-col cols="6" class="my-0 py-0">
+              </v-col> -->
+              <v-col cols="12" class="my-0 py-0">
                 <v-select
                   v-model="employee_id"
                   :items="getEmployee"
@@ -89,7 +89,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="back()"> Close </v-btn>
+          <v-btn color="blue darken-1" text @click="back()"> ປິດ </v-btn>
           <v-btn
             :loading="loading"
             color="blue darken-1"
@@ -97,7 +97,7 @@
             text
             @click="update()"
           >
-            Save
+            ບັນທືກ
           </v-btn>
         </v-card-actions>
       </v-card>

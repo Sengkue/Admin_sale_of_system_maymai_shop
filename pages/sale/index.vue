@@ -45,7 +45,7 @@
                   <v-col cols="6">
                     <v-text-field
                       v-model="search"
-                      label="Search"
+                      label="ຄົ້ນຫາ"
                       outlined
                       hide-details
                       dense
@@ -124,7 +124,7 @@
                     </v-card>
                   </v-col>
                 </v-row>
-                {{ ListOrder }}
+                <!-- {{ ListOrder }} -->
               </v-col>
             </v-row>
             <!-- card image 1 -->
@@ -838,7 +838,7 @@ export default {
     },
     AddToOrder(id) {
       const item = this.color_size_data.find((i) => i.id === id)
-      console.log('show:', item)
+      // console.log('show:', item)
       const listOrder = this.ListOrder.find((i) => i.id === id)
 
       if (listOrder) {

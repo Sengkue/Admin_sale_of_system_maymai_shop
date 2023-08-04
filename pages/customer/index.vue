@@ -152,9 +152,9 @@ export default {
         { text: "ນາມສະກຸນ", value: "c_lname" },
         // { text: "email", value: "email" },
         { text: "ເບີ", value: "c_phone" },
-        { text: "Create", value: "createdAt" },
-        { text: "updatedAt", value: "updatedAt" },
-        { text: "Actions", value: "actions" },
+        { text: "ວັນທີສ້າງ", value: "createdAt" },
+        { text: "ວັນທີແກ້ໄຂ", value: "updatedAt" },
+        { text: "ຈັດການ", value: "actions" },
         
       ],
     };

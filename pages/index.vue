@@ -215,9 +215,16 @@
             </div>
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
-          <div class="d-flex">
-            <v-icon color="white">mdi-package-variant-plus</v-icon>
-            <div>ກວດສອບ</div>
+          <div class="d-flex justify-space-between align-center">
+            <div class="d-flex">
+              <v-icon color="white">mdi-package-variant-plus</v-icon>
+              <div>ກວດສອບ</div>
+            </div>
+            <div>
+              <v-btn small icon to="/order_online" >
+                <v-icon color="white">mdi-arrow-right-bold-outline</v-icon>
+              </v-btn>
+            </div>
           </div>
         </v-card>
       </v-col>
@@ -242,9 +249,16 @@
             </div>
           </div>
           <v-divider class="white mt-n2 mb-1"></v-divider>
-          <div class="d-flex">
-            <v-icon color="white" larg>mdi-check-decagram</v-icon>
-            <div>ກວດສິນຄ້າ</div>
+          <div class="d-flex justify-space-between align-center">
+            <div class="d-flex">
+              <v-icon color="white">mdi-package-variant-plus</v-icon>
+              <div>ກວດສອບ</div>
+            </div>
+            <div>
+              <v-btn small icon to="/report/product" >
+                <v-icon color="white">mdi-arrow-right-bold-outline</v-icon>
+              </v-btn>
+            </div>
           </div>
         </v-card>
       </v-col>
@@ -252,6 +266,7 @@
     <v-row>
       <v-col cols="12" sm="8" md="8" class="ma-0 pa-0">
         <v-card height="50">
+          <h2 class="ml-5">ສິນຄ້າຂາຍດີພາຍໃນເດືອນ</h2>
           <home-top-product-graph-year />
         </v-card>
       </v-col>

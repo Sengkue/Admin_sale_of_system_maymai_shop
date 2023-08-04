@@ -61,6 +61,12 @@
                     <v-img :src="`${item.profile}`" width="60"></v-img>
                   </div>
                 </template>
+                <template #[`item.sale_price`]="{value}">
+                  {{ formatPrice(value) }} ກີບ
+                </template>
+                <template #[`item.cost_price`]="{ value }">
+                  {{ formatPrice(value) }} ກີບ
+                </template>
                 <template #[`item.createdAt`]="{ value }">
                   {{ value | DateToText }}
                 </template>
@@ -152,9 +158,9 @@ export default {
         { text: 'ລາຄາຂາຍ', value: 'sale_price' },
         // { text: "ຜູ້ສະໜອງ", value: "supplier_name" },
         // { text: "ຄຳອະທິບາຍ", value: "description" },
-        { text: 'Create', value: 'createdAt' },
-        { text: 'updatedAt', value: 'updatedAt' },
-        { text: 'Actions', value: 'actions' },
+        { text: 'ວັນທີສ້າງ', value: 'createdAt' },
+        { text: 'ວັນທີແກ້ໄຂ', value: 'updatedAt' },
+        { text: 'ຈັດການ', value: 'actions' },
       ],
     }
   },

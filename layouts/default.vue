@@ -167,11 +167,11 @@ export default {
               title: 'ຈັດການຂໍ້ມູນລູກຄ້າ',
               to: '/customer',
             },
-            {
-              icon: 'mdi-store',
-              title: 'ຈັດການຂໍ້ມູນເຈົ້າຂອງຮ້ານ',
-              to: '/owner',
-            },
+            // {
+            //   icon: 'mdi-store',
+            //   title: 'ຈັດການຂໍ້ມູນເຈົ້າຂອງຮ້ານ',
+            //   to: '/owner',
+            // },
             {
               icon: 'mdi-account-group',
               title: 'ຈັດການຜູ້ນຳໃຊ້ລະບົບ',

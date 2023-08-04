@@ -9,7 +9,7 @@
         <v-card class="mx-2" height="180" elevation="2">
           <v-row no-gutters class="justify-center">
             <div>
-              <v-icon size="120" color="#4FC3F7">mdi-account</v-icon>
+              <v-icon size="120" color="#4FC3F7">mdi-account-group</v-icon>
               <div class="pa-2">
                 <h3>
                   ທັງໜົດ

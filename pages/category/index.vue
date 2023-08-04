@@ -148,8 +148,8 @@ export default {
           value: 'category',
         },
         {
-          text: 'Actions',
-          value: 'actions',
+          text: 'ຈັດການ',
+          value: 'actions', align: 'right',
         },
       ],
       title: '',

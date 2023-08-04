@@ -44,7 +44,6 @@
                 </div>
               </v-col>
             </v-row>
-            <div></div>
           </v-col>
           <v-col cols="12" sm="12">
             <v-card>
@@ -141,9 +140,9 @@ export default {
         { text: "ຊື່", value: "name" },
         { text: "ເງື່ອນໄຂ", value: "condition" },
         { text: "ສ່ວນຫຼຸດ", value: "discount" },
-        { text: "Create", value: "createdAt" },
-        { text: "updatedAt", value: "updatedAt" },
-        { text: "Actions", value: "actions" },
+        { text: "ວັນທີສ້າງ", value: "createdAt" },
+        { text: "ວັນທີແກ້ໄຂ", value: "updatedAt" },
+        { text: "ຈັດການ", value: "actions" },
       ],
     };
   },

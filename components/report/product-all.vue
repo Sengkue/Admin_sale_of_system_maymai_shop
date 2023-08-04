@@ -29,7 +29,7 @@
                 >
                 </v-text-field
               ></v-col>
-              <v-col cols="4">
+              <!-- <v-col cols="4">
                 <v-text-field
                   v-model="search"
                   outlined
@@ -38,8 +38,8 @@
                   class="box2 my-n4"
                   prepend-inner-icon="mdi-barcode-scan"
                 ></v-text-field
-              ></v-col>
-              <v-col cols="4" class="d-flex align-center justify-space-between">
+              ></v-col> -->
+              <v-col cols="8" class="d-flex align-center justify-space-between">
                 <h2>ສິນຄ້າທັງໝົດໃນສະຕ໊ອກມີ >>( {{ getRow.length }} )</h2>
                 <v-menu offset-y>
                   <template #activator="{ on, attrs }">
@@ -78,12 +78,18 @@
                     <v-img :src="`${item.profile}`" width="60"></v-img>
                   </div>
                 </template>
+                <template #[`item.cost_price`]="{ value }">
+                  {{ formatPrice(value)}} ກີບ
+                </template>
+                <template #[`item.sale_price`]="{ value }">
+                  {{ formatPrice(value) }} ກີບ
+                </template>
                 <template #[`item.createdAt`]="{ value }">
                   {{ value | DateToText }}
                 </template>
-                <template #[`item.updatedAt`]="{ value }">
+                <!-- <template #[`item.updatedAt`]="{ value }">
                   {{ value | DateToText }}
-                </template>
+                </template> -->
               </v-data-table>
             </v-card>
           </v-col>

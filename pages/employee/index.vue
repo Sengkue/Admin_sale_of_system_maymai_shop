@@ -99,7 +99,7 @@ export default {
         },
 
         {
-          text: 'Actions',
+          text: 'ຈັດການ',
           value: 'actions',
         },
       ],

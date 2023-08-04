@@ -4,7 +4,7 @@
       <v-card>
         <v-card class="pa-3 mb-10 teal white--text rounded-0">
           <div class="d-flex justify-center">
-            <div class="text-h5">Create promotions</div>
+            <h2>ແກ້ໄຂໂປຼໂມຊັນ</h2>
           </div>
         </v-card>
         <v-card-text>
@@ -15,7 +15,7 @@
                   v-model="name"
                   filled
                   dense
-                  label="name"
+                  label="ຊື່"
                   prepend-inner-icon="mdi-cog-counterclockwise"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -28,7 +28,7 @@
                   v-model="condition"
                   filled
                   dense
-                  label="condition"
+                  label="ເງື່ອນໄຂ"
                   prepend-inner-icon="mdi-sign-yield"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -41,7 +41,7 @@
                   v-model="discount"
                   filled
                   dense
-                  label="discount"
+                  label="ສ່ວນຫຼຸດ"
                   prepend-inner-icon="mdi-brightness-percent"
                   clearable
                   clear-icon="mdi-close-circle-outline"
@@ -54,7 +54,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="back()"> Close </v-btn>
+          <v-btn color="blue darken-1" text @click="back()"> ປິດ </v-btn>
           <v-btn
             :loading="loading"
             color="blue darken-1"
@@ -62,7 +62,7 @@
             text
             @click="updateItem()"
           >
-            Save
+            ບັນທືກ
           </v-btn>
         </v-card-actions>
       </v-card>
