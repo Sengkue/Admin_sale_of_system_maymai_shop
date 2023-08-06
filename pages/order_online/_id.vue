@@ -14,10 +14,42 @@
         <h3>ລາຍລະອຽດຜູ້ສຳຊື້</h3>
         <div v-if="getTypeAndStatus.customer">
           <div class="my-2">
-            ຊື່ ແລະ ນານສະກຸນ: {{ getTypeAndStatus.customer.c_fname }}
+            ຜູ້ສັ່ງຊື້ສິນຄ້າ: {{ getTypeAndStatus.customer.c_fname }}
           </div>
-          <div class="my-2">
-            ເບີ້ໂທຜູ້ສັ່ງຊື້: {{ getTypeAndStatus.customer.c_phone }}
+          <div class="d-flex align-center">
+            ເບີຜູ້ສັ່ງຊື້:
+            <div v-if="getTypeAndStatus.customer">
+              <v-tooltip top>
+                <template #activator="{ on }">
+                  <v-btn text>
+                    <a
+                      v-if="getTypeAndStatus.customer.c_phone"
+                      :class="custom_link"
+                      class="d-flex align-center"
+                      style="text-decoration: none; color: green"
+                      :href="
+                        'https://wa.me/' +
+                        '+856' +
+                        getTypeAndStatus.customer.c_phone
+                          .toString() // Convert phone to string
+                          .replace(/\s+/g, '')
+                          .substr(0) +
+                        '?text=ສະບາຍດີເຈົ້າ ພວກເຮົາຕິດຕໍ່ຈາກ ຮ້ານຂາຍເຄື່ອງແມ່ໄໝ...ເດີ້. ເຫັນທ່ານສັ່ງຊື້ເຄື່ອງໃນເວັບຂາຍອອນຂອງພວກເຮົາ...ສະນັ້ນ, ' +
+                        'ພວກເຮົາພວກເຮົາກຳລັງຈັດສົ່ງໃຫ້ທ່ານ, ລໍຖ້າຮັບເຄື່ອງຢູຸສາຂາໄປທາງເລີຍເຈົ້າ. '
+                      "
+                      target="_blank"
+                      v-on="on"
+                    >
+                    <v-icon class="my-icon" small color="green"
+                    >mdi-whatsapp</v-icon
+                    >
+                    {{ getTypeAndStatus.customer.c_phone }}
+                    </a>
+                  </v-btn>
+                </template>
+                <span>ແຈ້ງໃຫ້ລຸກຄ້າຮູ້ວ່າສິນຄ້າກຳລັງອານຸມັດຈັດສົ່ງ</span>
+              </v-tooltip>
+            </div>
           </div>
           <div class="my-2">
             ວັນທີ່ສັ່ງຊື້: {{ formatDateLo(getTypeAndStatus.sale_date) }}
@@ -33,20 +65,58 @@
           v-if="getTypeAndStatus.payment"
           :src="getTypeAndStatus.payment"
           width="100px"
-          class="cursor-pointe"
+          class="cursor_pointe"
           @click="openImageDialog = true"
         ></v-img>
         <v-img
           v-else
           src="/images/logo.png"
           width="100px"
-          class="cursor-pointe"
+          class="cursor_pointe"
           @click="openImageDialog = true"
         ></v-img>
       </v-col>
       <v-col cols="4">
         <div v-if="getTypeAndStatus.location">
           <h3>ທີຢູ່:</h3>
+          <div class="my-2">
+            ຜູ້ຮັບ: {{ getTypeAndStatus.location.recipient }}
+          </div>
+          <div class="d-flex align-center" >
+            ເບີ:
+            <div v-if="getTypeAndStatus.location">
+              <v-tooltip top>
+                <template #activator="{ on }">
+                  <v-btn text>
+                    <a
+                      v-if="getTypeAndStatus.location.phone"
+                      :class="custom_link"
+                      class="d-flex align-center"
+                      style="text-decoration: none; color: green"
+                      :href="
+                        'https://wa.me/' +
+                        '+856' +
+                        getTypeAndStatus.location.phone
+                          .toString() // Convert phone to string
+                          .replace(/\s+/g, '')
+                          .substr(0) +
+                        '?text=ສະບາຍດີເຈົ້າ ພວກເຮົາຕິດຕໍ່ຈາກ ຮ້ານຂາຍເຄື່ອງແມ່ໄໝ...ເດີ້. ເຫັນທ່ານສັ່ງຊື້ເຄື່ອງໃນເວັບຂາຍອອນຂອງພວກເຮົາ...ສະນັ້ນ, ' +
+                        'ພວກເຮົາພວກເຮົາກຳລັງຈັດສົ່ງໃຫ້ທ່ານ, ລໍຖ້າຮັບເຄື່ອງຢູຸສາຂາໄປທາງເລີຍເຈົ້າ. '
+                      "
+                      target="_blank"
+                      v-on="on"
+                    >
+                    <v-icon class="my-icon" small color="green"
+                    >mdi-whatsapp</v-icon
+                    >
+                    {{ getTypeAndStatus.location.phone }}
+                    </a>
+                  </v-btn>
+                </template>
+                <span>ແຈ້ງໃຫ້ລຸກຄ້າຮູ້ວ່າສິນຄ້າກຳລັງອານຸມັດຈັດສົ່ງ</span>
+              </v-tooltip>
+            </div>
+          </div>
           <div class="my-2">ແຂວງ: {{ getTypeAndStatus.location.province }}</div>
           <div class="my-2">
             ເມືອງ: {{ getTypeAndStatus.location.district }}
@@ -80,18 +150,19 @@
                   <h3 class="mb-0">ລາຍລະອຽດການສັ່ງຊື້</h3>
                 </div>
                 <div class="d-flex align-center justify-space-between">
-                  <div v-if="getTypeAndStatus.customer">
-                    <v-tooltip top>
+                  <div v-if="getTypeAndStatus.location">
+                    <v-tooltip top color="success">
                       <template #activator="{ on }">
-                        <v-btn color="green">
+                        <v-btn color="success">
                           <a
-                            v-if="getTypeAndStatus.customer.c_phone"
-                            :class="custom - link"
-                            style="text-decoration: none; color: white"
+                            v-if="getTypeAndStatus.location.phone"
+                            :class="custom_link"
+                            style="text-decoration: none; color:white"
                             :href="
                               'https://wa.me/' +
                               '+856' +
-                              getTypeAndStatus.customer.c_phone
+                              getTypeAndStatus.location.phone
+                                .toString() // Convert phone to string
                                 .replace(/\s+/g, '')
                                 .substr(0) +
                               '?text=ສະບາຍດີເຈົ້າ ພວກເຮົາຕິດຕໍ່ຈາກ ຮ້ານຂາຍເຄື່ອງແມ່ໄໝ...ເດີ້. ເຫັນທ່ານສັ່ງຊື້ເຄື່ອງໃນເວັບຂາຍອອນຂອງພວກເຮົາ...ສະນັ້ນ, ' +
@@ -100,19 +171,18 @@
                             target="_blank"
                             v-on="on"
                           >
-                            {{ getTypeAndStatus.customer.c_phone }}
-                            <v-icon class="my-icon" size="25" color="white"
+                            {{ getTypeAndStatus.location.phone }}
+                            <v-icon class="my-icon" color="white" size="26"
                               >mdi-whatsapp</v-icon
                             >
                           </a>
                         </v-btn>
                       </template>
                       <span>ແຈ້ງໃຫ້ລຸກຄ້າຮູ້ວ່າສິນຄ້າກຳລັງອານຸມັດຈັດສົ່ງ</span>
-                      <!-- Replace "Tooltip text" with your desired tooltip content -->
                     </v-tooltip>
                   </div>
-                  <v-tooltip top>
-                    <template #activator="{ on }">
+                  <!-- <v-tooltip top color="primary">
+                    <template #activator="{ on }"> -->
                       <v-btn
                         :loading="loading"
                         class="primary white--text"
@@ -121,9 +191,9 @@
                       >
                         ຢືນຢັນການສັ່ງຊື່
                       </v-btn>
-                    </template>
+                    <!-- </template>
                     <span>ຢືນຢັນການສັ່ງຊື່</span>
-                  </v-tooltip>
+                  </v-tooltip> -->
                 </div>
               </div>
             </template>
@@ -282,16 +352,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cursor-pointe {
+.cursor_pointe {
   cursor: pointer;
 }
 
-.custom-link {
-  color: blue;
+.custom_link {
+  color:green;
   text-decoration: none;
 }
 
-.custom-link:hover {
+.custom_link:hover {
   color: red;
   text-decoration: underline;
 }

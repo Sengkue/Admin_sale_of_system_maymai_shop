@@ -592,7 +592,10 @@ export default {
         sale_price: null,
         quantity: null,
         color_size_id: null,
+        color: null,
+        size: null,
       },
+      discounted_price: null,
     }
   },
   computed: {
@@ -760,10 +763,14 @@ export default {
 
           // send data to sale_detail---------------------------
           this.ListOrder.map(async (item) => {
+            this.discounted_price = item.sale_price * (this.promotion / 100)
+            this.sale_detail_data.sale_price =
+              item.sale_price - this.discounted_price
             this.sale_detail_data.sale_id = this.sale_id
             this.sale_detail_data.product_id = item.product_id
             this.sale_detail_data.color_size_id = item.id
-            this.sale_detail_data.sale_price = item.sale_price
+            this.sale_detail_data.color = item.color
+            this.sale_detail_data.size = item.size
             this.sale_detail_data.quantity = item.order_amount
             return await this.$axios.post('/saleDetail', this.sale_detail_data)
           })

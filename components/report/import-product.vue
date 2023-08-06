@@ -91,10 +91,10 @@
       class="elevation-3"
       item-key="id"
     >
-      <template #[`item.sale_date`]="{ value }">
+      <template #[`item.receive_date`]="{ value }">
         <div>{{ formatDateBill(value) }}</div>
       </template>
-      <template #[`item.sale_total`]="{ value }">
+      <template #[`item.price`]="{ value }">
         {{ formatPrice(value) }} ກີບ
       </template>
       <template #[`item.actions`]="{ item }">
@@ -111,7 +111,7 @@
       <!-- _______________________________table show details_____________________________ -->
       <div v-if="getDetail">
         <v-data-table :headers="newdetailHeader" :items="getDetail">
-          <template #[`item.profile`]="{ value }">
+          <template #[`item.productProfile`]="{ value }">
             <v-icon v-if="!value" color="primary" large
               >mdi-file-image-remove</v-icon
             >
@@ -142,11 +142,11 @@
               </div>
             </div>
           </template>
-          <template #[`item.total`]="{ item }">
+          <!-- <template #[`item.total`]="{ item }">
             {{ formatPrice(item.sale_price * item.quantity) }} ກີບ
-          </template>
-          <template #[`item.sale_price`]="{ item }">
-            {{ formatPrice(item.sale_price) }} ກີບ
+          </template> -->
+          <template #[`item.Imp_price`]="{ item }">
+            {{ formatPrice(item.Imp_price) }} ກີບ
           </template>
         </v-data-table>
       </div>
@@ -168,10 +168,10 @@ export default {
       newSearch: null,
       newHeaders: [
         { text: 'ລະຫັດໃບບິນ', value: 'id' },
-        { text: 'ຊື່ພະນັກງານຂາຍ', value: 'employeeName' },
-        { text: 'ຈຳນວນ', value: 'sale_quantity' },
-        { text: 'ຈຳນວນເງິນ', value: 'sale_total' },
-        { text: 'ວັນທີຊື້', value: 'sale_date' },
+        { text: 'ຊື່ພະນັກງານຂາຍ', value: 'employeefirstName' },
+        { text: 'ຈຳນວນ', value: 'quantity' },
+        { text: 'ຈຳນວນເງິນ', value: 'price' },
+        { text: 'ວັນທີຊື້', value: 'receive_date' },
         { text: 'ລາຍລະອຽດ', value: 'actions' },
       ],
       newdetailHeader: [
@@ -180,15 +180,16 @@ export default {
           text: 'ຮູບ',
           align: 'center',
           sortable: false,
-          value: 'profile',
+          value: 'productProfile',
         },
         { text: 'ຊື່ສິນຄ້າ', value: 'productName' },
-        { text: 'ປະເພດ', value: 'productName' },
-        { text: 'ສີ', value: 'color' },
-        { text: 'ຂະໜາດ', value: 'size' },
-        { text: 'ຈໍານວນ', value: 'quantity' },
-        { text: 'ລາຄາ', value: 'sale_price' },
-        { text: 'ລາຄາລວມ', value: 'total' },
+        { text: 'ປະເພດ', value: 'category' },
+        // { text: 'ສີ', value: 'color' },
+        // { text: 'ຂະໜາດ', value: 'size' },
+        { text: 'ຜູ້ສະໜອງ', value: 'supplierName' },
+        { text: 'ຈໍານວນ', value: 'Imp_quantity' },
+        { text: 'ລາຄາ', value: 'Imp_price' },
+        // { text: 'ລາຄາລວມ', value: 'total' },
       ],
       loading: false,
       getDetail: [],
@@ -212,12 +213,12 @@ export default {
     },
     totalSaleTotal() {
       return this.salesData.reduce((total, item) => {
-        return total + item.sale_total
+        return total + item.price
       }, 0)
     },
     totalSaleQuantity() {
       return this.salesData.reduce((total, item) => {
-        return total + item.sale_quantity
+        return total + item.quantity
       }, 0)
     },
   },
@@ -247,7 +248,7 @@ export default {
     review(id) {
       this.dialog = true
       this.$axios
-        .get(`/saleDetail/sale/${id}`)
+        .get(`/import_detail/import/${id}`)
         .then((data) => {
           this.getDetail = data.data.result.map((item, index) => {
             return { index: index + 1, ...item }
@@ -261,7 +262,7 @@ export default {
     fetchSalesData() {
       // Fetch the data from the API
       fetch(
-        `http://localhost:8080/sale/sales/status-type-date?sale_status=completed&sale_type=pos&startDate=${this.startDate}&endDate=${this.endDate}`
+        `http://localhost:8080/import/all-by-date?startDate=${this.startDate}&endDate=${this.endDate}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -276,7 +277,7 @@ export default {
     fetchFilteredSalesData() {
       if (this.startDate && this.endDate) {
         fetch(
-          `http://localhost:8080/sale/sales/status-type-date?sale_status=completed&sale_type=pos&startDate=${this.startDate}&endDate=${this.endDate}`
+          `http://localhost:8080/import/all-by-date?startDate=${this.startDate}&endDate=${this.endDate}`
         )
           .then((response) => response.json())
           .then((data) => {
@@ -287,6 +288,7 @@ export default {
           })
       }
     },
+
     generateAndPrintBill(callback) {
       const table = document.querySelector('.v-data-table__wrapper table')
       const clonedTable = table.cloneNode(true)
@@ -301,73 +303,75 @@ export default {
       }
 
       const printWindow = window.open('', '', 'height=500,width=800')
-      printWindow.document.write('<html><head><title>ລາຍງານການຂາຍໜ້າຮ້ານ</title>')
+      printWindow.document.write(
+        '<html><head><title>ລາຍງານການສັ່ງຊື່</title>'
+      )
       printWindow.document.write(`
-    <style>
-        *{
-          font-family: phetsarath ot;
+      <style>
+          *{
+            font-family: phetsarath ot;
+          }
+        table {
+          border-collapse: collapse;
+          margin: 0 auto;
+          width: 100%;
         }
-      table {
-        border-collapse: collapse;
-        margin: 0 auto;
-        width: 100%;
-      }
-      td, th {
-        border: 1px solid black;
-        padding: 0.5rem;
-      }
-      .logo {
-        width: 80px;
-        height: auto;
-        margin-right: 10px;
-      }
-      .shop-info {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .shop-details {
-        margin-top: 10px;
-      }
-      .bill-date {
-        margin-bottom: 10px;
-      }
-      .total-price {
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-    </style>
-  `)
+        td, th {
+          border: 1px solid black;
+          padding: 0.5rem;
+        }
+        .logo {
+          width: 80px;
+          height: auto;
+          margin-right: 10px;
+        }
+        .shop-info {
+          display: flex;
+          align-items: center;
+          margin-bottom: 20px;
+        }
+        .shop-details {
+          margin-top: 10px;
+        }
+        .bill-date {
+          margin-bottom: 10px;
+        }
+        .total-price {
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+      </style>
+    `)
       printWindow.document.write('</head><body >')
 
       // Add bill date
       printWindow.document.write(
-        `<h2 style='text-align:center'>ລາຍງານການຂາຍໜ້າຮ້ານ</h2>`
+        `<h2 style='text-align:center'>ລາຍງານການສັ່ງຊື້</h2>`
       )
       printWindow.document.write(
         `<h3 class="bill-date">ພະນັກງານ: ${this.$cookies.get('name')}</h3>`
       )
       printWindow.document.write(
         `<div style='display: flex; justify-content:space-between'">
-
-
-          <div>
-            <h3> ລາຍງານວັນທີຂາຍ: ${this.formatDate(this.startDate)}</h3>
-            <h3> ລາຍງານວັນທີຂາຍ: ${this.formatDate(this.endDate)}</h3>
-          </div>
-          <div style='border:1px solid black; padding:8px; margin:5px'>
-           <p class="bill-date">ລວມເງິນທັງໝົດ: ${this.formatPrice(
-             this.totalSaleTotal
-           )} ກີບ</p>
-           <p class="bill-date">ຈຳນວນທັງໝົດ: ${this.formatPrice(
-             this.totalSaleQuantity
-           )}</p>
-
-                </div>
+  
+  
+            <div>
+              <h3> ວັນທີສັ່ງຊື້: ${this.formatDate(this.startDate)}</h3>
+              <h3> ຫາວັນທີສັ່ງຊື້: ${this.formatDate(this.endDate)}</h3>
+            </div>
+            <div style='border:1px solid black; padding:8px; margin:5px'>
+             <p class="bill-date">ລວມເງິນທັງໝົດ: ${this.formatPrice(
+               this.totalSaleTotal
+             )} ກີບ</p>
+             <p class="bill-date">ຈຳນວນທັງໝົດ: ${this.formatPrice(
+               this.totalSaleQuantity
+             )}</p>
+  
                   </div>
-                  
-        
-        `
+                    </div>
+                    
+          
+          `
       )
 
       // Add table

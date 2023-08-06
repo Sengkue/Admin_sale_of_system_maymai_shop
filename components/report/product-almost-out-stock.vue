@@ -81,16 +81,57 @@
                   </div>
                 </template>
                 <template #[`item.cost_price`]="{ value }">
-                  {{ formatPrice(value)}} ກີບ
+                  {{ formatPrice(value) }} ກີບ
                 </template>
                 <template #[`item.sale_price`]="{ value }">
                   {{ formatPrice(value) }} ກີບ
+                </template>
+                <template #[`item.actions`]="{ item }">
+                  <v-icon @click="viewDetail(item)">mdi-eye</v-icon>
                 </template>
               </v-data-table>
             </v-card>
           </v-col>
         </v-row>
       </v-card>
+      <v-dialog v-model="openDetail" persistent max-width="800">
+        <v-card class="pa-5 ma-0 pb-16">
+          <v-row class="mb-8">
+            <v-col
+              cols="12"
+              sm="12"
+              class="d-flex align-center justify-space-between"
+            >
+              <h2>ລາຍລະອຽດສະຕ໊ອກມີ</h2>
+              <v-btn small color="error" @click="openDetail = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col v-if="color_size_data.length === 0" cols="12" sm="12">
+              <div class="py-10">
+                <h2>
+                  <v-alert v-model="showAlert" type="error">
+                   ໝົດສະຕ໊ອກ!
+                  </v-alert>
+                </h2>
+              </div>
+            </v-col>
+            <v-col v-else>
+              <div v-for="item in color_size_data" :key="item.id">
+                <div class="d-flex">
+                  <div>
+                    {{
+                      `ລຳດັບ - (${item.index}) || ສີ - (${item.color}) || ຂະໜາດ - (${item.size}) || ຈຳນວນ - (${item.quantity})`
+                    }}
+                  </div>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -100,6 +141,8 @@ import * as XLSX from 'xlsx'
 export default {
   data() {
     return {
+      openDetail: false,
+      color_size_data: [],
       isLoading: false,
       loading: false,
       viewLoading: false,
@@ -112,9 +155,9 @@ export default {
         { text: 'ຊື່', value: 'name' },
         { text: 'ປະເພດ', value: 'category' },
         { text: 'ຈຳນວນ', value: 'quantity' },
-        { text: 'ລາຄາຊື້', value: 'cost_price' },
+        { text: 'ລາຄາສັ່ງຊື້', value: 'cost_price' },
         { text: 'ລາຄາຂາຍ', value: 'sale_price' },
-        // { text: 'Create', value: 'createdAt' },
+        { text: 'ເບິ່ງ', value: 'actions' },
         // { text: 'updatedAt', value: 'updatedAt' },
       ],
       getRow: [],
@@ -147,16 +190,33 @@ export default {
     }
   },
   methods: {
+    viewDetail(item) {
+      this.openDetail = true
+      this.$axios
+        .get(`/color_size/byProductId/${item.id}`)
+        .then((res) => {
+          this.color_size_data = res.data.result.map((item, index) =>{
+            return {
+              index: index + 1,
+            ...item,
+            }
+          })
+        })
+        .catch((error) => {
+          this.color_size_data = []
+          console.error('Error fetching color_size_data:', error)
+        })
+    },
     exportToExcel() {
-      const data =  this.getRow
+      const data = this.getRow
 
       const modifiedData = data.map((item, index) => {
         return {
           index: index + 1,
           ຊື່: item.name,
           ປະເພດ: item.category,
-          ເບີ: item.size_id,
-          ສີ: item.color,
+          // ເບີ: item.size_id,
+          // ສີ: item.color,
           ຈຳນວນ: item.quantity,
           ລາຄາຂາຍ: item.sale_price,
           ລາຄາຊື້: item.cost_price,

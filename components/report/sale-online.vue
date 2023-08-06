@@ -186,7 +186,7 @@ export default {
         { text: 'ຊື່ສິນຄ້າ', value: 'productName' },
         { text: 'ປະເພດ', value: 'productName' },
         { text: 'ສີ', value: 'color' },
-        { text: 'ຂະໜາດ', value: 'size_id' },
+        { text: 'ຂະໜາດ', value: 'size' },
         { text: 'ຈໍານວນ', value: 'quantity' },
         { text: 'ລາຄາ(ກິບ)', value: 'sale_price' },
         { text: 'ລາຄາລວມ(ກິບ)', value: 'total' },

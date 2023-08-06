@@ -1,45 +1,46 @@
 <template>
+  <div class="pa-5">
     <div>
-      <div>
-        <v-btn tile fixed right color="error" class="mb-10" to="/import/history"
-          ><v-icon>mdi-close</v-icon> ປິດ</v-btn
-        >
-      </div>
-      <div class="shop-info">
-        <img src="/images/logo.png" alt="Shop Logo" class="logo" />
-  
-        <div class="shop-details">
-          <h2>Maymai Shop</h2>
-          <p>123 Main Street, City</p>
-          <p>Phone: (020) 7878-1525</p>
-        </div>
-      </div>
-      <p class="bill-date">ໃບບິນນຳເຂົ້າ:{{ getSale.id }}</p>
-      <p class="bill-date">ວັນທີນຳເຂົ້າ:{{ formatDateLo(getSale.receive_date) }}</p>
-      <p class="bill-date">ພະນັກງານນຳເຂົ້າ:{{ getSale.employeefirstName }}</p>
-      <v-data-table :items="getDetail" :headers="headers" class="product-table">
-        <template #[`item.productProfile`]="{ item }">
-          <v-img :src="item.productProfile" width="60px"></v-img>
-        </template>
-        <template #[`item.Imp_price`]="{ item } ">
-         {{  formatPrice(item.Imp_price) }} ກີບ
-        </template>
-        
-      </v-data-table>
-      <!-- <p class="total-price">ລວມເງິນທັງໝົດ: {{ formatPrice(500000) }}ກິບ</p> -->
-      <v-btn class="print-button primary" @click="generateAndPrintBill"
-        >ພິມໃບບິນ</v-btn
+      <v-btn tile fixed right color="error" class="mb-10" to="/import/history"
+        ><v-icon>mdi-close</v-icon> ປິດ</v-btn
       >
     </div>
-  </template>
-  
-  <script>
+    <div class="shop-info">
+      <img src="/images/logo.png" alt="Shop Logo" class="logo" />
+
+      <div class="shop-details">
+        <h2>Maymai Shop</h2>
+        <p>123 Main Street, City</p>
+        <p>Phone: (020) 7878-1525</p>
+      </div>
+    </div>
+    <p class="bill-date">ໃບບິນນຳເຂົ້າ:{{ getSale.id }}</p>
+    <p class="bill-date">
+      ວັນທີນຳເຂົ້າ:{{ formatDateLo(getSale.receive_date) }}
+    </p>
+    <p class="bill-date">ພະນັກງານນຳເຂົ້າ:{{ getSale.employeefirstName }}</p>
+    <v-data-table :items="getDetail" :headers="headers" class="product-table">
+      <template #[`item.productProfile`]="{ item }">
+        <v-img :src="item.productProfile" width="60px"></v-img>
+      </template>
+      <template #[`item.Imp_price`]="{ item }">
+        {{ formatPrice(item.Imp_price) }} ກີບ
+      </template>
+    </v-data-table>
+    <p class="total-price">ລວມເງິນທັງໝົດ: {{ formatPrice(totalPrice) }}ກິບ</p>
+    <v-btn class="print-button primary" @click="generateAndPrintBill"
+      >ພິມໃບບິນ</v-btn
+    >
+  </div>
+</template>
+
+<script>
   import pdfMake from 'pdfmake/build/pdfmake'
   import pdfFonts from 'pdfmake/build/vfs_fonts'
   pdfMake.vfs = pdfFonts.pdfMake.vfs
   export default {
     name: 'AdminSaleOfSystemMaymaiShopBill',
-  
+
     data() {
       return {
         headers: [
@@ -86,11 +87,11 @@
       getSale() {
         return this.$store.state.import.importId
       },
-    //   totalPrice() {
-    //     return this.getDetail.reduce((total, item) => {
-    //       return total + item.sale_price * item.quantity
-    //     }, 0)
-    //   },
+      totalPrice() {
+      return this.getDetail.reduce((total, item) => {
+        return total + item.Imp_price * item.Imp_quantity
+      }, 0)
+    },
 
     },
     mounted() {
@@ -103,7 +104,7 @@
   const clonedTable = table.cloneNode(true)
   const printWindow = window.open('', '', 'height=500,width=800')
 
-  printWindow.document.write('<html><head><title>ໃບບິນສັ່ງຊື້ຂອງຮ້ານເມໄໝ</title>')
+  printWindow.document.write('<html><head><title>ບິນນຳເຂົ້າສິນຄ້າ</title>')
   printWindow.document.write(`
     <style>
     *{
@@ -159,33 +160,22 @@
     <div class="shop-info">
       <img src="/images/logo.png" alt="Shop Logo" class="logo" />
       <div class="shop-details">
-        <h2>Maymai Shop</h2>
-        <p>123 Main Street, City</p>
-        <p>Phone: (020) 7878-1525</p>
+        <h2>ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ</h2>
+        <p>ຕັ້ງຢູ່ທີ່ ບ້ານດົງໂດກ, ເມືອງໄຊທານີ, ນະຄອນຫຼວງວຽງຈັນ</p>
+        <p>ເບີຕິດຕໍ່: 020 5475-6861</p>
       </div>
     </div>
   `)
 
-  // Add bill date
+  // Add bill date<p class="bill-date">ໃບບິນນຳເຂົ້າ:{{ getSale.id }}</p>
   printWindow.document.write(
-    `<p class="bill-date">Date: ${this.formatDateLo(
-      this.getSale.receive_date
-    )}</p>`
+    `<p class="bill-date">ໃບບິນນຳເຂົ້າ:${ this.getSale.id}</p>`
   )
   printWindow.document.write(
-    `<p class="bill-date">Date: ${this.formatDateLo(
-      this.getSale.receive_date
-    )}</p>`
+    `<p>ວັນທີນຳເຂົ້າ: ${ this.formatDateLo(this.getSale.receive_date) }</p>`
   )
   printWindow.document.write(
-    `<p class="bill-date">Date: ${this.formatDateLo(
-      this.getSale.receive_date
-    )}</p>`
-  )
-  printWindow.document.write(
-    `<p class="bill-date">Date: ${this.formatDateLo(
-      this.getSale.receive_date
-    )}</p>`
+    `<p class="bill-date">ພະນັກງານນຳເຂົ້າ: ${ this.getSale.employeefirstName }</p>`
   )
 
   // Remove the profile column from the cloned table
@@ -201,6 +191,10 @@
 
   // Add table
   printWindow.document.write(clonedTable.outerHTML)
+
+  printWindow.document.write(
+     `<h4>ລວມເງິນທັງໝົດ: ${ this.formatPrice(this.totalPrice) }ກິບ</h4>`
+  )
 
   printWindow.document.write('</body></html>')
   printWindow.document.close()
@@ -218,42 +212,41 @@
 
     },
   }
-  </script>
-  
-  <style lang="scss" scoped>
-  /* Add your custom styles here */
-  
-  .shop-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .logo {
-    width: 80px;
-    height: auto;
-    margin-right: 10px;
-  }
-  
-  .shop-details {
-    margin-top: 10px;
-  }
-  
-  .bill-date {
-    margin-bottom: 10px;
-  }
-  
-  .product-table {
-    margin-bottom: 20px;
-  }
-  
-  .total-price {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .print-button {
-    margin-top: 20px;
-  }
-  </style>
-  
+</script>
+
+<style lang="scss" scoped>
+/* Add your custom styles here */
+
+.shop-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.shop-details {
+  margin-top: 10px;
+}
+
+.bill-date {
+  margin-bottom: 10px;
+}
+
+.product-table {
+  margin-bottom: 20px;
+}
+
+.total-price {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.print-button {
+  margin-top: 20px;
+}
+</style>

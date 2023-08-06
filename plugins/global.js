@@ -1,8 +1,8 @@
 import Vue from "vue";
 import dayjs from 'dayjs'
-import moment from 'moment';
+// import moment from 'moment';
 import 'dayjs/locale/lo'; // import the Thai locale
-
+import moment from 'moment-timezone'; // Import moment-timezone
 // Make sure to pick a unique name for the flag
 // so it won't conflict with any other mixin.
 if (!Vue.__my_mixin__) {
@@ -37,9 +37,17 @@ if (!Vue.__my_mixin__) {
       formatDateLo(date) {
         return dayjs(date).locale('lo').format('D MMMM YYYY, HH:mm:ss');
       },
+      // formatDateBill(date) {
+      //   return moment(date).format('DD/MM/YYYY, HH:mm:ss');
+      // },
       formatDateBill(date) {
-        return moment(date).format('DD/MM/YYYY, HH:mm:ss');
+        // Convert the date to the Indochina Time zone (ICT)
+        const dateICT = moment.tz(date, "Asia/Bangkok");
+
+        // Format the Date object using moment.js with the desired format
+        return dateICT.format('DD/MM/YYYY, HH:mm:ss');
       },
+
     },
   }); // Set up your mixin then
 }

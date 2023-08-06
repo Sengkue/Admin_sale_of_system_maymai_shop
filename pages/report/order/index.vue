@@ -17,6 +17,13 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
+      <v-tab-item key="ລາຍງານການສັ່ງຊື້">
+        <v-card flat>
+          <v-card-text>
+            <report-import-product/>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
     </v-tabs-items>
   </v-card>
 </template>
@@ -26,7 +33,8 @@ export default {
     return {
       tab: null,
       items: [
-        { tab: 'ສິນຄ້ານິຍົນສັ່ງຊື້', content: 'Product Tab' }
+        { tab: 'ສິນຄ້ານິຍົນສັ່ງຊື້', content: 'Product Tab' },
+        { tab: 'ລາຍງານການສັ່ງຊື້', content: 'Import' }
       ],
     }
   },

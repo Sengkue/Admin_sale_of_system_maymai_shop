@@ -16,7 +16,7 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
-      <v-tab-item key="ສິນຄ້າທັງໝົດໃຈສະຕ໊ອກ">
+      <v-tab-item key="ສິນຄ້າທັງໝົດໃນສະຕ໊ອກ">
         <v-card flat>
           <v-card-text>
             <report-product-all />

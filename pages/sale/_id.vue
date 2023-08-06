@@ -49,7 +49,8 @@ export default {
       headers: [
         {
           text: 'ລຳດັບ',
-          value: 'index', width:'35'
+          value: 'index',
+          width: '35',
         },
         {
           text: 'ຊື່ສິນຄ້າ',
@@ -76,10 +77,10 @@ export default {
   },
   computed: {
     getDetail() {
-      return this.$store.state.saleDetail.StateSelectOne.map((item, index)=>{
-        return { 
+      return this.$store.state.saleDetail.StateSelectOne.map((item, index) => {
+        return {
           index: index + 1,
-          ...item
+          ...item,
         }
       })
     },
@@ -87,10 +88,22 @@ export default {
       return this.$store.state.sale.StateSelectOne
     },
     totalPrice() {
-      return this.getDetail.reduce((total, item) => {
-        return total + item.sale_price * item.quantity
-      }, 0)
+      const finalPrice = this.getSale.sale_total // Final price (e.g., 156,750)
+      const discountPercentage = this.getSale.promotionDiscount // Discount percentage (e.g., 5)
+
+      if (discountPercentage < 0) {
+        return finalPrice // Return the final price if the discount is negative
+      } else {
+        const originalPrice = finalPrice / (1 - discountPercentage / 100) // Original price (e.g., 156,750 / (1 - 0.05) = 165,000)
+        return originalPrice // Return the original price
+      }
     },
+
+    // totalPrice() {
+    //   return this.getDetail.reduce((total, item) => {
+    //     return total + item.sale_price * item.quantity
+    //   }, 0)
+    // },
     calculatePromotion() {
       return (
         this.totalPrice -
@@ -165,10 +178,10 @@ export default {
     </style>
   `)
       printWindow.document.write('</head><body >')
-  // Watermark
-  // printWindow.document.write(`
-  //   <div class="watermark">*ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ*</div>
-  // `)
+      // Watermark
+      // printWindow.document.write(`
+      //   <div class="watermark">*ຮ້ານຂາຍເຄື່ອງ ແມ່ໄໝ*</div>
+      // `)
       // Add shop information
       printWindow.document.write(`
     <div class="shop-info">
@@ -212,7 +225,8 @@ export default {
       </div>
     `)
       }
-      printWindow.document.write(`<h4 style="display: flex; justify-content: space-between">
+      printWindow.document
+        .write(`<h4 style="display: flex; justify-content: space-between">
   <div>ລາຍເຊັນຜູ້ຂາຍ</div>
   <div>ລາຍເຊັນລູກຄ້າ</div>
 </h4>`)
