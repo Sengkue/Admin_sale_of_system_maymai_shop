@@ -203,7 +203,7 @@ export default {
         {
           icon: 'mdi-cart-variant',
           title: 'ສັ່ງຊື້ອອນໄລ',
-          to: 'order',
+          to: '/online_order',
           children: [
             {
               icon: 'mdi-cart-arrow-down',
@@ -221,7 +221,7 @@ export default {
         {
           icon: 'mdi-chart-areaspline',
           title: 'ລາຍງານ',
-          to: 'report',
+          to: '/report',
           children: [
             {
               icon: 'mdi-tshirt-crew',
@@ -260,9 +260,10 @@ export default {
   },
   mounted() {
     let removes = []
-
+    
     if (this.$cookies.get('status') === 'user') {
-      removes = ['/user', '/manage', 'report', "order",]
+      this.$router.push('/sale')
+      removes = ['/','/user', '/report','/product','/category','/supplier','/online_order','/promotion','/customer']
     }
     if (this.$cookies.get('status') === 'admin') {
       removes = []

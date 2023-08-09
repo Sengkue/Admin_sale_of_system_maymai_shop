@@ -205,13 +205,12 @@ export default {
     },
     TotalPrice() {
       return this.show.reduce(
-        (num, item) => num + item.cost_price * item.order_quantity,
+        (num, item) => num + parseFloat(item.cost_price) * parseFloat(item.order_quantity),
         0
       )
     },
     TotalQuantity() {
-      console.log(this.show)
-      return this.show.reduce((num, item) => num + item.order_quantity, 0)
+      return this.show.reduce((num, item) => num + parseInt(item.order_quantity), 0)
     },
   },
   mounted() {
@@ -296,8 +295,8 @@ export default {
       this.show.map(async(item) => {
         this.import_detail_data.import_id = res.data.result.id
         this.import_detail_data.product_id = item.product_id
-        this.import_detail_data.Imp_price = item.cost_price
-        this.import_detail_data.Imp_quantity = item.order_quantity
+        this.import_detail_data.Imp_price = parseInt(item.cost_price)
+        this.import_detail_data.Imp_quantity = parseInt(item.order_quantity)
         return await this.$axios.post('/import_detail', this.import_detail_data)
       })
       // _________update sell_price and cost_price____________

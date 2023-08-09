@@ -163,16 +163,6 @@ export default {
       getRow: [],
     }
   },
-  computed: {
-    //   getRow() {
-    //     return this.$store.state.product.StateSelectAll.map((item, index) => {
-    //       return {
-    //         index: index + 1,
-    //         ...item,
-    //       }
-    //     })
-    //   },
-  },
   async mounted() {
     try {
       this.loading = true
@@ -186,7 +176,8 @@ export default {
       })
       this.loading = false
     } catch (error) {
-      this.$toast.success('error!')
+      this.$toast.success('ບໍ່ມີສິນຄ້າໝົດສະຕ໊ອກ')
+      this.loading = false
     }
   },
   methods: {

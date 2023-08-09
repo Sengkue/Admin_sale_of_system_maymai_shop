@@ -44,6 +44,7 @@
                 <v-row>
                   <v-col cols="6">
                     <v-text-field
+                      ref="myTextField"
                       v-model="search"
                       label="ຄົ້ນຫາ"
                       outlined
@@ -409,6 +410,12 @@
       <v-dialog v-model="openDetail" persistent max-width="800">
         <v-card class="pa-5 ma-0">
           <v-row>
+            <v-col cols="12" class="mt-n2
+             mr-n10 d-flex justify-end">
+              <v-btn class="error" @click="closeDetail()"
+                ><v-icon>mdi-close</v-icon> ປິດ</v-btn
+              ></v-col
+            >
             <v-col cols="4">
               <v-img :src="displayDetail.profile" width="250"></v-img>
             </v-col>
@@ -539,9 +546,6 @@
               :disabled="!selected_color_size.id"
               @click="AddToOrder(selected_color_size.id)"
               ><v-icon>mdi-plus</v-icon> ສັ່ງເພີ່ມ</v-btn
-            >
-            <v-btn class="error" @click="closeDetail()"
-              ><v-icon>mdi-close</v-icon> ປິດ</v-btn
             >
           </v-card-actions>
         </v-card>
@@ -682,6 +686,7 @@ export default {
     },
   },
   mounted() {
+    this.$refs.myTextField.focus()
     this.$store.dispatch('product/selectAll')
     this.$store.dispatch('promotion/selectAll')
     this.$axios.get('/category').then((res) => {
