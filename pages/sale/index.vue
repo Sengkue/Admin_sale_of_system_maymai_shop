@@ -50,7 +50,9 @@
                       outlined
                       hide-details
                       dense
+                      clearable
                       prepend-inner-icon="mdi-barcode-scan"
+                      @keyup.enter="enterScanner"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="6">
@@ -664,7 +666,7 @@ export default {
       })
     },
     filteredRow() {
-      const searchTerm = this.search.toLowerCase().trim()
+      const searchTerm = this.search !== null ? this.search.toLowerCase().trim() : '';
       const selectedCategoryId = this.category_id
 
       return this.$store.state.product.StateSelectAll.map((item, index) => {
@@ -708,8 +710,41 @@ export default {
         (i) => i.id === this.color_size_data.id
       )
     },
+    enterScanner(){
+      console.log('Enter', this.filteredRow[0])
+      this.openDetail = true
+      this.displayDetail = this.filteredRow[0]
+      this.$axios
+        .get(`/color_size/byProductId/${this.filteredRow[0].id}`)
+        .then((res) => {
+          this.color_size_data = res.data.result
+          const colorSizeOptions = res.data.result
+          for (const colorSizeOption of colorSizeOptions) {
+            // Check if an item with the same 'id' already exists in 'ListSale'
+            const existingItem = this.ListSale.find(
+              (saleItem) => saleItem.id === colorSizeOption.id
+            )
+            if (!existingItem) {
+              this.ListSale.push({
+                id: colorSizeOption.id,
+                product_id: colorSizeOption.product_id,
+                name: this.displayDetail.name,
+                category: this.displayDetail.category,
+                sale_price: colorSizeOption.sale_price,
+                color: colorSizeOption.color,
+                size: colorSizeOption.size,
+                quantity: colorSizeOption.quantity,
+              })
+            }
+          }
+        })
+        .catch((error) => {
+          this.color_size_data = []
+          console.error('Error fetching color_size_data:', error)
+        })
+},
     showDetail(item) {
-      console.log('show', item)
+      console.log('Show', item)
       this.openDetail = true
       this.displayDetail = item
       this.$axios
@@ -741,6 +776,7 @@ export default {
           console.error('Error fetching color_size_data:', error)
         })
     },
+
     onPromotionSelect() {
       const item = this.getPromotion.find((i) => i.id === this.promotion_id)
       this.promotion = item.discount || null

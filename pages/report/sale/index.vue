@@ -18,7 +18,7 @@
               </v-card>
             </v-col> -->
             <v-col cols="12">
-              <home-top-product-graph-year />
+              <home-top-best-seller/>
             </v-col>
           </v-row>
         </v-card>

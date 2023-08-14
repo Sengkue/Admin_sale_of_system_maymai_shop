@@ -80,7 +80,7 @@ export default {
         { text: 'ນາມສະກຸນ', value: 'c_lname' },
         // { text: "email", value: "email" },
         { text: 'ເບີ', value: 'c_phone' },
-        { text: 'ວັນທີສ້າງ', value: 'createdAt' }
+        { text: 'ວັນທີສ້າງ', value: 'createdAt' },
       ],
     }
   },
@@ -104,8 +104,8 @@ export default {
       const modifiedData = data.map((item, index) => {
         return {
           index: index + 1,
-          ຊື່: item.c_fname.toUpperCase(), // modify the name value to uppercase
-          ນາມສະກຸນ: item.c_lname ? item.c_lname.toLowerCase() : '---', // modify the surname value to lowercase
+          ຊື່: item.c_fname ? item.c_fname.toUpperCase() : '---',
+          ນາມສະກຸນ: item.c_lname ? item.c_lname.toLowerCase() : '---',
           ເພດ: item.c_gender,
           ເບີ: `+${item.c_phone}`,
           ວັນທີສ້າງ: `${this.formatDateBill(item.createdAt)}`,
